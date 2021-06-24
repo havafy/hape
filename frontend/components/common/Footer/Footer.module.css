@@ -1,0 +1,21 @@
+
+.footer{
+  background: #333;
+}
+.copyright{
+  background: #292929;
+  @apply py-4 text-gray-400 flex flex-col md:flex-row justify-center items-center space-y-4
+}
+.footer button{
+ color: #fff!important;
+}
+.menu{
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #9B9DA1;
+  @apply uppercase font-bold py-2 md:py-0 md:pb-4
+
+}
+.menu a:hover{
+  color: #fff;
+}

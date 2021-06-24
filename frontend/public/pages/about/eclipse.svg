@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920px" height="1323px" viewBox="0 0 1920 1323" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 44.1 (41455) - http://www.bohemiancoding.com/sketch -->
+    <title>oval full</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="60.6612868%" y1="43.2781358%" x2="122.187771%" y2="0%" id="linearGradient-1">
+            <stop stop-color="#FF5263" offset="0%"></stop>
+            <stop stop-color="#FFE01B" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Wireframe" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="r5">
+            <g id="oval-full">
+                <rect id="Rectangle-9" fill="#FF5163" x="0" y="0" width="1920" height="1323"></rect>
+                <circle id="Oval-2" fill="url(#linearGradient-1)" cx="1195" cy="746" r="577"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,121 @@
+
+.button {
+    display: inline-block;
+    padding: 10px 40px;
+    background: #DB4140;
+}
+.button:hover{
+
+   color: #fff;
+}
+
+.arrow {
+    color: #fff;
+}
+
+.arrow::after {
+    display: inline-block;
+    padding-left: 8px;
+    content: "\0279E";
+    -webkit-transition: transform 0.1s ease-out;
+    -moz-transition: transform 0.1s ease-out;
+    -ms-transition: transform 0.1s ease-out;
+    -o-transition: transform 0.1s ease-out;
+    transition: transform 0.1s ease-out;
+}
+
+.arrow:hover {
+    color: #fff;
+}
+
+.arrow:hover::after {
+    -webkit-transform: translateX(6px);
+    -moz-transform: translateX(6px);
+    -ms-transform: translateX(6px);
+    -o-transform: translateX(6px);
+    transform: translateX(6px);
+}
+
+/* ------- Sections -------- */
+.iconItems{
+
+}
+.iconItems .item{
+    @apply md:col-span-1 py-0 mb-10
+}
+.iconItems .title{
+    @apply text-base mt-5 mb-3 font-semibold text-gray-700 
+}
+.iconItems .des{
+    color: #555 !important;
+@apply text-base italic text-gray-500   
+}
+
+.stepsBox{
+    @apply mt-12 px-5 md:grid md:grid-cols-2 md:gap-8
+}
+.stepsBox .item{
+  @apply md:col-span-1 pb-7 lg:px-5 lg:px-12 py-0 flex
+}
+.stepsBox .title{
+    @apply text-xl mt-5 mb-3 font-semibold text-gray-600 uppercase
+}
+.stepsBox .des{
+ @apply text-base italic text-gray-500   
+}
+.stepsBox .stepNum{
+    font-size: 2rem;
+    color: #333;
+    font-weight: bold;
+    border-left: 3px solid #ff4777;
+    height: 50px;
+    width: 50px;
+    padding: 20px 10px;
+    margin: 27px 39px;
+    line-height: 1px;
+
+}
+
+span.highlight {
+    font-weight: bolder;
+    background: rgb(255,255,255);
+    background: linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.896796218487395) 100%);
+
+    box-decoration-break: clone;
+    margin: 0;
+    border-radius: 7.5px;
+
+}
+
+/*----------- checkedList ----------*/
+.checkedListBig{
+
+}
+.checkedListBig li{
+    @apply text-xl my-5
+}
+
+/*---------- Drawer ----------*/
+
+.burgerMenuDrawer .ant-drawer-header{
+    display: none;
+}
+
+/*----------- checkedList ----------*/
+
+.menuDropdown  .ant-drawer-content {
+    background: #ffffffd4!important;
+    backdrop-filter: blur(4px)!important;
+}
+.menuDropdown .ant-collapse-header{
+ padding: 0!important;
+ @apply text-2xl font-semibold py-4 block;
+}
+.menuDropdown .ant-collapse-arrow{
+        color: #777!important;
+        margin-top: 6px!important;
+        position: absolute!important;
+        right: 5px!important;
+        font-size: 26px!important;
+    
+}

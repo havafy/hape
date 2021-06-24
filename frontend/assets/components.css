@@ -1,0 +1,41 @@
+.fit {
+  min-height: calc(100vh - 88px);
+}
+
+.ant-tabs-tab-btn {
+  outline: none;
+  transition: all 0.3s;
+  font-size: 15px;
+  font-weight: bold;
+  color: #666;
+}
+.techstacks .ant-tabs-nav::before{
+  border-bottom: none;
+}
+.itemCenter{
+  margin: 20px 0 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+  justify-content: center;
+  transition: all 0.3s ease 0s;
+}
+.itemCenter li{
+  width: 166px;
+  background: rgba(224, 225, 235, 0.23);
+  margin: 0px 3px 6px;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  padding: 6px 13px;
+  min-height: 93px;
+}
+.h-highlight {
+  position: relative;
+  background: linear-gradient(-225deg,transparent 5px,#fbcfd5 0) bottom left, linear-gradient(-45deg, transparent 5px,#fbcfd5 0) bottom right;
+  background-size: 51% 7px;
+  background-repeat: no-repeat;
+}

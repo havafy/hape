@@ -1,0 +1,24 @@
+.root {
+  @apply fixed w-full top-0 z-40 transition-all duration-150;
+  transition: padding 100ms ease 0s;
+  transition: background-color 100ms linear;
+}
+
+.link, .link_last{
+  font-size: 12px;
+  @apply inline-flex items-center text-gray-700 px-1 leading-6 uppercase font-bold transition ease-in-out duration-75 cursor-pointer;
+
+}
+
+.link:hover {
+  @apply text-accents-9;
+}
+
+.link:focus {
+  @apply outline-none text-accents-8;
+}
+
+.logo {
+  width: 120px;
+  @apply cursor-pointer transform duration-100 ease-in-out mr-9;
+}

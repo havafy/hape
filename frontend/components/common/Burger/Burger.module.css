@@ -1,0 +1,11 @@
+.menuBox{
+    @apply mt-9
+}
+.menuItems a{
+ @apply text-2xl font-semibold py-4 block;
+
+}
+.menuSubItems a{
+ @apply text-base font-semibold py-2 block;
+
+}

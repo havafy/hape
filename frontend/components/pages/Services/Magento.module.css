@@ -1,0 +1,29 @@
+
+.headBox{
+    background: url('/pages/about/h2.jpg') no-repeat center center;
+    background-size: cover;
+    min-height: 500px;
+    margin: 0 0 70px 0;
+}
+.headBox_wrap{
+    position: relative;
+    z-index: 1;
+   @apply max-w-7xl m-auto px-5
+}
+.headBox h1{
+
+    @apply max-w-5xl text-4xl lg:text-5xl font-bold pt-40 text-white
+}
+.headBox p{
+   @apply max-w-3xl mt-5 text-white text-xl
+  
+}
+.headBox::after {
+    background: #00000069;
+  
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%; height: 500px;
+    top: 0;
+  }

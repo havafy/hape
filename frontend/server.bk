@@ -1,0 +1,75 @@
+const express = require('express')
+const next = require('next')
+const dev = process.env.NEXT_PUBLIC_MODE !== 'production'
+const app = next({ dev })
+const handle = app.getRequestHandler()
+const qs = require('qs')
+const path = require('path')
+const axios = require('axios')
+const compress = require('compression')
+
+
+app.prepare()
+  .then(() => {
+    const server = express()
+    server.use(compress())
+
+    const options = {
+      root: path.join(__dirname, '/static'),
+      headers: {
+        'Content-Type': 'text/plain;charset=UTF-8'
+      }
+    }
+    server.get('/robots.txt', (req, res) => (
+      res.status(200).sendFile('robots.txt', options)
+    ))
+
+    server.get('/sitemap.xml', async (req, res) => {
+      try {
+        let { data } = await axios.get(`${configEnv.api}sitemaps/sitemap.xml`)
+        res.status(200).set({ 'Content-Type': 'text/xml' }).send(data)
+      } catch (e) {
+        res.status(404)
+      }
+    })
+
+    
+    server.get('*', async (req, res) => {
+      let actualPage = null
+      if (req.url.indexOf('/c/') === 0) actualPage = '/category'
+      else if (req.url.indexOf('/seller/') === 0) actualPage = '/seller'
+      if (actualPage) {
+        try {
+          let slugs = ''
+          if (actualPage === '/category') {
+            slugs = req.url.replace('/c/', '').split('?')
+          } else {
+            slugs = req.url.replace('/seller/', '').split('?')
+          }
+          if (slugs.length >= 1) {
+            let params = {}
+            if (actualPage === '/category') params = { categorySlug: slugs[0] }
+            else params = { sellerSlug: slugs[0] }
+            slugs.shift()
+            let parsed = qs.parse('&' + slugs.join('&'))
+            params = { ...params, ...parsed, ...req.query }
+            return app.render(req, res, actualPage, params)
+          } else {
+            return app.render404(req, res)
+          }
+        } catch (e) {
+          return app.render404(req, res)
+        }
+      }
+
+      return handle(req, res)
+    })
+
+    server.listen(process.env.PORT, (err) => {
+      if (err) throw err
+      console.log('> Ready on http://localhost:' + process.env.PORT)
+    })
+  })
+  .catch((ex) => {
+    process.exit(1)
+  })

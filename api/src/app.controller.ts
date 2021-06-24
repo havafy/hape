@@ -1,20 +1,21 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Res, HttpStatus, UseGuards } from '@nestjs/common';
+import { AppService } from './app.service';
+import { Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller()
 export class AppController {
-    private start: number;
+  constructor(private readonly appService: AppService) {}
 
-    constructor() {
-        this.start = Date.now();
-    }
+  @Get()
+  getHello(@Res() res: Response) {
+    return res.status(HttpStatus.OK).json(this.appService.getHello());
+  }
 
-    @Get('healthcheck')
-    async healthcheck() {
-        const now = Date.now();
-        return {
-
-            status: 'API Online',
-            uptime: Number((now - this.start) / 1000).toFixed(0),
-        };
-    }
+  @UseGuards(AuthGuard('jwt'))
+  @Get('api/secure')
+  getProtectedResource(@Res() res: Response) {
+    console.log('res',res)
+    return res.status(HttpStatus.OK).json(this.appService.getSecureResource());
+  }
 }
