@@ -1,7 +1,50 @@
-import { FC } from 'react'
+import { FC , useState} from 'react'
 import Link from 'next/link'
 import cn from 'classnames'
 import s from './UserNav.module.css'
+import { Modal, Button } from 'antd';
+import { RegisterForm } from '@components/common'
+const RegisterModal = () => {
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState('Content of the modal');
+
+  const showModal = () => {
+    setVisible(true);
+  };
+
+  const handleOk = () => {
+    setModalText('The modal will be closed after two seconds');
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setVisible(false);
+      setConfirmLoading(false);
+    }, 400);
+  };
+
+  const handleCancel = () => {
+    console.log('Clicked cancel button');
+    setVisible(false);
+  };
+
+  return (
+    <>
+         <button onClick={showModal} className="button arrow">Đăng ký</button>
+
+      <Modal
+        title="Đăng ký"
+        visible={visible}
+        onOk={handleOk}
+        confirmLoading={false}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <RegisterForm />
+      </Modal>
+    </>
+  );
+};
+
 interface Props {
   className?: string
 }
@@ -10,7 +53,7 @@ const UserNav: FC<Props> = ({ className }) => {
   return (
     <nav className={cn(s.root, className)}>
       <div className={s.mainContainer}>
-        <Link href='/contact'><a className="button arrow">Contact Us</a></Link>
+        <RegisterModal />
       </div>
     </nav>
   )

@@ -8,3 +8,5 @@ export { default as Burger } from './Burger'
 export { default as Head } from './Head'
 export { default as I18nWidget } from './I18nWidget'
 export { default as TechStacks } from './Sections/TechStacks'
+export { default as RegisterForm } from './Register'
+
