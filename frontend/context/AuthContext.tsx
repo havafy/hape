@@ -1,15 +1,17 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-import axios from 'axios'
+type userInterface = { name: string, email: string}
 type authContextType = {
-    user: boolean;
-    userName: string;
-    login: () => void;
+    accessToken: string;
+    user: userInterface;
+    setUser: (user: userInterface) => void;
+    login: (accessToken: string) => void;
     logout: () => void;
 };
 
 const authContextDefaultValues: authContextType = {
-    user: null,
-    userName: 'loading',
+    accessToken: '',
+    user: { name: '', email: ''},
+    setUser: () => {},
     login: () => {},
     logout: () => {},
 };
@@ -23,24 +25,28 @@ export function useAuth() {
 type Props = {
     children: ReactNode;
 };
+const isServer = typeof window !== 'object'
+let initialAccessToken = '';
+if(!isServer){
+    const accessToken = localStorage.getItem('accessToken')
+    initialAccessToken = accessToken ?  accessToken : ''
+}
 
 export function AuthProvider({ children }: Props) {
-    const [user, setUser] = useState<boolean>(null);
-    const [userName, setUserName] = useState<string>('');
-    const login = async () => {
-        const { data } = await axios.get('healthcheck')
-        console.log(data)
-        setUserName(data.status)
-        setUser(true);
+    const [accessToken, setAccessToken] = useState<string>(initialAccessToken);
+    const [user, setUser] = useState<userInterface>({name: '', email: ''});
+    const login = (accessToken: string) => {
+        setAccessToken(accessToken);
     };
 
     const logout = () => {
-        setUser(false);
+        setAccessToken('');
     };
 
-    const value = {
+    const value: authContextType = {
+        accessToken,
         user,
-        userName,
+        setUser,
         login,
         logout,
     };

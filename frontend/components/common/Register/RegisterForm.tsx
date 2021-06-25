@@ -1,11 +1,12 @@
 import { FC , useState, createRef} from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import cn from 'classnames'
 import axios from 'axios'
 import s from './RegisterForm.module.css'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { Form, Input, Button, Checkbox } from 'antd'
-
+import { useAuth } from '@context/AuthContext';
 interface Props {
   title?: string;
   name: string;
@@ -25,18 +26,23 @@ const TextInput: FC<Props> = ({ title, name, required = false, type = 'text' }) 
 )
 
 const RegisterForm = () => {
+  const { login, setUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false)
-
+  const router = useRouter()
   const siteName = process.env.NEXT_PUBLIC_SITE
   const captchaRef = createRef();
 
   const onFinish = async (values: any) => {
     const token = await captchaRef.current.executeAsync();
     setIsLoading(true)
-    const { data: { status, error } } = await axios.post('auth/register', {
+    const { data } = await axios.post('auth/register', {
       token,
       ...values
-        })
+      })
+    if(data?.accessToken){
+      localStorage.setItem('accessToken', data.accessToken);
+      login(data.accessToken)
+    }
     setIsLoading(false)
   };
 

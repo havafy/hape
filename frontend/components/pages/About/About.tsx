@@ -2,10 +2,9 @@ import { FC, useState, ChangeEvent } from 'react'
 import Link from 'next/link'
 import s from './About.module.css'
 import Head from 'next/head'
-import { useAuth } from '@context/AuthContext';
 
 const About: FC = () => {
-  const { user, login, logout, userName} = useAuth();
+
   return (
     <main className="">
       <Head>
@@ -18,14 +17,7 @@ const About: FC = () => {
 
       </div>
       <div className="px-5 mx-auto max-w-7xl">
-      <div className="bg-gray-400">
-                    <h1>Hello: {userName}</h1>
-                    <h2>User: {user ? "login" : "logout"}</h2>
-                    <div>
-                        <button onClick={login}>Login</button>
-                        <button onClick={logout}>Logout</button>
-                    </div>
-                </div>
+
 
         <div className={s.headTitle}>
           The extended team that is part of your team
