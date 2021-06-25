@@ -1,0 +1,42 @@
+.ant-tabs-tab-btn {
+    outline: none;
+    transition: all 0.3s;
+    font-size: 15px;
+    font-weight: bold;
+    color: #666;
+  }
+  .techstacks .ant-tabs-nav::before{
+    border-bottom: none;
+  }
+  .ant-scrolling-effect {
+    width: 100%!important;
+    overflow-y:visible !important;
+  }
+
+
+
+.burgerMenuDrawer .ant-drawer-header{
+    display: none;
+}
+
+/*----------- checkedList ----------*/
+
+.menuDropdown  .ant-drawer-content {
+    background: #ffffffd4!important;
+    backdrop-filter: blur(4px)!important;
+}
+.menuDropdown .ant-collapse-header{
+ padding: 0!important;
+ @apply text-2xl font-semibold py-4 block;
+}
+.menuDropdown .ant-collapse-arrow{
+        color: #777!important;
+        margin-top: 6px!important;
+        position: absolute!important;
+        right: 5px!important;
+        font-size: 26px!important;
+    
+}
+.register-form-modal .ant-modal-header{
+    @apply uppercase text-base font-semibold;
+}

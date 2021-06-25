@@ -1,4 +1,4 @@
-import { MaxLength, MinLength, IsNotEmpty, IsEmail, IsString } from 'class-validator';
+import { MaxLength, MinLength, IsNotEmpty, IsEmail, IsString, IsNumber } from 'class-validator';
 
 export class RegisterUserDto {
   readonly id: number;
@@ -8,15 +8,19 @@ export class RegisterUserDto {
   @MinLength(2)
   readonly name: string;
 
-  @IsString()
-  @MaxLength(20)
-  @MinLength(4)
-  readonly username: string;
-
   @IsEmail()
-  @MaxLength(20)
+  @MaxLength(50)
   @MinLength(5)
   readonly email: string;
+
+  @MaxLength(512)
+  @MinLength(5)
+  readonly token: string;
+
+  @MaxLength(14)
+  @MinLength(8)
+  @IsNotEmpty()
+  phone: string;
 
   @IsNotEmpty()
   @IsString()

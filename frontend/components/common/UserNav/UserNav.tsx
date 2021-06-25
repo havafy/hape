@@ -32,7 +32,8 @@ const RegisterModal = () => {
          <button onClick={showModal} className="button arrow">Đăng ký</button>
 
       <Modal
-        title="Đăng ký"
+        title="Đăng ký thành viên"
+        className="register-form-modal"
         visible={visible}
         onOk={handleOk}
         confirmLoading={false}

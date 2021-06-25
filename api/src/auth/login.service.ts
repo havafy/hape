@@ -37,12 +37,12 @@ export class LoginService {
         };
       }
 
-      const payload = {
+      const payload: JwtPayload = {
         email: userData.email,
         id: userData.id,
       };
 
-      const accessToken = this.jwtService.sign(payload);
+      const accessToken = this.getAccessToken(payload);
 
       return {
         expiresIn: process.env.EXPIRES_IN_JWT,
@@ -52,7 +52,12 @@ export class LoginService {
       };
     });
   }
-
+  public getAccessToken(payload: JwtPayload) {
+    return this.jwtService.sign( {
+      email: payload.email,
+      id: payload.id,
+    });
+  }
   public async validateUserByJwt(payload: JwtPayload) {
     // This will be used when the user has already logged in and has a JWT
     const user = await this.usersService.findByEmail(payload.email);
@@ -66,6 +71,7 @@ export class LoginService {
   protected createJwtPayload(user) {
     const data: JwtPayload = {
       email: user.email,
+      id: user.id
     };
 
     const jwt = this.jwtService.sign(data);

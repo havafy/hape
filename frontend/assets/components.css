@@ -2,16 +2,7 @@
   min-height: calc(100vh - 88px);
 }
 
-.ant-tabs-tab-btn {
-  outline: none;
-  transition: all 0.3s;
-  font-size: 15px;
-  font-weight: bold;
-  color: #666;
-}
-.techstacks .ant-tabs-nav::before{
-  border-bottom: none;
-}
+
 .itemCenter{
   margin: 20px 0 0 0;
   padding: 0;

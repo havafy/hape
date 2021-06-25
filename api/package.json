@@ -1,7 +1,7 @@
 {
   "name": "hape-api",
   "version": "1.0.0",
-   "author": "KenZ",
+  "author": "KenZ",
   "private": true,
   "scripts": {
     "prebuild": "rimraf dist",
@@ -28,6 +28,7 @@
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.4.2",
     "@nestjs/typeorm": "^7.1.0",
+    "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.11.0",

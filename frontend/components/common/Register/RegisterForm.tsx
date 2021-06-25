@@ -1,16 +1,25 @@
-import { FC , useState} from 'react'
+import { FC , useState, createRef} from 'react'
 import Link from 'next/link'
 import cn from 'classnames'
 import axios from 'axios'
 import s from './RegisterForm.module.css'
+import ReCAPTCHA from 'react-google-recaptcha'
 import { Form, Input, Button, Checkbox } from 'antd'
+
+interface Props {
+  title?: string;
+  name: string;
+  type?: string;
+  required: boolean;
+}
+
 const TextInput: FC<Props> = ({ title, name, required = false, type = 'text' }) => (
   <div className="relative w-full mb-6">
     <label className={s.label}>{title}</label>
    {/* <input type={type} placeholder={title} className={s.input} /> */}
     <Form.Item name={name}
         rules={[{ required, message: 'Please input ' + title?.toLowerCase() + '!' }]} >
-       <Input placeholder={title} className={s.input}  />
+       <Input placeholder={title} className={s.input} type={type} />
      </Form.Item>
 </div>
 )
@@ -19,14 +28,14 @@ const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const siteName = process.env.NEXT_PUBLIC_SITE
+  const captchaRef = createRef();
+
   const onFinish = async (values: any) => {
+    const token = await captchaRef.current.executeAsync();
     setIsLoading(true)
-    const { data: { status, error } } = await axios.post('customer-contact', {
-            ...values, 
-            options:{
-              ...values, 
-            },
-            subject: '[' + siteName + '] Contact Page',
+    const { data: { status, error } } = await axios.post('auth/register', {
+      token,
+      ...values
         })
     setIsLoading(false)
   };
@@ -34,40 +43,37 @@ const RegisterForm = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-
+  const onChange = (value: any) => {
+    console.log("Captcha value:", value);
+  }
   return (
     <>
 <Form name="basic" initialValues={{ remember: true }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}    >
       
-              <TextInput name="full_name" title="Your name" type="text"  required />
+              <TextInput name="name" title="Tên hiển thị" type="text"  required />
               <div className="mt-8 md:grid md:grid-cols-2 md:gap-6">
                 <div className="md:col-span-1">
-                  <TextInput name="email" title="Your email"type="email" required />
+                  <TextInput name="phone" title="Số điện thoại"type="number" required />
                 </div>
                 <div className="md:col-span-1">
-                  <TextInput name="phone_number" title="Your phone" type="text" required />
+                  <TextInput name="email" title="Địa chỉ email" type="email" required />
                 </div>
               </div>
+              <TextInput name="password" title="Mật khẩu" type="password"  required />
 
-              <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-500 text-xs font-bold mb-2 ml-1">
-                Your project
-                </label>
-                <Form.Item name='message'  rules={[{ required: true, message: 'Please input your project!' }]}>
-                  <Input.TextArea 
-                        placeholder='Describe your project briefly *'
-                        rows={8}
-                        cols={40}
-                        className={s.input} />
-                </Form.Item>
-              </div>
-
-              <div className="relative w-full mb-3 justify-center">
+              <div className="relative w-full mt-10 justify-center">
                 <button type="submit"  className={s.button} >
-                  { !isLoading ? 'Submit' : 'Loading' }
+                  { !isLoading ? 'Đăng ký' : 'Loading' }
                 </button>
+
+                <ReCAPTCHA
+                  ref={captchaRef}
+                  size="invisible"
+                  sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
+                  onChange={onChange}
+                />
               </div>
 
             </Form>
