@@ -17,7 +17,6 @@ interface Props {
 const TextInput: FC<Props> = ({ title, name, required = false, type = 'text' }) => (
   <div className="relative w-full mb-6">
     <label className={s.label}>{title}</label>
-   {/* <input type={type} placeholder={title} className={s.input} /> */}
     <Form.Item name={name}
         rules={[{ required, message: 'Please input ' + title?.toLowerCase() + '!' }]} >
        <Input placeholder={title} className={s.input} type={type} />
@@ -26,39 +25,42 @@ const TextInput: FC<Props> = ({ title, name, required = false, type = 'text' }) 
 )
 
 const RegisterForm = () => {
-  const { login, setUser } = useAuth();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const siteName = process.env.NEXT_PUBLIC_SITE
-  const captchaRef = createRef();
+  const captchaRef: any = createRef();
 
   const onFinish = async (values: any) => {
-    const token = await captchaRef.current.executeAsync();
     setIsLoading(true)
-    const { data } = await axios.post('auth/register', {
-      token,
-      ...values
-      })
-    if(data?.accessToken){
-      localStorage.setItem('accessToken', data.accessToken);
-      login(data.accessToken)
+    const token = await captchaRef.current.executeAsync();
+    if(token){
+        try {
+          const { data } = await axios.post('auth/register', {
+            token,
+            ...values
+            })
+            if(data?.accessToken){
+              login(data.accessToken, data.user)
+            }
+        } catch (err){
+
+        }
     }
     setIsLoading(false)
-  };
 
+  }
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
+  }
   const onChange = (value: any) => {
-    console.log("Captcha value:", value);
+
   }
   return (
     <>
 <Form name="basic" initialValues={{ remember: true }}
               onFinish={onFinish}
-              onFinishFailed={onFinishFailed}    >
-      
-              <TextInput name="name" title="Tên hiển thị" type="text"  required />
+              onFinishFailed={onFinishFailed}>
+              <TextInput name="username" title="Tên đăng nhập" type="text"  required />
               <div className="mt-8 md:grid md:grid-cols-2 md:gap-6">
                 <div className="md:col-span-1">
                   <TextInput name="phone" title="Số điện thoại"type="number" required />
@@ -68,7 +70,6 @@ const RegisterForm = () => {
                 </div>
               </div>
               <TextInput name="password" title="Mật khẩu" type="password"  required />
-
               <div className="relative w-full mt-10 justify-center">
                 <button type="submit"  className={s.button} >
                   { !isLoading ? 'Đăng ký' : 'Loading' }

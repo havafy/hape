@@ -1,17 +1,16 @@
 import { createContext, useContext, ReactNode, useState } from "react";
-type userInterface = { name: string, email: string}
+type userInterface = { username: string, email: string}
+const guestUser = { username: '', email: ''}
 type authContextType = {
     accessToken: string;
     user: userInterface;
-    setUser: (user: userInterface) => void;
-    login: (accessToken: string) => void;
+    login: (accessToken: string, user: userInterface) => void;
     logout: () => void;
 };
 
 const authContextDefaultValues: authContextType = {
     accessToken: '',
-    user: { name: '', email: ''},
-    setUser: () => {},
+    user: guestUser,
     login: () => {},
     logout: () => {},
 };
@@ -27,26 +26,35 @@ type Props = {
 };
 const isServer = typeof window !== 'object'
 let initialAccessToken = '';
+let initialUser = guestUser
 if(!isServer){
     const accessToken = localStorage.getItem('accessToken')
     initialAccessToken = accessToken ?  accessToken : ''
+    const user = localStorage.getItem('user')
+    initialUser = user ?  JSON.parse(user): guestUser
+
 }
 
 export function AuthProvider({ children }: Props) {
     const [accessToken, setAccessToken] = useState<string>(initialAccessToken);
-    const [user, setUser] = useState<userInterface>({name: '', email: ''});
-    const login = (accessToken: string) => {
-        setAccessToken(accessToken);
+    const [user, setUser] = useState<userInterface>(initialUser);
+    const login = (accessToken: string, user: userInterface) => {
+        localStorage.setItem('accessToken', accessToken)
+        localStorage.setItem('user', JSON.stringify(user))
+        setAccessToken(accessToken)
+        setUser(user)
     };
 
     const logout = () => {
-        setAccessToken('');
+        localStorage.setItem('accessToken', '')
+        localStorage.setItem('user', JSON.stringify(guestUser))
+        setAccessToken('')
+        setUser(guestUser)
     };
 
     const value: authContextType = {
         accessToken,
         user,
-        setUser,
         login,
         logout,
     };

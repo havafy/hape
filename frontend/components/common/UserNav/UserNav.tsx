@@ -4,19 +4,18 @@ import cn from 'classnames'
 import s from './UserNav.module.css'
 import { Modal, Button } from 'antd';
 import { RegisterForm } from '@components/common'
-import { useAuth } from '@context/AuthContext';
-
+import { useAuth } from '@context/AuthContext'
+import { Menu, Dropdown, Icon } from 'antd'
 const RegisterModal = () => {
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('Content of the modal');
-  const { accessToken, login, logout } = useAuth();
+  const { accessToken, user, logout } = useAuth();
   const showModal = () => {
     setVisible(true);
   };
 
   const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
     setConfirmLoading(true);
     setTimeout(() => {
       setVisible(false);
@@ -25,36 +24,44 @@ const RegisterModal = () => {
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
     setVisible(false);
-  };
+  }
 
   return (
     <>
-    {
-      accessToken !== '' ?
-      <div>
-        <b>Logged: {accessToken}</b>
-      </div> :
-      <><button onClick={showModal} className="button arrow">Đăng ký</button>
-        <Modal
-          title="Đăng ký thành viên"
-          className="register-form-modal"
-          visible={visible}
-          onOk={handleOk}
-          confirmLoading={false}
-          onCancel={handleCancel}
-          footer={null}
-        >
-          <RegisterForm />
-        </Modal>
-      </>
-}
-</>
+      {
+        accessToken !== '' ?
+          <div className={s.userLoggedBox}>
+            <div>Chào, {user.username} 
+            <div className={s.dropdown}>
+                <ul>
+                  <li className={s.dropdownItem}>Tài khoản</li>
+                  <li className={s.dropdownItem} onClick={logout}>Đăng xuất</li>
+                </ul>
+              </div>
+            </div>
+            
+          </div> :
+          <><button onClick={showModal} className="button arrow">Đăng ký</button>
+            <Modal
+              title="Đăng ký thành viên"
+              className="register-form-modal"
+              visible={visible}
+              onOk={handleOk}
+              confirmLoading={false}
+              onCancel={handleCancel}
+              footer={null}
+            >
+              <RegisterForm />
+            </Modal>
+          </>
+      }
+    </>
 
-         
+
   )
 }
+
 
 interface Props {
   className?: string

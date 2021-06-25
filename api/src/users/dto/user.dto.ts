@@ -4,7 +4,7 @@ export class UserDto {
   @IsString()
   @MinLength(2)
   @MaxLength(30)
-  readonly name: string;
+  readonly username: string;
 
 
   @MaxLength(14)

@@ -6,7 +6,7 @@ export class RegisterUserDto {
   @IsString()
   @MaxLength(20)
   @MinLength(2)
-  readonly name: string;
+  readonly username: string;
 
   @IsEmail()
   @MaxLength(50)

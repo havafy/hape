@@ -31,17 +31,21 @@ export class RegisterController {
       const user = await this.registerService.register(registerUserDto);
       if(user){
         const payload: JwtPayload = {
-          email: user.email,
+          username: user.username,
           id: user.id,
         }
         accessToken = this.loginService.getAccessToken(payload)
+        return res.status(HttpStatus.OK).json({
+          message: 'User registration successfully!',
+          accessToken,
+          user: payload,
+          status: 200,
+        });
       }
-      return res.status(HttpStatus.OK).json({
-        message: 'User registration successfully!',
-        accessToken,
-        status: 200,
-      });
+
+
     } catch (err) {
+      console.log(err)
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: 'Error: User not registration!',
         status: 400,

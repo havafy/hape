@@ -2,20 +2,10 @@ import { FC } from 'react'
 import Link from 'next/link'
 import s from './Home.module.css'
 import { TechStacks } from '@components/common'
-import { useAuth } from '@context/AuthContext';
 const HomeContent: FC = () => {
-  const { user, login, logout, userName } = useAuth();
 
   return (
   <main className="pt-20 sm:mt-20 md:pt-32">
-        <div className="bg-gray-400">
-                <h1>Hello: {userName}</h1>
-                    <h2>User: {user ? "login" : "logout"}</h2>
-                    <div>
-                        <button onClick={login}>Login</button>
-                        <button onClick={logout}>Logout</button>
-                    </div>
-                </div>
 
     <div className="mx-auto max-w-7xl">
       <div className="md:grid md:grid-cols-3 md:gap-6">
