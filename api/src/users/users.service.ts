@@ -20,10 +20,6 @@ export class UsersService {
       },
     });
 
-    if (!user) {
-      throw new NotFoundException(`User ${username} not found`);
-    }
-
     return user;
   }
   public async findByEmail(email: string): Promise<Users> {
@@ -39,7 +35,13 @@ export class UsersService {
 
     return user;
   }
-
+  
+  public async findOne(where: object): Promise<Users> {
+    const user = await this.userRepository.findOne({
+      where
+    })
+    return user;
+  }
   public async findById(userId: number): Promise<Users> {
     const user = await this.userRepository.findOne({
       where: {
@@ -53,8 +55,21 @@ export class UsersService {
 
     return user;
   }
-
-  public async create(userDto: UserDto): Promise<IUsers> {
+  public async getUniqueUserName(keyword: string): Promise<string> {
+    let username = keyword.toLowerCase().replace(' ', '')
+    let count = 0
+    let checkUsername = username
+    while(count < 100){
+      const user = await this.findByUsername(checkUsername)
+      if(!user){
+        return checkUsername
+      }
+      checkUsername = username + Math.floor(Math.random() * 1000)
+      count++
+    }
+    return Math.random().toString(36).substring(8);
+  }
+  public async create(userDto: any): Promise<IUsers> {
     try {
       return await this.userRepository.save(userDto);
     } catch (err) {

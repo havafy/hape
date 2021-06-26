@@ -6,14 +6,17 @@ export class Users {
   id: number;
 
   @Column({nullable: true})
-
   name: string;
+
+  @Column({nullable: true})
+  avatar: string;
 
   @Column({unique: true})
   username: string;
 
   @Column({
-    unique: true
+    unique: true,
+    nullable: true
   })
   phone: string;
 
@@ -24,6 +27,15 @@ export class Users {
 
   @Column({ length: 60 })
   password: string;
+
+  @Column({nullable: true})
+  google_id: string;
+
+  @Column({nullable: true})
+  facebook_id: string;
+
+  @Column({nullable: true})
+  apple_id: string;
 
   @CreateDateColumn()
   createdAt: string;

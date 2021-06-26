@@ -1,4 +1,4 @@
-import { MaxLength, MinLength, IsNotEmpty, IsEmail, IsString, IsNumber } from "class-validator";
+import { MaxLength, MinLength, IsNotEmpty, IsEmail, IsString, IsNumber, IsOptional } from "class-validator";
 
 export class UserDto {
   @IsString()
@@ -6,11 +6,10 @@ export class UserDto {
   @MinLength(3)
   readonly username: string;
 
-
+  @IsString()
   @MaxLength(14)
   @MinLength(8)
   phone: string;
-
 
   @IsEmail()
   @MinLength(5)
@@ -22,4 +21,9 @@ export class UserDto {
   @MinLength(6)
   @MaxLength(60)
   password: string;
+
+  @IsOptional()
+  @MaxLength(250)
+  @MinLength(5)
+  google_id: string;
 }

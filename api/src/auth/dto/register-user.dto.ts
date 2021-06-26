@@ -1,4 +1,4 @@
-import { MaxLength, MinLength, IsNotEmpty, IsEmail, IsString, IsNumber } from 'class-validator';
+import { MaxLength, MinLength, IsNotEmpty, IsEmail, IsString, IsOptional } from 'class-validator';
 
 export class RegisterUserDto {
   readonly id: number;

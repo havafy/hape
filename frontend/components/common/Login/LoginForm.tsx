@@ -68,7 +68,7 @@ const LoginForm = () => {
   const onFinishFailed = (errorInfo: any) => {
   }
   const responseGoogleOnFailure = (response: any) => {
-    console.log('responseGoogleOnFailure:', response);
+   // console.log('responseGoogleOnFailure:', response);
   }
   
 
@@ -101,12 +101,12 @@ const LoginForm = () => {
       onOk={handleOk} confirmLoading={false} onCancel={handleCancel} footer={null} >
            <GoogleLogin
                 clientId="333870013971-d8ncjpd1brc33asiiacr91tlq5n0gvqi.apps.googleusercontent.com"
-                buttonText="Login"
+                buttonText="Tài khoản Google"
                 onSuccess={handleGoogleSuccess}
                 onFailure={responseGoogleOnFailure}
                 cookiePolicy={'single_host_origin'}
             />
-
+        <div className="my-5 text-center text-gray-800"> -- hoặc đăng nhập với -- </div>
       <Form name="basic" initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}>

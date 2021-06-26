@@ -4,6 +4,7 @@
 }
 
 .mainContainer{
+  padding: 4px 0;
 }
 .list {
   @apply flex flex-row items-center justify-items-end h-full;

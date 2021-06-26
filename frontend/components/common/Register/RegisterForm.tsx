@@ -7,6 +7,7 @@ import s from './RegisterForm.module.css'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { Form, Input, Button, Modal } from 'antd'
 import { useAuth } from '@context/AuthContext';
+import { GoogleLogin } from 'react-google-login';
 interface Props {
   title?: string;
   name: string;
@@ -47,10 +48,11 @@ const RegisterForm = () => {
   const onFinish = async (values: any) => {
     // let disabled the submit button
     setIsLoading(true)
-    // sleep about 2 seconds
+  
     let count = 0
-    while (!recaptchaToken && count < 3){
-      await new Promise(f => setTimeout(f, 1500))
+    while (!recaptchaToken && count < 5){
+        // sleep about 2 seconds
+      await new Promise(f => setTimeout(f, 2500))
       // get a token from ReCaptcha
       if(!recaptchaToken && typeof captchaRef.current !== undefined){
         setRecaptchaToken(await captchaRef.current.executeAsync())
@@ -91,6 +93,32 @@ const RegisterForm = () => {
     // submits another email.
     captchaRef.current.reset();
   }
+
+
+  const responseGoogleOnFailure = (response: any) => {
+    // console.log('responseGoogleOnFailure:', response);
+   }
+   
+ 
+   const handleGoogleSuccess = async (response: any) => {
+     const { tokenObj, profileObj } = response
+     if (tokenObj) {
+         console.log(tokenObj, profileObj)
+         try {
+             //send register data to API
+             const { data } = await axios.post('auth/loginByParty', {
+                     party: 'google',
+                     accessToken: tokenObj.access_token,
+                 })
+                 if(data?.accessToken){
+                 login(data.accessToken, data.user)
+                 }
+             } catch (err){
+         
+             }
+     }
+     setVisible(false);
+   }
   return (
     <>
       <button onClick={showModal} className="button arrow">Đăng ký</button>
@@ -104,7 +132,15 @@ const RegisterForm = () => {
       onCancel={handleCancel}
       footer={null}
       >
+      <GoogleLogin
+                clientId="333870013971-d8ncjpd1brc33asiiacr91tlq5n0gvqi.apps.googleusercontent.com"
+                buttonText="Tài khoản Google"
+                onSuccess={handleGoogleSuccess}
+                onFailure={responseGoogleOnFailure}
+                cookiePolicy={'single_host_origin'}
+            />
 
+<div className="my-5 text-center text-gray-400"> -- hoặc đăng ký với -- </div>
       <Form name="basic" initialValues={{ remember: true }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}>
@@ -122,7 +158,6 @@ const RegisterForm = () => {
                       <button type="submit" disabled={isLoading} className={s.button} >
                         { !isLoading ? 'Đăng ký' : 'Loading...' }
                       </button>
-
                       <ReCAPTCHA
                         ref={captchaRef}
                         size="invisible"
