@@ -2,8 +2,8 @@ import { MaxLength, MinLength, IsNotEmpty, IsEmail, IsString, IsNumber } from "c
 
 export class UserDto {
   @IsString()
-  @MinLength(2)
-  @MaxLength(30)
+  @MaxLength(12)
+  @MinLength(3)
   readonly username: string;
 
 

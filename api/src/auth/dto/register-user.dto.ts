@@ -4,8 +4,8 @@ export class RegisterUserDto {
   readonly id: number;
 
   @IsString()
-  @MaxLength(20)
-  @MinLength(2)
+  @MaxLength(12)
+  @MinLength(3)
   readonly username: string;
 
   @IsEmail()

@@ -20,8 +20,16 @@
 .dropdownItem:hover{
   @apply bg-gray-100 
 }
+.userLoggedBox{
+  padding: 10px 0;
+}
+.userLoggedBox:hover .dropdown{
+  display: block;
+}
 .dropdown{
   position: absolute;
+  display: none;
+  margin-top: 8px;
   min-width: 200px;
   @apply shadow-lg bg-white
 }

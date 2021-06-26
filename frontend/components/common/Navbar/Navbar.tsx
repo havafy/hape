@@ -11,7 +11,7 @@ interface Props {
 const Navbar: FC<Props> = ({darkMode}) => (
   <NavbarRoot>
     <Container>
-      <div className="siteNavbar relative flex flex-row justify-between px-5 py-1 sm:py-1  align-center  ">
+      <div className="siteNavbar relative flex flex-row justify-between px-5  align-center  ">
         <div className="flex items-center">
           <Link href="/">
             <a className={s.logo} aria-label="Logo">
@@ -19,7 +19,7 @@ const Navbar: FC<Props> = ({darkMode}) => (
             </a>
           </Link>
 
-          <ul className="navMenu 2xl:ml-36 xl:ml-30 lg:ml-10 space-x-4  sm:block hidden">
+          <ul className="navMenu pt-1 2xl:ml-36 xl:ml-30 lg:ml-10 space-x-4  sm:block hidden">
             <li>
               <Link href="/page/about-us">
                 <a className={s.link}>About us</a>

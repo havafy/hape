@@ -7,8 +7,8 @@ export class UserProfileDto {
   name: string;
 
   @IsString()
-  @MaxLength(20)
-  @MinLength(4)
+  @MaxLength(12)
+  @MinLength(3)
   username: string;
 
 

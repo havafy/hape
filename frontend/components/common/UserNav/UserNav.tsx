@@ -2,30 +2,13 @@ import { FC, useState } from 'react'
 import Link from 'next/link'
 import cn from 'classnames'
 import s from './UserNav.module.css'
-import { Modal, Button } from 'antd';
-import { RegisterForm } from '@components/common'
+import { RegisterForm, LoginForm } from '@components/common'
 import { useAuth } from '@context/AuthContext'
 import { Menu, Dropdown, Icon } from 'antd'
 const RegisterModal = () => {
-  const [visible, setVisible] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Content of the modal');
+
   const { accessToken, user, logout } = useAuth();
-  const showModal = () => {
-    setVisible(true);
-  };
-
-  const handleOk = () => {
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setVisible(false);
-      setConfirmLoading(false);
-    }, 400);
-  };
-
-  const handleCancel = () => {
-    setVisible(false);
-  }
+  
 
   return (
     <>
@@ -42,18 +25,9 @@ const RegisterModal = () => {
             </div>
             
           </div> :
-          <><button onClick={showModal} className="button arrow">Đăng ký</button>
-            <Modal
-              title="Đăng ký thành viên"
-              className="register-form-modal"
-              visible={visible}
-              onOk={handleOk}
-              confirmLoading={false}
-              onCancel={handleCancel}
-              footer={null}
-            >
-              <RegisterForm />
-            </Modal>
+              <>
+          <LoginForm />
+          <RegisterForm />
           </>
       }
     </>

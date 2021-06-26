@@ -13,7 +13,19 @@ export class UsersService {
     @InjectRepository(Users)
     private readonly userRepository: Repository<Users>,
   ) {}
+  public async findByUsername(username: string): Promise<Users> {
+    const user = await this.userRepository.findOne({
+      where: {
+        username: username,
+      },
+    });
 
+    if (!user) {
+      throw new NotFoundException(`User ${username} not found`);
+    }
+
+    return user;
+  }
   public async findByEmail(email: string): Promise<Users> {
     const user = await this.userRepository.findOne({
       where: {

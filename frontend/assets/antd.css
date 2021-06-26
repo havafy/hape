@@ -37,6 +37,6 @@
         font-size: 26px!important;
     
 }
-.register-form-modal .ant-modal-header{
+.auth-form-modal .ant-modal-header{
     @apply uppercase text-base font-semibold;
 }
