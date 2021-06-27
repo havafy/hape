@@ -1,10 +1,6 @@
-import { FC, useState } from 'react'
-import Link from 'next/link'
-import cn from 'classnames'
 import s from './UserNav.module.css'
 import { RegisterForm, LoginForm } from '@components/common'
 import { useAuth } from '@context/AuthContext'
-import { Menu, Dropdown, Icon } from 'antd'
 const AuthMenu = () => {
   const { accessToken, user, logout } = useAuth();
   return (

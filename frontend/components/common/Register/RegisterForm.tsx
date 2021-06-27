@@ -1,10 +1,10 @@
-import React, { FC , useState } from 'react'
+import React, { FC , useState, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import cn from 'classnames'
 import axios from 'axios'
 import s from './RegisterForm.module.css'
-import ReCAPTCHA from 'react-google-recaptcha'
+import ReCAPTCHA, { ReCAPTCHA as ReCAPTCHA2 } from 'react-google-recaptcha';
 import { Form, Input, Button, Modal } from 'antd'
 import { useAuth } from '@context/AuthContext';
 import { GoogleLogin } from 'react-google-login';
@@ -14,7 +14,9 @@ interface Props {
   type?: string;
   required: boolean;
 }
-
+interface RefObject<T> {
+  readonly current: T | null;
+}
 
 
 const RegisterForm = () => {
@@ -26,7 +28,7 @@ const RegisterForm = () => {
   const [token, setToken] = useState<string>('')
   const [formMessage, setFormMessage] = useState([''])
   const [isLoading, setIsLoading] = useState(false)
-  const captchaRef: any = React.useRef();
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const showModal = () => {
     setVisible(true);
   };
@@ -44,13 +46,13 @@ const RegisterForm = () => {
   const onFinish = async (values: any) => {
     // let disabled the submit button
     setIsLoading(true)
-    let reqToken = ''
+    let reqToken = null
     let count = 0
     while ( count < 3){
       // get a token from ReCaptcha
-      if(typeof captchaRef.current !== undefined){
+      if(typeof recaptchaRef.current !== undefined){
         try {
-          reqToken = await captchaRef.current.executeAsync()
+          reqToken = await recaptchaRef?.current?.executeAsync()
           if(reqToken !== ''){
             break
           }
@@ -64,7 +66,7 @@ const RegisterForm = () => {
       }
       count++
     }
-    if(reqToken !== ''){
+    if(reqToken !== null){
       try {
         //send register data to API
         const { data } = await axios.post('auth/register', {
@@ -133,7 +135,7 @@ const RegisterForm = () => {
     setToken(captchaCode)
     // Reset the reCAPTCHA so that it can be executed again if user 
     // submits another email.
-    captchaRef.current.reset();
+    recaptchaRef?.current?.reset();
   }
 
   const responseGoogleOnFailure = (response: any) => {
@@ -195,9 +197,9 @@ const RegisterForm = () => {
                   <span className="font-bold cursor-pointer" onClick={() => setStep1(false)}>Quay lại </span>
                   </div>
               </div>
-              <ReCAPTCHA ref={captchaRef} size="invisible" 
+              {/* <ReCAPTCHA ref={recaptchaRef} size="invisible" 
                 sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
-                onChange={onReCAPTCHAChange}  />
+                onChange={onReCAPTCHAChange}  /> */}
           </Form>
       </div>
 
