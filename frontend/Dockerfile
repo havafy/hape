@@ -7,4 +7,4 @@ RUN npm config set unsafe-perm true
 WORKDIR /src
 # Copy sourcecode
 COPY . /src
-CMD rm -rf .next && npm i && npm run build && npm run start
+CMD  npm i && npm run build && npm run start
