@@ -19,6 +19,10 @@ services:
       - "3800:3500"
     networks:
       - hape
+    depends_on:
+      - mysqld
+      - redis
+      - elasticsearch
   mysql:
     container_name: hape-mysql
     image: mysql:5
