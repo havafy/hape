@@ -20,7 +20,7 @@ services:
     networks:
       - hape
     depends_on:
-      - mysqld
+      - mysql
       - redis
       - elasticsearch
   mysql:
