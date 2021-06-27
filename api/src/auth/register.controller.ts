@@ -2,9 +2,10 @@ import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
 import { RegisterService } from './register.service';
 import { RecaptchaService } from './recaptcha.service';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { EmailDto } from './dto/email.dto';
 import { LoginService } from './login.service';
 import { JwtPayload } from './interfaces/jwt.payload';
-@Controller('api/auth/register')
+@Controller()
 export class RegisterController {
   constructor(
     private readonly registerService: RegisterService,
@@ -12,7 +13,7 @@ export class RegisterController {
     private recaptchaService: RecaptchaService
     ) {}
 
-  @Post()
+  @Post('api/auth/register')
   public async register(
     @Res() res,
     @Body() registerUserDto: RegisterUserDto,
@@ -50,6 +51,25 @@ export class RegisterController {
         message: 'Error: User not registration!',
         status: 400,
       });
+    }
+  }
+  @Post('api/auth/checkEmail')
+  public async checkEmail(
+    @Res() res,
+    @Body() emailDto: EmailDto,
+  ): Promise<any> {
+    try {  
+      const status = await this.registerService.checkEmail(emailDto);
+      return res.status(HttpStatus.OK).json({
+          status
+      })
+
+    } catch (err) {
+      console.log(err)
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        message: 'Error!',
+        status: 400,
+      })
     }
   }
 }

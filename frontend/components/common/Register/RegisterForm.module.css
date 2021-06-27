@@ -22,3 +22,7 @@
     min-width: 16px;
     @apply h-5 w-5 text-gray-600 lg:col-span-1
 }
+.formMessage{
+    @apply text-sm text-red mb-5
+
+}
