@@ -356,3 +356,20 @@ body.layout{
   opacity: .5;
   margin: 25px 0;
 }
+.facebook-login-btn{
+  padding: 10px 20px;
+  color: #3578e5;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: rgb(0 0 0 / 24%) 0px 2px 2px 0px, rgb(0 0 0 / 24%) 0px 0px 1px 0px;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: Roboto, sans-serif;
+}
+.facebook-login-btn i.fa::before{
+  margin-right: 10px;
+  color: #3578e5;
+  font-size: 1.3rem;
+}

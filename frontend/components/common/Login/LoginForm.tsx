@@ -7,7 +7,7 @@ import s from './LoginForm.module.css'
 import { Form, Input, Button, Modal } from 'antd'
 import { useAuth } from '@context/AuthContext';
 import { GoogleLogin } from 'react-google-login';
-
+import FacebookLogin from 'react-facebook-login';
 interface Props {
   title?: string;
   name: string;
@@ -92,20 +92,41 @@ const LoginForm = () => {
     setVisible(false);
   }
 
-  return (
+ 
+  const responseFacebook = (response: any) => {
+    console.log(response);
+  }
+  const componentFBClicked = (response: any) => {
+    console.log(response);
+  }
+     return (
     <>
       <button onClick={showModal} className="font-bold mr-5 outline-none">Đăng nhập</button>
-
       <Modal
       title="Đăng nhập" className="auth-form-modal" visible={visible}
       onOk={handleOk} confirmLoading={false} onCancel={handleCancel} footer={null} >
-           <GoogleLogin
+           <div className="grid grid-cols-2 ">
+                <div className="col-span-1">
+                <GoogleLogin
                 clientId="333870013971-d8ncjpd1brc33asiiacr91tlq5n0gvqi.apps.googleusercontent.com"
                 buttonText="Tài khoản Google"
                 onSuccess={handleGoogleSuccess}
                 onFailure={responseGoogleOnFailure}
                 cookiePolicy={'single_host_origin'}
             />
+                </div>
+                <div className="col-span-1">
+                <FacebookLogin
+                    appId={process.env.NEXT_PUBLIC_FACEBOOK_KEY}
+                    autoLoad={false}
+                    fields="name,email,picture"
+                    icon="fa-facebook"
+                    cssClass="facebook-login-btn"
+                    onClick={componentFBClicked}
+                    callback={responseFacebook} />
+                  </div>
+            </div>
+
         <div className="my-5 text-center text-gray-800"> -- hoặc đăng nhập với -- </div>
       <Form name="basic" initialValues={{ remember: true }}
         onFinish={onFinish}
