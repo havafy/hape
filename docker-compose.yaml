@@ -5,7 +5,7 @@ services:
     restart: always
     build: ./frontend/
     volumes:
-      - .:/src
+      - ./frontend:/src
     ports:
       - "3100:3000"
 
