@@ -26,6 +26,10 @@ export class LoginService {
       if (loginDto.party === 'google') {
         return await this.loginByGoogle(loginDto);
       }
+      if (loginDto.party === 'facebook') {
+        return await this.loginByFacebook(loginDto);
+      }
+      
     } catch (err) {
       console.log(err);
       return {
@@ -98,6 +102,98 @@ export class LoginService {
       id: user.id,
       token: jwt,
     };
+  }
+  protected async loginByFacebook(loginDto: LoginByPartyDto) {
+    try {
+      const { data } = await axios.get(
+        `https://graph.facebook.com/v2.3/me`,
+        { params: { 
+            access_token: loginDto.accessToken,
+            fields: 'name%2Cemail%2Cpicture',
+            locale: 'en_US',
+            method:'get',
+            sdk: 'joey',
+            suppress_http_code:1
+         } }
+      );
+     /*     {
+    "name": "Kenzin Nguyen",
+    "email": "ntnpro@gmail.com",
+    "picture": {
+        "data": {
+            "height": 50,
+            "is_silhouette": false,
+            "url": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10159160398303948&height=50&width=50&ext=1627411798&hash=AeQfGETDGnBfMnsauxU",
+            "width": 50
+        }
+    },
+    "id": "10159160398303948",
+
+}*/
+      if (data.id) {
+        const avatar = data.picture.data.url;
+        const name = data.name;
+        const email = data.email;
+
+        // Check existing email or google ID
+        let user = await this.usersService.findOne({ email });
+        // if not exist let create a new user
+        if (!user) {
+          let r = Math.random()
+            .toString(36)
+            .substring(7);
+          const username = await this.usersService.getUniqueUserName(data.name);
+          const userDto = {
+            avatar,
+            name,
+            email,
+            username,
+            phone: null,
+            password: r,
+            facebook_id: data.id,
+          };
+          userDto.password = bcrypt.hashSync(userDto.password, 8);
+
+          user = await this.usersService.create(userDto);
+        }
+
+        // return  user and accessToken
+        const payload: JwtPayload = {
+          username: user.username,
+          id: user.id,
+        };
+
+        const accessToken = this.getAccessToken(payload);
+
+        return {
+          accessToken,
+          user: {
+            username: user.username,
+            id: user.id,
+          },
+          expiresIn: process.env.EXPIRES_IN_JWT,
+          status: 200,
+        };
+        /*
+            {
+          "id": "102514039483890396620",
+          "email": "ntnpro@gmail.com",
+          "verified_email": true,
+          "name": "ken nguyen",
+          "given_name": "ken",
+          "family_name": "nguyen",
+          "picture": "https://lh3.googleusercontent.com/a-/AOh14Gja_TOygyzC8vCyJ7qtfMrX9hLM4pWZjQFDalhzUw=s96-c",
+          "locale": "en"
+      }
+      */
+      }
+    } catch (err) {
+      console.log(err);
+      return {
+        message: err.message,
+        status: 400,
+      };
+    }
   }
   protected async loginByGoogle(loginDto: LoginByPartyDto) {
     try {
