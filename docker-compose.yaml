@@ -32,6 +32,8 @@ services:
       MYSQL_DATABASE: hape_production
     ports:
       - "3320:3306"
+    networks:
+      - hape
   redis: # sudo sysctl vm.overcommit_memory=1
     container_name: hape-redis
     restart: always
