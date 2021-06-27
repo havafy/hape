@@ -75,7 +75,6 @@ const LoginForm = () => {
   const handleGoogleSuccess = async (response: any) => {
     const { tokenObj, profileObj } = response
     if (tokenObj) {
-        console.log(tokenObj, profileObj)
         try {
             //send register data to API
             const { data } = await axios.post('auth/loginByParty', {
@@ -95,12 +94,20 @@ const LoginForm = () => {
  
   const responseFacebook = async (response: any) => {
     console.log(response);
-    if(response?.accessToken){
-      let { data } = await axios.post(`auth/loginByParty`,{
-        party: 'facebook',
-        accessToken: response.accessToken
-      })
+    try {
+      if(response?.accessToken){
+        let { data } = await axios.post(`auth/loginByParty`,{
+          party: 'facebook',
+          accessToken: response.accessToken
+        })
+        if(data?.accessToken){
+          login(data.accessToken, data.user)
+        }
+      }
+    } catch (err){
+          
     }
+    setVisible(false);
 
   }
   const componentFBClicked = (response: any) => {
