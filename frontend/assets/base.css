@@ -138,7 +138,7 @@ body.layout{
 }
 .navMenu > li{
   margin: 0;
-  padding: 10px 10px 40px 10px;
+  padding: 0px 0px 27px 0px;
   display: inline;
 }
 .navMenu > li::after {
@@ -146,7 +146,7 @@ body.layout{
   color: rgb(239, 83, 102);
   font-weight: bold;
   font-family: Graphik;
-  padding: 0px 0px 0px 19px;
+  padding: 0px 0px 0px 8px;
   font-size: 17px;
 }
 .navMenu > li:last-child::after {
@@ -180,10 +180,10 @@ body.layout{
 }
 .navMenu > li .submenu {
   position: absolute;
-  width: 900px;
-  left: 50%;
+  width: 100%;
+  left: 0;
   transform: translate(-50%, 10px);
-  top: 47px;
+  top: 21px;
   background: rgb(255, 255, 255);
   box-shadow: rgb(0 0 0 / 20%) 0px 4px 8px 0px;
   opacity: 0;
@@ -198,23 +198,6 @@ body.layout{
   opacity: 1;
   visibility: visible;
   transform: translateY(0px) rotate(45deg);
-}
-.navMenu > li > a::before {
-  content: "";
-  width: 16px;
-  height: 16px;
-  transform: translateY(10px) rotate(45deg);
-  position: absolute;
-  background: rgb(255, 255, 255);
-  left: 50%;
-  margin-left: -8px;
-  top: 46px;
-  z-index: 1;
-  border-top-left-radius: 2px;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s cubic-bezier(0.29, 0.19, 0.405, 1) 0s;
-  pointer-events: none;
 }
 .navMenu > li .submenu li img{
   max-width: 60px;

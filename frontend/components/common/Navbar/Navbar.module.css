@@ -6,8 +6,8 @@
 }
 
 .link, .link_last{
-  font-size: 12px;
-  @apply inline-flex items-center text-gray-700 px-1 leading-6 uppercase font-bold transition ease-in-out duration-75 cursor-pointer;
+  font-size: 13px;
+  @apply inline-flex items-center text-gray-900 px-1 leading-6 font-semibold transition ease-in-out duration-75 cursor-pointer;
 
 }
 

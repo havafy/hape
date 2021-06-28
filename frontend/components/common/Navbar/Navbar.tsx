@@ -19,15 +19,10 @@ const Navbar: FC<Props> = ({darkMode}) => (
             </a>
           </Link>
 
-          <ul className="navMenu pt-1 2xl:ml-36 xl:ml-30 lg:ml-10 space-x-4  sm:block hidden">
-            <li>
-              <Link href="/page/about-us">
-                <a className={s.link}>About us</a>
-              </Link>
-            </li>
-            <li className="dropdown">
+          <ul className="navMenu 2xl:ml-36 xl:ml-30 lg:ml-10 space-x-4  sm:block hidden">
+          <li className="dropdown">
               <Link href="/page/Magento-Development-Services">
-                <a className={s.link}>Services</a>
+                <a className={s.link}>Danh Mục</a>
               </Link>
               <div className="submenu">
                 <ul>
@@ -93,20 +88,27 @@ const Navbar: FC<Props> = ({darkMode}) => (
               </div>
             </li>
             <li>
-              <Link href="/page/Hire-Magento-ReactJs-Developers">
-                <a className={s.link}>Hire Developers</a>
+              <Link href="/page/about-us">
+                <a className={s.link}>Khuyến Mãi 24h</a>
               </Link>
             </li>
-            {/* <li>
-              <Link href="/page/demo">
-                <a className={s.link}>Demo</a>
-              </Link>
-            </li> */}
+          
             <li>
-              <Link href="/blog">
-                <a className={s.link_last}>Blog</a>
+              <Link href="/page/about-us">
+                <a className={s.link}>Mã giảm giá</a>
               </Link>
             </li>
+            <li>
+              <Link href="/page/about-us">
+                <a className={s.link}>Bán Chạy</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/page/Hire-Magento-ReactJs-Developers">
+                <a className={s.link}>Dọn kho</a>
+              </Link>
+            </li>
+
           </ul>
         </div>
 

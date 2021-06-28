@@ -95,3 +95,6 @@ span.highlight {
     @apply text-xl my-5
 }
 
+.grecaptcha-badge { 
+    visibility: hidden;
+}

@@ -121,7 +121,7 @@ const LoginForm = () => {
            <div className="grid grid-cols-2 ">
                 <div className="col-span-1">
                 <GoogleLogin
-                clientId="333870013971-d8ncjpd1brc33asiiacr91tlq5n0gvqi.apps.googleusercontent.com"
+                clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
                 buttonText="Tài khoản Google"
                 onSuccess={handleGoogleSuccess}
                 onFailure={responseGoogleOnFailure}
