@@ -8,6 +8,7 @@ import ReCAPTCHA, { ReCAPTCHA as ReCAPTCHA2 } from 'react-google-recaptcha';
 import { Form, Input, Button, Modal } from 'antd'
 import { useAuth } from '@context/AuthContext';
 import { GoogleLogin } from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
 interface Props {
   title?: string;
   name: string;
@@ -160,6 +161,27 @@ const RegisterForm = () => {
      }
      setVisible(false);
    }
+    
+  const responseFacebook = async (response: any) => {
+    try {
+      if(response?.accessToken){
+        let { data } = await axios.post(`auth/loginByParty`,{
+          party: 'facebook',
+          accessToken: response.accessToken
+        })
+        if(data?.accessToken){
+          login(data.accessToken, data.user)
+        }
+      }
+    } catch (err){
+          
+    }
+    setVisible(false);
+
+  }
+  const componentFBClicked = (response: any) => {
+
+  }
   return (
     <>
       <button onClick={showModal} className="button arrow">Đăng ký</button>
@@ -203,14 +225,27 @@ const RegisterForm = () => {
           </Form>
       </div>
 
-          <div className="my-5 text-center text-gray-400"> -- hoặc -- </div>
-      <GoogleLogin
-                clientId="333870013971-d8ncjpd1brc33asiiacr91tlq5n0gvqi.apps.googleusercontent.com"
-                buttonText="Tài khoản Google"
-                onSuccess={handleGoogleSuccess}
-                onFailure={responseGoogleOnFailure}
-                cookiePolicy={'single_host_origin'}
-            />
+          <div className="my-5 text-center text-gray-400"> - hoặc - </div>
+           <div className="grid grid-cols-2 ">
+                <div className="col-span-1">
+                <GoogleLogin
+                      clientId="333870013971-d8ncjpd1brc33asiiacr91tlq5n0gvqi.apps.googleusercontent.com"
+                      buttonText="Tài khoản Google"
+                      onSuccess={handleGoogleSuccess}
+                      onFailure={responseGoogleOnFailure}
+                      cookiePolicy={'single_host_origin'}   />
+                </div>
+                <div className="col-span-1">
+                <FacebookLogin
+                    appId={`${process.env.NEXT_PUBLIC_FACEBOOK_KEY}`}
+                    autoLoad={false}
+                    fields="name,email,picture"
+                    icon="fa-facebook"
+                    cssClass="facebook-login-btn"
+                    onClick={componentFBClicked}
+                    callback={responseFacebook} />
+                  </div>
+            </div>
 
       </Modal>
       </>

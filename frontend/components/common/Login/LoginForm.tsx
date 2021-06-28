@@ -93,7 +93,6 @@ const LoginForm = () => {
 
  
   const responseFacebook = async (response: any) => {
-    console.log(response);
     try {
       if(response?.accessToken){
         let { data } = await axios.post(`auth/loginByParty`,{
@@ -111,7 +110,7 @@ const LoginForm = () => {
 
   }
   const componentFBClicked = (response: any) => {
-    console.log(response);
+
   }
      return (
     <>

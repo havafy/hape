@@ -109,7 +109,7 @@ export class LoginService {
         `https://graph.facebook.com/v2.3/me`,
         { params: { 
             access_token: loginDto.accessToken,
-            fields: 'name%2Cemail%2Cpicture',
+            fields: 'name,email,picture',
             locale: 'en_US',
             method:'get',
             sdk: 'joey',
@@ -129,7 +129,9 @@ export class LoginService {
     },
     "id": "10159160398303948",
 
-}*/
+}*/      console.log(loginDto, data)
+
+
       if (data.id) {
         const avatar = data.picture.data.url;
         const name = data.name;
@@ -156,6 +158,16 @@ export class LoginService {
 
           user = await this.usersService.create(userDto);
         }
+        if(user){
+          let fields: any = {
+            avatar
+          }
+          if(user.facebook_id === null){
+            fields.facebook_id = data.id
+          }
+          await this.usersService.saveByField(user.id, fields)
+        }
+
 
         // return  user and accessToken
         const payload: JwtPayload = {
@@ -176,8 +188,8 @@ export class LoginService {
         };
         /*
             {
-          "id": "102514039483890396620",
-          "email": "ntnpro@gmail.com",
+          "id": "5654645645",
+          "email": "test@gmail.com",
           "verified_email": true,
           "name": "ken nguyen",
           "given_name": "ken",
@@ -229,6 +241,16 @@ export class LoginService {
           userDto.password = bcrypt.hashSync(userDto.password, 8);
 
           user = await this.usersService.create(userDto);
+        }
+        if(user){
+          let fields: any = {
+            name,
+            avatar
+          }
+          if(user.google_id === null){
+            fields.google_id = data.id
+          }
+          await this.usersService.saveByField(user.id, fields)
         }
 
         // return  user and accessToken

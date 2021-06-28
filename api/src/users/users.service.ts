@@ -76,7 +76,14 @@ export class UsersService {
       throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }
   }
+  public async saveByField(id: number, fields: { }): Promise<Users> {
+    const user = {
+      id,
+      ...fields
+    }
 
+    return await this.userRepository.save(user);
+  }
   public async updateByEmail(email: string): Promise<Users> {
     try {
       const user = await this.userRepository.findOne({ email: email });
