@@ -1,10 +1,7 @@
-import React, { FC , useState, useRef } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
+import React, { FC , useState, useEffect } from 'react'
 import cn from 'classnames'
 import axios from 'axios'
 import s from './RegisterForm.module.css'
-import ReCAPTCHA, { ReCAPTCHA as ReCAPTCHA2 } from 'react-google-recaptcha';
 import { Form, Input, Button, Modal } from 'antd'
 import { useAuth } from '@context/AuthContext';
 import { GoogleLogin } from 'react-google-login';
@@ -15,21 +12,16 @@ interface Props {
   type?: string;
   required: boolean;
 }
-interface RefObject<T> {
-  readonly current: T | null;
-}
-
 
 const RegisterForm = () => {
+  
   const { login } = useAuth();
   const [visible, setVisible] = useState(false);
   const [step1, setStep1] = useState(false)
   const [email, setEmail] = useState<string>('')
   const [emailMessage, setEmailMessage] = useState<string>('')
-  const [token, setToken] = useState<string>('')
   const [formMessage, setFormMessage] = useState([''])
   const [isLoading, setIsLoading] = useState(false)
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const showModal = () => {
     setVisible(true);
   };
@@ -45,28 +37,17 @@ const RegisterForm = () => {
     setVisible(false);
   }
   const onFinish = async (values: any) => {
+
     // let disabled the submit button
     setIsLoading(true)
-    let reqToken = null
-    let count = 0
-    while ( count < 3){
-      // get a token from ReCaptcha
-      if(typeof recaptchaRef.current !== undefined){
-        try {
-          reqToken = await recaptchaRef?.current?.executeAsync()
-          if(reqToken !== ''){
-            break
-          }
-          if(token !== ''){
-            reqToken = token
-            break
-          }
-        } catch (err){
-          // console.log('captchaRef_err', err)
-        }
-      }
-      count++
-    }
+    const reCapKey = process.env.NEXT_PUBLIC_RECAPTCHA_KEY
+    const { grecaptcha } = window as any;
+    grecaptcha.ready(async () => {
+      const token = await grecaptcha.execute(reCapKey, { action: "submit" });
+      await submitRegistration(values, token)
+    });
+  }
+  const submitRegistration = async (values: any , reqToken: any) => {
     if(reqToken !== null){
       try {
         //send register data to API
@@ -86,15 +67,13 @@ const RegisterForm = () => {
         
       }
     }  
-
     setIsLoading(false)
 
   }
-  function validateEmail(email: string) 
-    {
+  function validateEmail(email: string) {
         var re = /\S+@\S+\.\S+/;
         return re.test(email);
-    }
+  }
   const onFinishFailed = (errorInfo: any) => {
     console.log(errorInfo)
   }
@@ -126,18 +105,6 @@ const RegisterForm = () => {
     
   }
   
-  const onReCAPTCHAChange = (captchaCode: string) => {
-    // If the reCAPTCHA code is null or undefined indicating that
-    // the reCAPTCHA was expired then return early
-    if(!captchaCode) {
-      return;
-    }
-    // Else reCAPTCHA was executed successfully so proceed with the 
-    setToken(captchaCode)
-    // Reset the reCAPTCHA so that it can be executed again if user 
-    // submits another email.
-    recaptchaRef?.current?.reset();
-  }
 
   const responseGoogleOnFailure = (response: any) => {
     console.log('responseGoogleOnFailure:', response);
@@ -209,6 +176,7 @@ const RegisterForm = () => {
             <TextInput name="username" title="Tên đăng nhập" type="text"  required />
             <TextInput name="phone" title="Số điện thoại"type="number" required />
             <TextInput name="password" title="Mật khẩu" type="password"  required />
+          
             <div className="grid grid-cols-2  mt-10 ">
                 <div className="col-span-1">
                 <button type="submit" disabled={isLoading} className={s.button} >
@@ -219,9 +187,7 @@ const RegisterForm = () => {
                   <span className="font-bold cursor-pointer" onClick={() => setStep1(false)}>Quay lại </span>
                   </div>
               </div>
-              {/* <ReCAPTCHA ref={recaptchaRef} size="invisible" 
-                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
-                onChange={onReCAPTCHAChange}  /> */}
+    
           </Form>
       </div>
 

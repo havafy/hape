@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
+const recaptchaScriptSource = `https://www.google.com/recaptcha/api.js?render=` + process.env.NEXT_PUBLIC_RECAPTCHA_KEY;
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -9,7 +10,9 @@ class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head />
+        <Head>
+        <script src={recaptchaScriptSource}></script>
+        </Head>
         <body className="layout">
           <Main />
           <NextScript />
