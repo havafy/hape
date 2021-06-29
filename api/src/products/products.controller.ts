@@ -1,15 +1,17 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Body, Post } from '@nestjs/common';
 import { ProductsService } from './products.service';
-
-@Controller()
+import { ProductDto } from './dto/product.dto';
+@Controller('/api/products')
 export class ProductsController {
     constructor(public readonly movieService: ProductsService) {}
 
-    @Get('movies')
-    async getProductss(@Query('search') search: string) {
-        console.log(search)
-        if (search !== undefined && search.length > 1) {
-            return await this.movieService.findProductss(search);
-        }
+    @Post()
+    async create(@Body() productDto: ProductDto): Promise<any> {
+        console.log(productDto)
+
+        return {
+            productDto
+          };
+
     }
 }
