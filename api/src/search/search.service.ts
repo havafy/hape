@@ -73,6 +73,19 @@ export class SearchService {
         return await this.esService.bulk({ index, body })
     }
 
+    async update(index: string,  id: string, body: any){
+        try{
+            return await this.esService.index({ 
+                index,  
+                id,
+                body: {
+                  ...body 
+             } })
+        }catch(err){
+            console.log(err)
+        }
+
+    }
     async search(search: string) {
         let results = [];
         const { body } = await this.esService.search({

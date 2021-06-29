@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { nanoid } from 'nanoid'
 import { SearchService } from '../search/search.service';
 import { ProductDto } from './dto/product.dto';
+
 const ES_INDEX_NAME = 'products'
 @Injectable()
 export class ProductsService {
@@ -12,6 +14,12 @@ export class ProductsService {
         }]
         
         const res = await this.esService.createByBulk(ES_INDEX_NAME, record);
+        return res
+    }
+    async update(productDto: ProductDto) {
+        const id = productDto.id 
+        delete productDto.id
+        const res = await this.esService.update(ES_INDEX_NAME, id ,productDto);
         return res
     }
     async search(search: string = '') {
@@ -67,7 +75,7 @@ export class ProductsService {
                         description: { type: 'text' },
                         categorySlug: { type: 'text'},
                         status: { type: 'boolean' },
-                        images: { type: 'nested' },
+                        images: { type: 'text' },
                         userID: { type: 'long' },
                         updatedAt: { type: 'date' },
                         createdAt: { type: 'date' },

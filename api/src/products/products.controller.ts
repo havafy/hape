@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Res, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get,Put, Body, Res, Post, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ProductDto } from './dto/product.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -15,7 +15,15 @@ export class ProductsController {
         return res.json({
             status
         })
-
     }
+    @Put()
+    async update(@Res() res,  @Body() productDto: ProductDto): Promise<any> {
+        productDto.userID = res.req.user.id
+        const status = await this.productService.update(productDto)
+        return res.json({
+            status
+        })
+    }
+    
     
 }
