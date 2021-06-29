@@ -222,7 +222,7 @@ const TextInput: FC<Props> = ({ title, name, required = false, type = 'text' }) 
   <div className="relative w-full mb-6">
     <label className={s.label}>{title}</label>
     <Form.Item name={name}
-        rules={[{ required, message: 'Please input ' + title?.toLowerCase() + '!' }]} >
+        rules={[{ required, message: 'Vui lòng nhập ' + title?.toLowerCase() + '!' }]} >
        <Input placeholder={title} className={s.input} type={type} />
      </Form.Item>
 </div>

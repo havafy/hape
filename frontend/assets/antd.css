@@ -40,3 +40,11 @@
 .auth-form-modal .ant-modal-header{
     @apply uppercase text-base font-semibold;
 }
+
+
+.ant-picker-range {
+  position: relative;
+  display: inline-flex;
+  padding: 8px 10px;
+  border-radius: 4px;
+}

@@ -5,6 +5,8 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./users/users.module";
+import { SearchModule } from "./search/search.module";
+import { MovieModule } from "./movie/movie.module"
 import { ForgotPasswordModule } from "./forgot-password/forgot-password.module";
 import { ChangePasswordModule } from "./change-password/change-password.module";
 import { MailerModule } from "@nestjs-modules/mailer";
@@ -18,6 +20,8 @@ console.log({ dir: process.cwd() + "/templates/emails"})
     UsersModule,
     ForgotPasswordModule,
     ChangePasswordModule,
+    SearchModule, 
+    MovieModule,
     MailerModule.forRootAsync({
       useFactory: () => ({
         transport: {
