@@ -9,12 +9,17 @@ export class ProductDto {
   @IsOptional()
   @IsBoolean()
   status: boolean;
+  
+  @IsOptional()
+  @IsNumber()
+  userID: number;
 
   @IsNotEmpty()
   @MaxLength(250)
   @MinLength(10)
   url: string;
 
+  
   @IsNumber()
   price: number;
 

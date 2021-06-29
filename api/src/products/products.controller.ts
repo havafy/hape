@@ -1,17 +1,21 @@
-import { Controller, Get, Body, Post } from '@nestjs/common';
+import { Controller, Get, Body, Res, Post, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ProductDto } from './dto/product.dto';
+import { AuthGuard } from '@nestjs/passport';
+@UseGuards(AuthGuard('jwt'))     
 @Controller('/api/products')
 export class ProductsController {
-    constructor(public readonly movieService: ProductsService) {}
+    constructor(public readonly productService: ProductsService) {}
 
     @Post()
-    async create(@Body() productDto: ProductDto): Promise<any> {
-        console.log(productDto)
-
-        return {
-            productDto
-          };
+    async create(@Res() res,  @Body() productDto: ProductDto): Promise<any> {
+        productDto.userID = res.req.user.id
+        
+        const status = await this.productService.create(productDto)
+        return res.json({
+            status
+        })
 
     }
+    
 }

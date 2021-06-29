@@ -13,9 +13,4 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
     providers: [SearchService],
     exports: [SearchService],
 })
-export class SearchModule implements OnModuleInit {
-    constructor(private searchService: SearchService) {}
-    onModuleInit() {
-        this.searchService.createIndex().then();
-    }
-}
+export class SearchModule {}

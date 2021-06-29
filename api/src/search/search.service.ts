@@ -58,75 +58,19 @@ interface MoviesJsonResponse {
 export class SearchService {
     constructor(private readonly esService: ElasticsearchService) {}
 
-    async createIndex() {
-        const checkIndex = await this.esService.indices.exists(
-            { index: 'test'
-        });
+    async createIndex(index, body) {
+        const checkIndex = await this.esService.indices.exists({ index  });
         if (checkIndex.statusCode === 404) {
-            this.esService.indices.create(
-                {
-                    index: 'test',
+           const res = await this.esService.indices.create({
+                    index,
                     body: {
-                        settings: {
-                            analysis: {
-                                analyzer: {
-                                    autocomplete_analyzer: {
-                                        tokenizer: 'autocomplete',
-                                        filter: ['lowercase'],
-                                    },
-                                    autocomplete_search_analyzer: {
-                                        tokenizer: 'keyword',
-                                        filter: ['lowercase'],
-                                    },
-                                },
-                                tokenizer: {
-                                    autocomplete: {
-                                        type: 'edge_ngram',
-                                        min_gram: 1,
-                                        max_gram: 30,
-                                        token_chars: ['letter', 'digit', 'whitespace'],
-                                    },
-                                },
-                            },
-                        },
-                        mappings: {
-                            properties: {
-                                title: {
-                                    type: 'text',
-                                    fields: {
-                                        complete: {
-                                            type: 'text',
-                                            analyzer: 'autocomplete_analyzer',
-                                            search_analyzer: 'autocomplete_search_analyzer',
-                                        },
-                                    },
-                                },
-                                year: { type: 'integer' },
-                                genres: { type: 'nested' },
-                                actors: { type: 'nested' },
-                            },
-                        },
-                    },
-                },
-                (err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-                },
-            );
-            const body = await this.parseAndPrepareData();
-            this.esService.bulk(
-                {
-                    index: 'test',
-                    body,
-                },
-                (err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-                },
-            );
+                       ...body
+                    }  })
+            return res
         }
+    }
+    async createByBulk(index: string, body: any){
+        return await this.esService.bulk({ index, body })
     }
 
     async search(search: string) {
