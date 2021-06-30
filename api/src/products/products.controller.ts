@@ -1,4 +1,4 @@
-import { Controller, Get,Put, Body, Res, Post, UseGuards, Param } from '@nestjs/common';
+import { Controller, Get,Put, Body, Res, Post, UseGuards, Param, Delete } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ProductDto } from './dto/product.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -29,5 +29,12 @@ export class ProductsController {
         const data = await this.productService.get(id)
         return res.json(data)
     }
-    
+    @UseGuards(AuthGuard('jwt'))  
+    @Delete('/api/products/:id')
+    async delete(@Res() res, @Param() params: ProductGetDto): Promise<any> {
+        const userID = res.req.user.id
+        const id = params.id
+        const data = await this.productService.remove(userID, id)
+        return res.json(data)
+    }
 }

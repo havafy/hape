@@ -51,7 +51,7 @@ export class ProductsService {
         }
 
         const id = found.body.hits.hits[0]._id
-        delete productDto.id
+
         delete productDto.userID
         const status = await this.esService.update(ES_INDEX_NAME, id ,productDto);
         if(status && status.statusCode === 200){
@@ -81,6 +81,35 @@ export class ProductsService {
             }
         }
 
+    }
+
+    async remove(userID: number, id: string) {
+        try {
+            const product = await this.esService.findById(ES_INDEX_NAME, id )
+            if(product.found){
+                if(product._source.userID !== userID ){
+                    return {
+                        status: false,
+                        message: "Permission is denied.",
+                    }
+                }
+                const res = await this.esService.delete(ES_INDEX_NAME, id )
+                if(res.body.result === 'deleted'){
+                    return {
+                        status: true
+                    }
+                }
+       
+            }
+
+ 
+        }catch (err) {
+          
+        }
+        return {
+            status: false,
+            message: "This product is not found.",
+        }
     }
     async createIndex(){
         this.esService.createIndex(ES_INDEX_NAME, this.indicateBody())

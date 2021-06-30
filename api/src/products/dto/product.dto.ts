@@ -1,11 +1,7 @@
 import { MaxLength, MinLength, IsNumber ,IsNotEmpty, IsArray, IsBoolean, IsDate, IsOptional } from 'class-validator';
 
 export class ProductDto {
-  @IsOptional()
-  @MaxLength(100)
-  @MinLength(5)
-  id: string;
-
+  
   @IsNotEmpty()
   @MaxLength(70)
   @MinLength(10)

@@ -125,6 +125,14 @@ export class SearchService {
           })
         return body;
     }
+    async delete(index: string, id: string) {
+        const res = await this.esService.delete({
+            index,
+            id
+          })
+        return res
+    }
+    
     async search(search: string) {
         let results = [];
         const { body } = await this.esService.search({
