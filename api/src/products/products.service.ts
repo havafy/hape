@@ -47,13 +47,12 @@ export class ProductsService {
             return {
                 status: false,
                 message: "Permission is denied.",
-                userID,
-                found: found
             }
         }
 
         const id = found.body.hits.hits[0]._id
         delete productDto.id
+        delete productDto.userID
         const status = await this.esService.update(ES_INDEX_NAME, id ,productDto);
         if(status && status.statusCode === 200){
             return {
