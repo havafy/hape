@@ -60,7 +60,7 @@ export class SearchService {
 
     async createIndex(index, body) {
         const checkIndex = await this.esService.indices.exists({ index  });
-        if (checkIndex.statusCode === 404) {
+        if (checkIndex?.statusCode && checkIndex.statusCode === 404) {
            const res = await this.esService.indices.create({
                     index,
                     body: {
@@ -70,6 +70,7 @@ export class SearchService {
         }
     }
     async createByBulk(index: string, body: any){
+        
         return await this.esService.bulk({ index, body })
     }
 
@@ -84,7 +85,41 @@ export class SearchService {
         }catch(err){
             console.log(err)
         }
+        return false
 
+    }
+    async checkExisting(index: string, field: string, fieldValue: string): Promise<boolean> {
+        try {
+            const query = {}
+            query[field]= fieldValue
+            const { body: { hits: { total: { value } } }} = await this.findByFields(index, query);
+            return value > 0 ? true : false
+        }catch (err){
+            console.log(err)
+        }
+        return true
+    }
+    async findByFields(index: string, queryMatch: any) {
+        const reqParams = {
+            index,
+            body: {
+                query: {
+                    match: {
+                        ...queryMatch
+                    }
+                  }
+                  
+            }
+        }
+        const res = await this.esService.search(reqParams)
+        return res
+    }
+    async findById(index: string, id: string) {
+        const { body } = await this.esService.get({
+            index,
+            id
+          })
+        return body;
     }
     async search(search: string) {
         let results = [];

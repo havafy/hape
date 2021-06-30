@@ -11,6 +11,12 @@ export class ProductDto {
   @MinLength(10)
   name: string;
 
+
+  @IsNotEmpty()
+  @MaxLength(70)
+  @MinLength(5)
+  sku: string;
+
   @IsOptional()
   @IsBoolean()
   status: boolean;

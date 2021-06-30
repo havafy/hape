@@ -7,28 +7,74 @@ const ES_INDEX_NAME = 'products'
 @Injectable()
 export class ProductsService {
     constructor(readonly esService: SearchService) {}
+
     async create(productDto: ProductDto) {
+        const existing = await this.esService.checkExisting(ES_INDEX_NAME, 'sku', productDto.sku)
+        if(existing){
+            return {
+                status: false,
+                message: "This SKU is existing."
+            }
+        }
         const record = [ 
              { index: { _index: ES_INDEX_NAME } },  {
             ...productDto
         }]
         
         const res = await this.esService.createByBulk(ES_INDEX_NAME, record);
-        return res
+        if(res.statusCode === 200) {
+            return {
+                status: true,
+            }
+        }
+        return {
+            status: false,
+        }
     }
-    async update(productDto: ProductDto) {
-        const id = productDto.id 
+    async update(userID: number, productDto: ProductDto) {
+
+        const found = await this.esService.findByFields(ES_INDEX_NAME, { sku: productDto.sku })
+        if(found.body.hits.total.value === 0  || !Array.isArray(found.body.hits.hits)){
+            return {
+                status: false,
+                message: "This SKU is not existing.",
+                found: found
+            }
+        }
+
+        if(found.body.hits.hits[0]._source.userID !== userID ){
+            return {
+                status: false,
+                message: "Permission is denied."
+            }
+        }
+
+        const id = found.body.hits.hits[0]._id
         delete productDto.id
-        const res = await this.esService.update(ES_INDEX_NAME, id ,productDto);
-        return res
+        const status = await this.esService.update(ES_INDEX_NAME, id ,productDto);
+        return status
     }
     async search(search: string = '') {
         return await this.esService.search(search);
     }
-    async createIndex(){
+    async get(id: string) {
+        try {
+            const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
+            return {
+                found: true,
+                product: {
+                    ..._source
+                }
+            }
+        }catch (err) {
+            return {
+                found: false,
+            }
+        }
 
+    }
+    async createIndex(){
         this.esService.createIndex(ES_INDEX_NAME, this.indicateBody())
-        
     }
     indicateBody() {
         return {
