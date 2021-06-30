@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { UV_FS_O_FILEMAP } from 'constants';
 import { nanoid } from 'nanoid'
 import { SearchService } from '../search/search.service';
 import { ProductDto } from './dto/product.dto';
@@ -38,21 +39,30 @@ export class ProductsService {
             return {
                 status: false,
                 message: "This SKU is not existing.",
-                found: found
+
             }
         }
 
         if(found.body.hits.hits[0]._source.userID !== userID ){
             return {
                 status: false,
-                message: "Permission is denied."
+                message: "Permission is denied.",
+                userID,
+                found: found
             }
         }
 
         const id = found.body.hits.hits[0]._id
         delete productDto.id
         const status = await this.esService.update(ES_INDEX_NAME, id ,productDto);
-        return status
+        if(status && status.statusCode === 200){
+            return {
+                status: true
+            }
+        }
+        return {
+            status: false
+        }
     }
     async search(search: string = '') {
         return await this.esService.search(search);

@@ -76,12 +76,16 @@ export class SearchService {
 
     async update(index: string,  id: string, body: any){
         try{
-            return await this.esService.index({ 
-                index,  
-                id,
+            console.log(body)
+            return await this.esService.update({
+                index, type: '_doc', id,
                 body: {
-                  ...body 
-             } })
+                    doc: {
+                    ...body 
+                    }
+                }
+            })
+           
         }catch(err){
             console.log(err)
         }
