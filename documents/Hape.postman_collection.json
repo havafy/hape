@@ -1,0 +1,565 @@
+{
+	"info": {
+		"_postman_id": "35726006-9c64-4871-b788-091bb5b9d741",
+		"name": "Hape",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "TEST",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3500/movies?search=Dark",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3500",
+							"path": [
+								"movies"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Dark"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"sample name sample name sample name sample name \",\n    \"price\": 10000,\n    \"priceOriginal\": 11000,\n    \"dealBegin\": \"2012-04-23T18:25:43.511Z\",\n    \"dealEnd\": \"2012-04-23T18:25:43.511Z\",\n    \"status\": true,\n    \"url\": \"https://wwww.aaaaa.com/2222222\",\n    \"description\": \"sample name sample name sample name sample nam e sample name sample na e sample name sample na e sample name sample na\",\n    \"categorySlug\": \"222222\",\n    \"images\": [\"aaaa\",\"aaaaaa\"]\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3500/api/products/ErSZWHoBmObw8gIC7p_2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"products",
+								"ErSZWHoBmObw8gIC7p_2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im50bnBybzNAZ21haWwuY29tIiwiaWQiOjYsImlhdCI6MTYyNDUyMjQyNCwiZXhwIjoxNjI1ODE4NDI0fQ.jZVyIeFgNNcNKpnJ-6ekNa2geb6FKtxhAiDmKVqjxlw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"11111 name sample name sample name sample name \",\n    \"price\": 10000,\n    \"sku\": \"11111\",\n    \"priceOriginal\": 11000,\n    \"dealBegin\": \"2012-04-23T18:25:43.511Z\",\n    \"dealEnd\": \"2012-04-23T18:25:43.511Z\",\n    \"status\": true,\n    \"url\": \"https://wwww.aaaaa.com/2222222\",\n    \"description\": \"sample name sample name sample name sample nam e sample name sample na e sample name sample na e sample name sample na\",\n    \"categorySlug\": \"222222\",\n    \"images\": [\"aaaa\",\"aaaaaa\"]\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3500/api/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Product by SKU",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im50bnBybzNAZ21haWwuY29tIiwiaWQiOjYsImlhdCI6MTYyNDUyMjQyNCwiZXhwIjoxNjI1ODE4NDI0fQ.jZVyIeFgNNcNKpnJ-6ekNa2geb6FKtxhAiDmKVqjxlw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"6666 name sample name sample name sample name \",\n    \"sku\": \"88888e88999811\",\n    \"price\": 10000,\n    \"priceOriginal\": 11000,\n    \"dealBegin\": \"2012-04-23T18:25:43.511Z\",\n    \"dealEnd\": \"2012-04-23T18:25:43.511Z\",\n    \"status\": true,\n    \"url\": \"https://wwww.aaaaa.com/2222222\",\n    \"description\": \"sample name sample name sample name sample nam e sample name sample na e sample name sample na e sample name sample na\",\n    \"categorySlug\": \"222222\",\n    \"images\": [\"aaaa\",\"aaaaaa\"]\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3500/api/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Product on ES",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im50bnBybzNAZ21haWwuY29tIiwiaWQiOjYsImlhdCI6MTYyNDUyMjQyNCwiZXhwIjoxNjI1ODE4NDI0fQ.jZVyIeFgNNcNKpnJ-6ekNa2geb6FKtxhAiDmKVqjxlw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"2222sample name sample name sample name sample name \",\n    \"id\": \"ErSZWHoBmObw8gIC7p_2\"\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3500/api/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3500/api/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"ken nguyen\",\n    \"username\": \"kennguyen2\",\n    \"email\": \"ntnpro2@gmail.com\",\n    \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"ntnpro2@gmail.com\",\n    \"password\": \"ntnpro2@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login by Google",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"party\": \"google\",\n    \"accessToken\": \"a0ARrdaM_gnlXP0nCG8XygSi2sVwWkfRdB7lBf9Eqd6WzFV_scxaLQeAyD_OcOeZco8ocSeSNOzdt1w6OQ9WkuZEYS5_zl8Ojajs2hTGTEYziDaRTjTU_HmrttXJ7gpmYMVvRZE4gncfrqQN9i8LtZ8XQNVOcg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/auth/loginByParty",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"auth",
+								"loginByParty"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login by Facebook",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"party\": \"facebook\",\n    \"accessToken\": \"a0ARrdaM_gnlXP0nCG8XygSi2sVwWkfRdB7lBf9Eqd6WzFV_scxaLQeAyD_OcOeZco8ocSeSNOzdt1w6OQ9WkuZEYS5_zl8Ojajs2hTGTEYziDaRTjTU_HmrttXJ7gpmYMVvRZE4gncfrqQN9i8LtZ8XQNVOcg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/auth/loginByParty",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"auth",
+								"loginByParty"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "checkEmail",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"ntnpro@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/auth/checkEmail",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"auth",
+								"checkEmail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Profile Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im50bnBybzNAZ21haWwuY29tIiwiaWQiOjYsImlhdCI6MTYyNDUyMjQyNCwiZXhwIjoxNjI1ODE4NDI0fQ.jZVyIeFgNNcNKpnJ-6ekNa2geb6FKtxhAiDmKVqjxlw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \"name\": \"changed\",\n    \"username\": \"test2\",\n    \"email\": \"test2@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/users/profile",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im50bnBybzNAZ21haWwuY29tIiwiaWQiOjYsImlhdCI6MTYyNDUyMjk4MCwiZXhwIjoxNjI1ODE4OTgwfQ.bubkOErfjJIN_8_w-rFFq0HHgco2AhfPwrDArMtExAo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"888888\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/auth/change-password",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"auth",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoia2VuIG5ndXllbiIsImVtYWlsIjoibnRucHJvQGdtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE2MjQ1MTkyNTgsImV4cCI6MTYyNTgxNTI1OH0.9MLva2etM7NzGpCONUiFkIBweQPMAsRBV7WtaOmaGk4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"ntnpro@gmail.com\",\n    \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/users/profile",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "check secure",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im50bnBybzIyQGdtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE2MjQ1MjA2OTksImV4cCI6MTYyNTgxNjY5OX0.ERxQOAJ05Yx0GiBnT-9y4f4zJeaV8sEtViI8EOphf10",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:3500/api/secure",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "3500",
+					"path": [
+						"api",
+						"secure"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
