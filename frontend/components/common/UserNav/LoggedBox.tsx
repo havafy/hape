@@ -6,7 +6,7 @@ const LoggedBox = () => {
   return (
       <div className="grid grid-cols-2 ">
           <div className="col-span-1">
-                <Link href='/user/post'><a className="button arrow">Post</a></Link>
+                <Link href='/user/shop_product_create'><a className="button arrow">Post</a></Link>
         </div>
         <div className="col-span-1">
             <div className={s.userLoggedBox}>

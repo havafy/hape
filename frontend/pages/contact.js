@@ -1,12 +1,9 @@
 import Head from 'next/head'
 import { Layout } from '@components/common'
 import { Contact } from '@components/pages'
-export default function Home() {
+export default function Contact() {
   return (
     <Layout>
-      <Head>
-        <title>Home page</title>
-      </Head>
         <Contact />
     </Layout>
   )

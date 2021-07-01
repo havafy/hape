@@ -98,3 +98,29 @@ span.highlight {
 .grecaptcha-badge { 
     visibility: hidden;
 }
+/* ----------- sidebar ----------- */
+.user-sidebar{
+    min-width: 210px;
+    @apply py-8
+}
+.user-sidebar .menu-box{
+    @apply mb-7 
+}
+.user-sidebar .group-title{
+    @apply font-semibold text-base px-5
+}
+.user-sidebar .list-menu{
+}
+
+.user-sidebar .list-menu .menu-item svg{
+    width: 20px!important;
+    height: 20px!important;
+    fill: #888;
+    margin: 2px 7px 0 0 ;
+}
+.user-sidebar .list-menu .menu-item a{
+    @apply my-1 py-2 px-6 block flex
+}
+.user-sidebar .list-menu .menu-item a:hover{
+    background: #f2f2f2;
+}

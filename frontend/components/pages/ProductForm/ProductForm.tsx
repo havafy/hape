@@ -5,7 +5,7 @@ import InputRange from 'react-input-range'
 import { Form, Input, DatePicker, Upload, Switch  } from 'antd'
 const { RangePicker } = DatePicker;
 import { PlusOutlined } from '@ant-design/icons';
-import s from './PostForm.module.css'
+import s from './ProductForm.module.css'
 interface Props {
   title?: string;
   name: string;
@@ -54,7 +54,7 @@ function getBase64(file: any) {
     reader.onerror = error => reject(error);
   });
 }
-const PostForm: FC = () => {
+const ProductForm: FC = () => {
   const [ fileList, setFileList ] = useState([
     {
       uid: '-1',
@@ -122,11 +122,9 @@ const PostForm: FC = () => {
   } 
 
   return (
-    <main className="mt-20 sm:mt-20 md:mt-32">
-      <div className="mx-auto max-w-7xl">
-        <div className="md:grid md:grid-cols-6 md:gap-6">
 
-          <div className="mt-5 sm:px-10 px-0 md:mt-0 md:col-span-5">
+        <div className="">
+
 
           <h1 className={s.h1}>Thêm sản phẩm</h1>
             <div className={s.formBox}>
@@ -198,20 +196,8 @@ const PostForm: FC = () => {
             </Form>
             </div>
 
-          </div>
-          <div className="md:col-span-1">
-            <div className="px-4 sm:px-0">
-
-              <div className={s.infoBox}>
-
-              </div>
-
-            </div>
-          </div>
         </div>
-      </div>
-    </main>
   )
 }
 
-export default PostForm
+export default ProductForm
