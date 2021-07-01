@@ -5,7 +5,7 @@ import InputRange from 'react-input-range'
 import { Form, Input, DatePicker, Upload, Switch  } from 'antd'
 const { RangePicker } = DatePicker;
 import { PlusOutlined } from '@ant-design/icons';
-import s from './ProductForm.module.css'
+import s from './ShopProductForm.module.css'
 interface Props {
   title?: string;
   name: string;
@@ -54,7 +54,7 @@ function getBase64(file: any) {
     reader.onerror = error => reject(error);
   });
 }
-const ProductForm: FC = () => {
+const ShopProductForm: FC = () => {
   const [ fileList, setFileList ] = useState([
     {
       uid: '-1',
@@ -200,4 +200,4 @@ const ProductForm: FC = () => {
   )
 }
 
-export default ProductForm
+export default ShopProductForm

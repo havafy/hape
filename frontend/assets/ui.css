@@ -107,7 +107,7 @@ span.highlight {
     @apply mb-7 
 }
 .user-sidebar .group-title{
-    @apply font-semibold text-base px-5
+    @apply font-semibold text-base px-5 mb-2
 }
 .user-sidebar .list-menu{
 }
@@ -119,8 +119,19 @@ span.highlight {
     margin: 2px 7px 0 0 ;
 }
 .user-sidebar .list-menu .menu-item a{
-    @apply my-1 py-2 px-6 block flex
+    @apply py-3 px-6 block flex
 }
+.user-sidebar .list-menu .menu-item.active svg{
+    fill: #db4140;
+}
+.user-sidebar .list-menu .menu-item.active a{
+    color: #db4140;
+ 
+}
+.user-sidebar .list-menu .menu-item a:hover svg{
+    fill: #40a9ff;
+}
+
 .user-sidebar .list-menu .menu-item a:hover{
     background: #f2f2f2;
 }

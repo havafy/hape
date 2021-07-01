@@ -6,37 +6,42 @@ import s from './UserSidebar.module.css'
 import { GiShoppingBag } from 'react-icons/gi'
 import { FaAddressCard, FaMoneyCheck,  FaUserCircle } from 'react-icons/fa'
 import { RiLockPasswordFill, RiSettings5Line, RiDatabase2Line } from 'react-icons/ri'
-const UserSidebar: FC = () => {
-  return (
+interface MenuProps {
+    pid: string;
+    subMenu: string;
+    title: string;
+    children: JSX.Element,
+}
+interface Props {
+    pid: string;
+}
+const MenuItem: FC<MenuProps> = ({subMenu, title, pid, children})  => (
+    <div className={cn('menu-item', {'active': subMenu === pid ? true : false})}>
+        <Link href={"/user/" + subMenu}>
+                <a>{children}{title}</a>
+            </Link>
+        </div>
+)
+
+const UserSidebar: FC<Props> = ({pid}) => (
 <div className={cn(s.root,'user-sidebar')}>
     <div className='menu-box'>
         <div className='group-title'>
            Mua hàng
         </div>
         <div className="list-menu">
-            <div className="menu-item"><Link href={"/user/orders"}><a>
-                <GiShoppingBag /> Đơn hàng</a></Link></div>
-            <div className="menu-item"><Link href={"/user/address-book"}><a><FaAddressCard />Địa chỉ</a></Link></div>      
-        </div>
+            <MenuItem subMenu="orders" title='Đơn hàng' pid={pid}><GiShoppingBag /></MenuItem>
+            <MenuItem subMenu="address-book" title='Địa chỉ' pid={pid}><FaAddressCard /></MenuItem>
+          </div>
     </div>
     <div className='menu-box'>
         <div className="group-title">
             Cửa hàng
         </div>
         <div className="list-menu">
-            <div className="menu-item">
-                <Link href={"/user/shop_products"}>
-                    <a><RiDatabase2Line />Sản phẩm</a>
-                </Link>
-                </div>
-            <div className="menu-item"> 
-            <Link href={"/user/shop_orders"}>
-                    <a><FaMoneyCheck />Đơn hàng</a>
-                </Link></div>
-            <div className="menu-item"> 
-            <Link href={"/user/shop_settings"}>
-                    <a><RiSettings5Line />Cấu hình</a>
-                </Link></div>
+            <MenuItem subMenu="shop-products" title='Sản phẩm' pid={pid}><RiDatabase2Line /></MenuItem>
+            <MenuItem subMenu="shop-orders" title='Đơn hàng' pid={pid} ><FaMoneyCheck /></MenuItem>
+            <MenuItem subMenu="shop-settings" title='Cấu hình' pid={pid} ><RiSettings5Line /></MenuItem>
          </div>
     </div>
     <div className='menu-box'>
@@ -44,19 +49,12 @@ const UserSidebar: FC = () => {
             Tài Khoản Của Tôi
         </div>
         <div className="list-menu">
-            <div className="menu-item"> 
-            <Link href={"/user/settings"}>
-                    <a><FaUserCircle />Thông tin tài khoản</a>
-                </Link></div>
-            <div className="menu-item"> 
-            <Link href={"/user/password"}>
-                    <a><RiLockPasswordFill /> Đổi Mật khẩu</a>
-                </Link></div>
-
+            <MenuItem subMenu="profile" title='Thông tin tài khoản' pid={pid}><FaUserCircle /></MenuItem>
+            <MenuItem subMenu="change-password" title='Đổi Mật khẩu' pid={pid}><RiLockPasswordFill /></MenuItem>
          </div>
     </div>
 
 </div>
-  )
-}
+)
+
 export default UserSidebar

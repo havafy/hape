@@ -1,5 +1,9 @@
 import { Layout, UserSidebar} from '@components/common'
-import { Mobile, ProductForm, React, Hire, About, Demo } from '@components/pages'
+import { 
+  Orders, AddressBook, 
+  ShopProductForm, ShopProducts, ShopOrders, ShopSettings,
+  Profile, ChangePassword
+} from '@components/pages'
 import { useRouter } from 'next/router'
 export default function Page() {
     const router = useRouter()
@@ -10,15 +14,20 @@ export default function Page() {
        <div className="mx-auto max-w-7xl">
         <div className="md:grid md:grid-cols-12">
           <div className="mt-5 md:col-span-2">
-          <UserSidebar />
+          <UserSidebar pid={pid}/>
           </div>
           <div className="mt-5 md:col-span-10 ml-10">
-                {pid === 'shop_products' &&  <Mobile /> }
-                {pid === 'shop_product_create' &&  <ProductForm /> }
-                {pid === 'profile' &&  <React /> }
-                {pid === 'forgot-password' &&  <Hire /> }
-                {pid === 'change-password' &&  <About /> }
-                {pid === 'products' &&  <Demo /> }
+                {pid === 'orders' &&  <Orders /> }
+                {pid === 'address-book' &&  <AddressBook /> }
+
+                {pid === 'shop-products' &&  <ShopProducts /> }
+                {pid === 'shop-product-create' &&  <ShopProductForm /> }
+                {pid === 'shop-orders' &&  <ShopOrders /> }
+                {pid === 'shop-settings' &&  <ShopSettings /> }
+
+                {pid === 'profile' &&  <Profile /> }
+                {pid === 'change-password' &&  <ChangePassword /> }
+           
 
           </div>
           </div>
