@@ -11,7 +11,6 @@ import { ForgotPasswordModule } from "./forgot-password/forgot-password.module";
 import { ChangePasswordModule } from "./change-password/change-password.module";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
-console.log({ dir: process.cwd() + "/templates/emails"})
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),

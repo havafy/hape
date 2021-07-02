@@ -4,11 +4,12 @@ import axios from 'axios'
 import InputRange from 'react-input-range'
 import { Form, Input, DatePicker, Upload, Switch  } from 'antd'
 const { RangePicker } = DatePicker;
-import { PlusOutlined } from '@ant-design/icons';
+import { useAuth } from '@context/AuthContext'
+
 import s from './ShopProductForm.module.css'
 interface Props {
   title?: string;
-  name: string;
+  inputName: string;
   type?: string;
   required: boolean;
   tips?: string;
@@ -35,17 +36,6 @@ interface Array<T> {
 }
 
 
-const TextInput: FC<Props> = ({ title, name, required = false, type = 'text', tips}) => (
-  <div className="relative w-full mb-6">
-    <label className={s.label}>{title}</label>
-   {/* <input type={type} placeholder={title} className={s.input} /> */}
-    <Form.Item name={name}
-        rules={[{ required, message: 'Vui lòng nhập ' + title?.toLowerCase() + '!' }]} >
-       <Input placeholder={title} className={s.input}  />
-       { tips && <div className="text-sm pt-3 text-gray-600">{tips}</div>}
-     </Form.Item>
-</div>
-)
 function getBase64(file: any) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -75,23 +65,15 @@ const ShopProductForm: FC = () => {
       status: 'error',
     },
   ])
-  const [rangeValue, setRangeValue] = useState({
-    min: 5000,
-    max: 10000,
-  })
+  const { user, accessToken } = useAuth();
   const [isLoading, setIsLoading] = useState(false)
-
-  const siteName = process.env.NEXT_PUBLIC_SITE
   const onFinish = async (values: any) => {
+    console.log('--->values', values)
     setIsLoading(true)
-    const { data: { status, error } } = await axios.post('customer-contact', {
+    const { data  } = await axios.post('products', {
             ...values, 
-            options:{
-              rangeValue,
-              ...values, 
-            },
-            subject: '[' + siteName + '] Contact Page',
-        })
+        },{ headers: {   'Authorization': `Bearer ${accessToken}` } })
+        console.log('--->', data)
     setIsLoading(false)
   };
 
@@ -128,32 +110,42 @@ const ShopProductForm: FC = () => {
 
           <h1 className={s.h1}>Thêm sản phẩm</h1>
             <div className={s.formBox}>
-            <Form name="basic" initialValues={{ remember: true }}
+            <Form name="product-form" initialValues={{  }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}    >
               <div className="mt-8 md:grid md:grid-cols-6 md:gap-6">
                   <div className="md:col-span-5">
-                  <TextInput name="name" title="Tên sản phẩm" type="text"  required />
+                    <label className={s.label}>Tên sản phẩm</label>
+                    <Form.Item name="name"
+                        rules={[{ required: true, message: 'Please input Tên sản phẩm!' }]} >
+                      <Input placeholder='Tên sản phẩm' className={s.input}  />
+                    </Form.Item>
+
                   </div>
                   <div className="md:col-span-1">
                   <label className={s.label}>Trạng thái</label>
                   <Switch defaultChecked className="mt-2" />
                   </div>
               </div>
-
-          
-              <TextInput name="product_url" title="URL đặt hàng" type="text"
-                tips="Link sản phẩm ở shop của bạn, ví dụ: https://shopee.vn/iphone12-red-128GB"
-                required />
+              <div className="relative w-full mb-6">
+                 <label className={s.label}>Mã sản phẩm(SKU)</label>
+                  <Form.Item name="sku"
+                      rules={[{ required: true, message: 'Vui lòng nhập SKU sản phẩm!' }]} >
+                    <Input placeholder='Mã sản phẩm(SKU)' className={s.input}  />
+                  </Form.Item>
+                </div>
               <div className="mt-8 md:grid md:grid-cols-3 md:gap-6">
                 <div className="md:col-span-1">
-                  <TextInput name="price"
-                   title="Giá khuyến mãi"type="email"
-                   tips="Giá khách hàng có thể mua được trong thời gian khuyến mãi."
-                   required />
+                  <label className={s.label}>Giá sản phẩm</label>
+                   <Form.Item name="price" >
+                    <Input placeholder='Giá sản phẩm' type="number"  className={s.input}  />
+                  </Form.Item>
                 </div>
                 <div className="md:col-span-1">
-                  <TextInput name="price_original" title="Giá bán lẻ" type="text" required />
+                  <label className={s.label}>Giá khuyến mãi</label>
+                   <Form.Item name="price_discount" >
+                    <Input placeholder='Giá sản phẩm' type="number" className={s.input}  />
+                  </Form.Item>
                 </div>
                 <div className="md:col-span-1">
                   <div className="relative w-full mb-6">
@@ -169,7 +161,7 @@ const ShopProductForm: FC = () => {
                Mô tả
                 </label>
                 <Form.Item name='message'  rules={[{ required: true,
-                   message: 'Please input your project!' }]}>
+                   message: 'Cần nhập mô tả sản phẩm' }]}>
                   <Input.TextArea 
                         placeholder='Thông tin chi tiết sản phẩm'
                         rows={8}

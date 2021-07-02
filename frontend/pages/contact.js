@@ -4,7 +4,7 @@ import { ContactForm } from '@components/pages'
 export default function Contact() {
   return (
     <Layout>
-        <Contact />
+        <ContactForm />
     </Layout>
   )
 }
