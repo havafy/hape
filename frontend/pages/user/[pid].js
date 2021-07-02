@@ -4,13 +4,19 @@ import {
   ShopProductForm, ShopProducts, ShopOrders, ShopSettings,
   Profile, ChangePassword
 } from '@components/pages'
+import { Error } from '@components/pages'
+import { useAuth } from '@context/AuthContext'
 import { useRouter } from 'next/router'
 export default function Page() {
     const router = useRouter()
+    const { accessToken } = useAuth();
     const { pid } = router.query
+
   return (
-    <Layout pid={pid}>
-       <main className="mt-28">
+
+     <Layout pid={pid}>
+         { accessToken !== '' &&
+       <div className="mt-28">
        <div className="mx-auto max-w-7xl">
         <div className="md:grid md:grid-cols-12">
           <div className="mt-5 md:col-span-2">
@@ -32,7 +38,10 @@ export default function Page() {
           </div>
           </div>
           </div>
-      </main>
+      </div>
+         }
+         { accessToken === '' && <Error /> }
     </Layout>
+ 
   )
 }

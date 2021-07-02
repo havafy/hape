@@ -16,7 +16,7 @@
  
 }
 .formBox{
-    @apply shadow sm:pr-16  px-12 py-5 my-10 bg-white
+    @apply shadow  px-5 py-8 my-10 bg-white
 }
 .checkbox{
     margin-top: 6px;

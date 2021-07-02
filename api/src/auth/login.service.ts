@@ -64,11 +64,11 @@ export class LoginService {
       };
 
       const accessToken = this.getAccessToken(payload);
-
+      delete userData.password
       return {
         expiresIn: process.env.EXPIRES_IN_JWT,
         accessToken: accessToken,
-        user: payload,
+        user: userData,
         status: 200,
       };
     });
@@ -176,13 +176,11 @@ export class LoginService {
         };
 
         const accessToken = this.getAccessToken(payload);
-
+        // remove unused fields and return to client
+        delete user.password
         return {
           accessToken,
-          user: {
-            username: user.username,
-            id: user.id,
-          },
+          user,
           expiresIn: process.env.EXPIRES_IN_JWT,
           status: 200,
         };
@@ -260,13 +258,11 @@ export class LoginService {
         };
 
         const accessToken = this.getAccessToken(payload);
-
+        // remove unused fields and return to client
+        delete user.password
         return {
           accessToken,
-          user: {
-            username: user.username,
-            id: user.id,
-          },
+          user,
           expiresIn: process.env.EXPIRES_IN_JWT,
           status: 200,
         };

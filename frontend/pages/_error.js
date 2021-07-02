@@ -6,7 +6,7 @@ import { Error } from '@components/pages'
 function ErrorPage({ statusCode }) {
     return (
         <Layout>
-            <Error statusCode={statusCode} />
+            <Error statusCode={statusCode} title="Không tìm thấy đường dẫn này!" />
           </Layout>
     )
   }

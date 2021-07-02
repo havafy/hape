@@ -3,6 +3,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { Table, Button  } from 'antd'
 import s from './ShopProducts.module.css'
+import { RiDeleteBin6Line, RiAddFill } from 'react-icons/ri'
 
 const columns = [
   {
@@ -58,14 +59,21 @@ class ProductTable extends React.Component {
     const hasSelected = selectedRowKeys.length > 0;
     return (
       <div>
-        <div style={{ marginBottom: 16 }}>
-          <Button type="primary" onClick={this.start} disabled={!hasSelected} loading={loading}>
-            Reload
-          </Button>
-          <span style={{ marginLeft: 8 }}>
-            {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-          </span>
-        </div>
+       <div className="mb-3 grid grid-cols-2">
+          <div className="col-span-1">
+            <Button type="primary" onClick={this.start} disabled={!hasSelected} loading={loading}>
+              <RiDeleteBin6Line />
+            </Button>
+            <span className="ml-3 text-sm text-gray-500"> {hasSelected ? `Chọn ${selectedRowKeys.length} sản phẩm` : ''}
+            </span>
+          </div>
+            <div className="col-span-1 text-right">
+              <Link href="/user/shop-product-create"><a>
+              <Button type="primary"><RiAddFill /></Button>
+                </a></Link>
+            </div>
+          </div>
+
         <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
       </div>
     );
@@ -92,7 +100,7 @@ const ShopProducts: FC = () => {
   return (
 
         <div className="">
-          <h1 className={s.h1}>ShopProducts</h1>
+          <h1 className={s.h1}>Danh sách sản phẩm</h1>
             <div className={s.formBox}>
             <ProductTable />
             </div>

@@ -4,7 +4,7 @@ import axios from 'axios'
 import InputRange from 'react-input-range'
 import { Form, Input, Button, Checkbox } from 'antd'
 
-import s from './Contact.module.css'
+import s from './ContactForm.module.css'
 interface Props {
   title?: string;
   name: string;
@@ -28,7 +28,7 @@ const TextInput: FC<Props> = ({ title, name, required = false, type = 'text' }) 
 </div>
 )
 
-const Contact: FC = () => {
+const ContactForm: FC = () => {
   const [rangeValue, setRangeValue] = useState({
     min: 5000,
     max: 10000,
@@ -157,4 +157,4 @@ const Contact: FC = () => {
   )
 }
 
-export default Contact
+export default ContactForm

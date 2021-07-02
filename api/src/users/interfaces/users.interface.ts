@@ -4,7 +4,7 @@ export interface IUsers {
   readonly username: string;
   readonly email: string;
   readonly phone: string;
-  readonly password: string;
+  password: string;
   readonly avatar: string;
   readonly google_id: string;
   readonly facebook_id: string;

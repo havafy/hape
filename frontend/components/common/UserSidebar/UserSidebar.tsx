@@ -30,7 +30,7 @@ const UserSidebar: FC<Props> = ({pid}) => (
            Mua hàng
         </div>
         <div className="list-menu">
-            <MenuItem subMenu="orders" title='Đơn hàng' pid={pid}><GiShoppingBag /></MenuItem>
+            <MenuItem subMenu="orders" title='Đơn mua hàng' pid={pid}><GiShoppingBag /></MenuItem>
             <MenuItem subMenu="address-book" title='Địa chỉ' pid={pid}><FaAddressCard /></MenuItem>
           </div>
     </div>

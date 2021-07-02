@@ -135,3 +135,80 @@ span.highlight {
 .user-sidebar .list-menu .menu-item a:hover{
     background: #f2f2f2;
 }
+/* ---------- User Nav ------------ */
+
+.circle-avatar {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    border-radius: 50%;
+    border: 1px solid #eee;
+    text-align: center;
+    background-color: #eaeaea;
+    background-size: cover;
+    background-position: 50%;
+    background-image: url('/assets/avatar.png');
+}
+
+.user-logged-box{
+    margin: 0px 0 0 10px;
+    @apply text-sm
+ }
+  
+.user-logged-box:hover .user-menu-dropdown{
+    display: block;
+  }
+  
+.user-menu-dropdown{
+    position: absolute;
+    display: none;
+    right: 0;
+    min-width: 240px;
+    text-align: left;
+    @apply shadow-lg bg-white rounded
+}
+.user-menu-dropdown .menu-item a{
+    
+    border-bottom: 1px solid #f2f2f2;
+    @apply px-6 py-3 cursor-pointer block
+}
+.user-menu-dropdown .menu-item svg{
+    fill: #999;
+    width: 22px;
+    height: 22px;
+    margin: -2px 10px 0 0 ;
+    display: inline-block;
+}
+.user-menu-dropdown .menu-item:hover a{
+    color: #db4140;
+}
+.user-menu-dropdown .menu-item:hover svg{
+    fill: #db4140;
+}
+.user-menu-dropdown .menu-item:hover a{
+    background: #f2f2f2;
+
+}
+.header-popover-arrow{
+    display: block;
+}
+.header-popover-arrow:after, 
+.header-popover-arrow:before {
+    display: block;
+    content: " ";
+    position: absolute;
+    left: inherit;
+    right: inherit;
+    width: 0;
+    height: 0;
+    border-width: 10px;
+    border-style: solid;
+}
+.header-popover-arrow:after{
+    top: -19px;
+    border-color: transparent transparent #fff;
+}
+.header-popover-arrow:before{
+    top: -20px;
+    border-color: transparent transparent rgba(0,0,0,.02);
+}
