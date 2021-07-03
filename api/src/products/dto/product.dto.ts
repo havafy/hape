@@ -1,14 +1,19 @@
-import { MaxLength, MinLength, IsNumber ,IsNotEmpty, IsArray, IsBoolean, IsDate, IsOptional } from 'class-validator';
+import {
+  MaxLength, MinLength, 
+  IsNumber ,IsNotEmpty, 
+  IsArray, IsBoolean, 
+  IsDate, IsOptional, 
+  Min, Max,
+  ArrayMinSize, ArrayMaxSize
+} from 'class-validator';
 
 export class ProductDto {
   
-  @IsNotEmpty()
   @MaxLength(70)
   @MinLength(10)
   name: string;
 
 
-  @IsNotEmpty()
   @MaxLength(70)
   @MinLength(5)
   sku: string;
@@ -16,32 +21,43 @@ export class ProductDto {
   @IsOptional()
   @IsBoolean()
   status: boolean;
-  
-  @IsOptional()
+
   @IsNumber()
   userID: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(250)
   @MinLength(10)
   url: string;
 
   
   @IsNumber()
+  @Min(500)
+  @Max(900000000)
   price: number;
 
   @MaxLength(100)
-  @MinLength(2)
-  categorySlug: string;
+  @MinLength(3)
+  category: string;
 
+  @IsOptional()
   @IsNumber()
-  priceOriginal: number;
+  @Min(1)
+  @Max(10000)
+  quantity: number;
 
-  @IsDate()
-  dealBegin: Date;
+  @IsOptional()
+  @IsNumber()
+  @Min(500)
+  @Max(100000000)
+  priceDiscount: number;
 
+  @IsOptional()
   @IsDate()
-  dealEnd: Date;
+  discountBegin: Date;
+  @IsOptional()
+  @IsDate()
+  discountEnd: Date;
 
   @IsNotEmpty()
   @MaxLength(1024)
@@ -49,6 +65,8 @@ export class ProductDto {
   description: string;
 
   @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(9)
   images: string[];
 
 }
