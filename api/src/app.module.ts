@@ -7,6 +7,7 @@ import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./users/users.module";
 import { SearchModule } from "./search/search.module";
 import { ProductsModule } from "./products/products.module"
+import { FilesModule } from "./files/files.module"
 import { ForgotPasswordModule } from "./forgot-password/forgot-password.module";
 import { ChangePasswordModule } from "./change-password/change-password.module";
 import { MailerModule } from "@nestjs-modules/mailer";
@@ -19,6 +20,7 @@ import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handleba
     UsersModule,
     ForgotPasswordModule,
     ChangePasswordModule,
+    FilesModule,
     SearchModule, 
     ProductsModule,
     MailerModule.forRootAsync({

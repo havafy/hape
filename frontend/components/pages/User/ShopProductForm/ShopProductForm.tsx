@@ -26,26 +26,7 @@ function getBase64(file: any) {
   });
 }
 const ShopProductForm: FC = () => {
-  const [ fileList, setFileList ] = useState([
-    {
-      uid: '-1',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-2',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    
-    {
-      uid: '-5',
-      name: 'image.png',
-      status: 'error',
-    },
-  ])
+
   const { user, accessToken } = useAuth();
   const [status, setStatus] = useState(true)
   const [category, setCategory] = useState()
@@ -90,25 +71,32 @@ const ShopProductForm: FC = () => {
 
   
 
- const handleCancel = () => {
-   //setState({ previewVisible: false });
- }
+  const [fileList, setFileList] = useState([
+    {
+      uid: '-1',
+      name: 'image.png',
+      status: 'done',
+      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    },
+  ]);
 
- const  handlePreview = async (file :any) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    // this.setState({
-    //   previewImage: file.url || file.preview,
-    //   previewVisible: true,
-    //   previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
-    // });
+  const onChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
   };
-
-  const handleUploadChange = ({ fileList: any }) =>{
-//this.setState({ fileList });
-  } 
+  const onPreview = async (file: any) => {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow:any = window.open(src);
+    imgWindow.document.write(image.outerHTML);
+  };
 
   return (
 
@@ -214,11 +202,16 @@ const ShopProductForm: FC = () => {
               <div className="relative w-full mb-6">
                     <label className={s.label}>Hình ảnh</label>
                     <Upload
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                        name="file"
+                        action={process.env.NEXT_PUBLIC_API+'/file'}
+                        headers={{ Authorization: `Bearer ${accessToken}`}}
                         listType="picture-card"
                         fileList={fileList}
-                        onPreview={handlePreview}
-                        onChange={handleUploadChange} / >
+                        onChange={onChange}
+                        onPreview={onPreview}
+                      >
+                        {fileList.length < 5 && '+ Upload'}
+                      </Upload>
                   </div>
               <div className="relative w-full mb-3 justify-center">
                 <button type="submit"  className={s.button} >
