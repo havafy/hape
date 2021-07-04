@@ -1,10 +1,10 @@
-import React, { FC, useState, ChangeEvent } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
 import { Table, Button  } from 'antd'
 import s from './ShopProducts.module.css'
 import { RiDeleteBin6Line, RiAddFill } from 'react-icons/ri'
-
+import { useAuth } from '@context/AuthContext'
 const columns = [
   {
     title: 'Name',
@@ -80,13 +80,24 @@ class ProductTable extends React.Component {
   }
 }
 const ShopProducts: FC = () => {
-  
+  const { user, accessToken } = useAuth();
   const [isLoading, setIsLoading] = useState(false)
+  const [products, setProducts] = useState([])
 
-  const siteName = process.env.NEXT_PUBLIC_SITE
+  useEffect(() => {
+    (async () => {
+      const { data: { products} } = await axios.get('/products', { 
+        headers: { 'Authorization': `Bearer ${accessToken}` } 
+      })
+      console.log(products)
+
+      setProducts(products)
+    })()
+  
+  }, [])
   const onFinish = async (values: any) => {
     setIsLoading(true)
-    const { data: { status, error } } = await axios.post('customer-contact', {
+    const { data: { status, error } } = await axios.post('products', {
             ...values, 
 
         })

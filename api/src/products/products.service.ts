@@ -8,6 +8,21 @@ const ES_INDEX_NAME = 'products'
 @Injectable()
 export class ProductsService {
     constructor(readonly esService: SearchService) {}
+    
+    async getByUserID(userID: number) {
+
+        const products = await this.esService.findByFields(ES_INDEX_NAME, { userID })
+
+        // if(status && status.statusCode === 200){
+        //     return {
+        //         status: true
+        //     }
+        // }
+        return {
+            status: false,
+            products
+        }
+    }
 
     async create(productDto: ProductDto) {
         const existing = await this.esService.checkExisting(ES_INDEX_NAME, 'sku', productDto.sku)

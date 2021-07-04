@@ -23,6 +23,13 @@ export class ProductsController {
         const response = await this.productService.update(userID, productDto)
         return res.json(response)
     }
+    @UseGuards(AuthGuard('jwt'))   
+    @Get('/api/products')
+    async getByUserID(@Res() res): Promise<any> {
+        const userID = res.req.user.id
+        const response = await this.productService.getByUserID(userID)
+        return res.json(response)
+    }
     @Get('/api/products/:id')
     async get(@Res() res, @Param() params: ProductGetDto): Promise<any> {
         const id = params.id
