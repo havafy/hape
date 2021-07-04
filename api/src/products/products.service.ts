@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { url } from 'inspector';
 import { SearchService } from '../search/search.service';
+import { FilesService } from "../files/files.service";
 import { ProductDto } from './dto/product.dto';
 
 const ES_INDEX_NAME = 'products'
 @Injectable()
 export class ProductsService {
-    constructor(readonly esService: SearchService) {}
+    constructor(readonly esService: SearchService,
+        readonly filesService: FilesService) {}
     
     async getByUserID(userID: number,  size: number, from: number) {
         const { body: { 
@@ -47,7 +50,8 @@ export class ProductsService {
             updatedAt: createdAt,
             createdAt
         }]
-        
+        //move file from Waiting to Production folder
+        record.images = await this.filesService.formalizeS3Files(record.images)
         const res = await this.esService.createByBulk(ES_INDEX_NAME, record);
         if(res.statusCode === 200) {
             return {
@@ -58,6 +62,7 @@ export class ProductsService {
             status: false,
         }
     }
+ 
     async update(userID: number, productDto: ProductDto) {
  
         const found = await this.esService.findByFields(ES_INDEX_NAME, { sku: productDto.sku })
@@ -81,6 +86,8 @@ export class ProductsService {
         delete productDto.userID
         const now = new Date();
         productDto.updatedAt = now.toISOString()
+        //move file from Waiting to Production folder
+        productDto.images = await this.filesService.formalizeS3Files(productDto.images)
         const status = await this.esService.update(ES_INDEX_NAME, id ,productDto);
         if(status && status.statusCode === 200){
             return {

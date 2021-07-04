@@ -5,11 +5,12 @@ import axios from 'axios'
 import InputRange from 'react-input-range'
 import { Form, Input, DatePicker, Upload, Switch, TreeSelect  } from 'antd'
 import { IoMdArrowRoundBack } from 'react-icons/io'
+import { AiOutlineSave } from 'react-icons/ai'
+
 const { RangePicker } = DatePicker;
 import { useAuth } from '@context/AuthContext'
 import { default as categoryTree } from '@config/category'
 import s from './ShopProductForm.module.css'
-import product from 'next-seo/lib/jsonld/product'
 
 interface Props {
   title?: string;
@@ -51,12 +52,19 @@ const ShopProductForm: FC = () => {
         if(found){
           setProduct(product)
           setCategory(product.category)
-          console.log('--->', product)
+          // set images to review
+          setFileList(product.images.map((url: string, key:string)=> {
+                return {
+                  uid: key,
+                  name: url,
+                  status: 'done',
+                  url
+                }
+              }))
+
         }
       }
       setReady(true)
-      
-
     })()
   
   }, [])
@@ -133,7 +141,7 @@ const ShopProductForm: FC = () => {
                     </Link>
                     </span>
                   <button type="submit" className={s.button} > 
-                  { !isLoading ? 'Lưu sản phẩm' : 'Xử lý....' }
+                  <AiOutlineSave className="inline mr-1" /> { !isLoading ? 'Lưu' : 'Xử lý....' }
                     </button>
                 </div>
             </div>

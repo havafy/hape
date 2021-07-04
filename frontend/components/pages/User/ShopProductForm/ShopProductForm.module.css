@@ -19,6 +19,10 @@
   @apply inline ml-5 hover:text-white tracking-wide items-center justify-center text-white text-sm font-bold uppercase px-5 py-2 shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150 
  
 }
+.button svg {
+ width: 20px;
+ height: 20px;
+}
 .formBox{
     @apply shadow sm:pr-16  px-12 py-5 my-10 bg-white
 }

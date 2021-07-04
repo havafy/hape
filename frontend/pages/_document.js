@@ -14,6 +14,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
+        <link rel="shortcut icon" href="/favicon.png" />
         <script src={recaptchaScriptSource}></script>
         <script async src={GA_URL}></script>
         <script dangerouslySetInnerHTML={{ __html: `
