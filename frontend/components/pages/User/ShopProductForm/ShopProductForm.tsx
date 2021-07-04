@@ -3,9 +3,10 @@ import Link from 'next/link'
 import axios from 'axios'
 import InputRange from 'react-input-range'
 import { Form, Input, DatePicker, Upload, Switch, TreeSelect  } from 'antd'
+import { IoMdArrowRoundBack } from 'react-icons/io'
 const { RangePicker } = DatePicker;
 import { useAuth } from '@context/AuthContext'
-import { categoryTree } from '@config/category.json'
+import { default as categoryTree } from '@config/category'
 import s from './ShopProductForm.module.css'
 
 interface Props {
@@ -30,26 +31,26 @@ const ShopProductForm: FC = () => {
   const { user, accessToken } = useAuth();
   const [status, setStatus] = useState(true)
   const [category, setCategory] = useState()
-  const [discountDate, setDiscountDate] = useState([null, null])
+    
+  const [fileList, setFileList] = useState<any>([]);
+  const [discountDate, setDiscountDate] = useState<string[] | null[]>([null, null])
   const [isLoading, setIsLoading] = useState(false)
   const [formMessage, setFormMessage] = useState(false)
 
-  useEffect(() => {
-    console.log('discountDate:', discountDate)
-  }, [discountDate])
-
   const onFinish = async (values: any) => {
     setIsLoading(true)
+    let images = fileList.map((item: any) => item.response.url )
     try{
       const discountBegin = discountDate[0]
       const discountEnd= discountDate[1]
       const postData = {
+        ...values, 
         status,
         userID: user.id,
         category,
         discountBegin,
         discountEnd,
-          ...values, 
+        images
       }
       console.log(postData)
       const { data } = await axios.post('products', postData,{ 
@@ -69,18 +70,9 @@ const ShopProductForm: FC = () => {
     console.log('Failed:', errorInfo);
   };
 
-  
 
-  const [fileList, setFileList] = useState([
-    {
-      uid: '-1',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-  ]);
 
-  const onChange = ({ fileList: newFileList }) => {
+  const onChange = ({ fileList: newFileList }: any) => {
     setFileList(newFileList);
   };
   const onPreview = async (file: any) => {
@@ -99,13 +91,27 @@ const ShopProductForm: FC = () => {
   };
 
   return (
-
+    <Form name="product-form" initialValues={{  }}
+    onFinish={onFinish}
+    onFinishFailed={onFinishFailed}  >
         <div className="">
-          <h1 className={s.h1}>Thêm sản phẩm</h1>
+          <div className="mt-8 md:grid md:grid-cols-3 md:gap-6">
+                <div className="md:col-span-2">
+                <h1 className={s.h1}>Thêm sản phẩm</h1>
+                </div>
+                <div className="md:col-span-1 text-right">
+                  <span>
+                  <Link href="/user/shop-products">
+                    <a className={s.backButton}><IoMdArrowRoundBack className="inline" /> Quay lại</a>
+                    </Link>
+                    </span>
+                  <button type="submit" className={s.button} > 
+                  { !isLoading ? 'Lưu sản phẩm' : 'Xử lý....' }
+                    </button>
+                </div>
+            </div>
             <div className={s.formBox}>
-            <Form name="product-form" initialValues={{  }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}    >
+
              <div className={s.formMessage}>
                     {Array.isArray(formMessage) && formMessage.map((item: string, i:any) => {     
                           return (<div key={i}>• {item}</div>) 
@@ -129,7 +135,6 @@ const ShopProductForm: FC = () => {
                   </div>
               </div>
               <div className="mt-8 md:grid md:grid-cols-3 md:gap-6">
-         
                 <div className="md:col-span-1">
                  <label className={s.label}>Mã sản phẩm(SKU)</label>
                   <Form.Item name="sku"
@@ -157,8 +162,7 @@ const ShopProductForm: FC = () => {
                       placeholder="Chọn danh mục"
                       treeDefaultExpandAll
                       onChange={(value: any) => setCategory(value)}
-                    />
-                              </div>
+                    />  </div>
                 </div>
               <div className="mt-8 md:grid md:grid-cols-3 md:gap-6">
                 <div className="md:col-span-1">
@@ -177,7 +181,7 @@ const ShopProductForm: FC = () => {
                 <div className="md:col-span-1">
                   <div className="relative w-full mb-6">
                     <label className={s.label}>Thời hạn khuyến mãi</label>
-                    <RangePicker  onChange={(value:any, dateString) => setDiscountDate(dateString)} />
+                    <RangePicker  onChange={(value:any, dateString: string[]) => setDiscountDate(dateString)} />
                   </div>
                
               </div>
@@ -213,16 +217,12 @@ const ShopProductForm: FC = () => {
                         {fileList.length < 5 && '+ Upload'}
                       </Upload>
                   </div>
-              <div className="relative w-full mb-3 justify-center">
-                <button type="submit"  className={s.button} >
-                  { !isLoading ? 'Gởi đi' : 'Xử lý....' }
-                </button>
-              </div>
+    
 
-            </Form>
             </div>
 
         </div>
+     </Form>
   )
 }
 

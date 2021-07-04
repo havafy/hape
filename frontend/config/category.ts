@@ -1,5 +1,5 @@
 
-{ "categoryTree": [
+const categoryTree = [
     {
       "title": "Node1",
       "value": "0-0",
@@ -19,4 +19,5 @@
       "value": "0-1"
     }
   ]
-}
+
+export default categoryTree
