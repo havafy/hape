@@ -1,4 +1,5 @@
 import { FC, useState, ChangeEvent, Component, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import axios from 'axios'
 import InputRange from 'react-input-range'
@@ -8,6 +9,7 @@ const { RangePicker } = DatePicker;
 import { useAuth } from '@context/AuthContext'
 import { default as categoryTree } from '@config/category'
 import s from './ShopProductForm.module.css'
+import product from 'next-seo/lib/jsonld/product'
 
 interface Props {
   title?: string;
@@ -27,8 +29,11 @@ function getBase64(file: any) {
   });
 }
 const ShopProductForm: FC = () => {
-
+  const router = useRouter()
+  const { id } = router.query
   const { user, accessToken } = useAuth();
+  const [ready, setReady] = useState(false)
+  const [product, setProduct] = useState({})
   const [status, setStatus] = useState(true)
   const [category, setCategory] = useState()
     
@@ -36,6 +41,27 @@ const ShopProductForm: FC = () => {
   const [discountDate, setDiscountDate] = useState<string[] | null[]>([null, null])
   const [isLoading, setIsLoading] = useState(false)
   const [formMessage, setFormMessage] = useState(false)
+  
+  useEffect(() => {
+    (async () => {
+      if(id){
+        let { data: { found, product} } = await axios.get('/products/' + id, { 
+          headers: { 'Authorization': `Bearer ${accessToken}` } 
+        })
+        if(found){
+          setProduct(product)
+          setCategory(product.category)
+          console.log('--->', product)
+        }
+      }
+      setReady(true)
+      
+
+    })()
+  
+  }, [])
+
+
 
   const onFinish = async (values: any) => {
     setIsLoading(true)
@@ -91,13 +117,14 @@ const ShopProductForm: FC = () => {
   };
 
   return (
-    <Form name="product-form" initialValues={{  }}
+    <>
+    {ready && <Form name="product-form" initialValues={product}
     onFinish={onFinish}
     onFinishFailed={onFinishFailed}  >
         <div className="">
           <div className="mt-8 md:grid md:grid-cols-3 md:gap-6">
                 <div className="md:col-span-2">
-                <h1 className={s.h1}>Thêm sản phẩm</h1>
+                <h1 className={s.h1}>Thêm sản phẩm: {id}</h1>
                 </div>
                 <div className="md:col-span-1 text-right">
                   <span>
@@ -222,7 +249,8 @@ const ShopProductForm: FC = () => {
             </div>
 
         </div>
-     </Form>
+     </Form> }
+     </>
   )
 }
 

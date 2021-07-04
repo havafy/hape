@@ -103,10 +103,13 @@ export class SearchService {
         }
         return true
     }
-    async findByFields(index: string, queryMatch: any) {
+    async findByFields(index: string, queryMatch: any, size = 20, from = 0) {
         const reqParams = {
             index,
             body: {
+                size,
+                from,
+                sort: [{"createdAt": "desc"}],
                 query: {
                     match: {
                         ...queryMatch

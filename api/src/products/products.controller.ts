@@ -25,9 +25,10 @@ export class ProductsController {
     }
     @UseGuards(AuthGuard('jwt'))   
     @Get('/api/products')
-    async getByUserID(@Res() res): Promise<any> {
+    async getByUserID(@Res() res,  @Param() params: any): Promise<any> {
         const userID = res.req.user.id
-        const response = await this.productService.getByUserID(userID)
+        const {size = 20, from =0 } = params
+        const response = await this.productService.getByUserID(userID, size, from)
         return res.json(response)
     }
     @Get('/api/products/:id')

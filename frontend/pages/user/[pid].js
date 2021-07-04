@@ -13,7 +13,6 @@ export default function Page() {
     const { pid } = router.query
 
   return (
-
      <Layout pid={pid}>
          { accessToken !== '' &&
        <div className="mt-28">
@@ -28,6 +27,8 @@ export default function Page() {
 
                 {pid === 'shop-products' &&  <ShopProducts /> }
                 {pid === 'shop-product-create' &&  <ShopProductForm /> }
+                {pid === 'shop-product-update' &&  <ShopProductForm /> }
+                
                 {pid === 'shop-orders' &&  <ShopOrders /> }
                 {pid === 'shop-settings' &&  <ShopSettings /> }
 

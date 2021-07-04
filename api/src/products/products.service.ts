@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UV_FS_O_FILEMAP } from 'constants';
-import { nanoid } from 'nanoid'
 import { SearchService } from '../search/search.service';
 import { ProductDto } from './dto/product.dto';
 
@@ -9,22 +7,33 @@ const ES_INDEX_NAME = 'products'
 export class ProductsService {
     constructor(readonly esService: SearchService) {}
     
-    async getByUserID(userID: number) {
-
-        const products = await this.esService.findByFields(ES_INDEX_NAME, { userID })
-
-        // if(status && status.statusCode === 200){
-        //     return {
-        //         status: true
-        //     }
-        // }
+    async getByUserID(userID: number,  size: number, from: number) {
+        const { body: { 
+            hits: { 
+                total, 
+                hits 
+            } } } = await this.esService.findByFields(ES_INDEX_NAME, { userID }, size, from)
+        const count = total.value
+        let products = []
+        if(count){
+            products = hits.map((item: any) => {
+                return{
+                    id: item._id,
+                    ...item._source
+                 }
+            })
+        }
         return {
-            status: false,
+            count,
+            size,
+            from,
             products
         }
     }
 
     async create(productDto: ProductDto) {
+        const now = new Date();
+        const createdAt = now.toISOString()
         const existing = await this.esService.checkExisting(ES_INDEX_NAME, 'sku', productDto.sku)
         if(existing){
             return {
@@ -32,9 +41,11 @@ export class ProductsService {
                 message: "This SKU is existing."
             }
         }
-        const record = [ 
+        const record: any = [ 
              { index: { _index: ES_INDEX_NAME } },  {
-            ...productDto
+            ...productDto,
+            updatedAt: createdAt,
+            createdAt
         }]
         
         const res = await this.esService.createByBulk(ES_INDEX_NAME, record);
@@ -48,7 +59,7 @@ export class ProductsService {
         }
     }
     async update(userID: number, productDto: ProductDto) {
-
+ 
         const found = await this.esService.findByFields(ES_INDEX_NAME, { sku: productDto.sku })
         if(found.body.hits.total.value === 0  || !Array.isArray(found.body.hits.hits)){
             return {
@@ -68,6 +79,8 @@ export class ProductsService {
         const id = found.body.hits.hits[0]._id
 
         delete productDto.userID
+        const now = new Date();
+        productDto.updatedAt = now.toISOString()
         const status = await this.esService.update(ES_INDEX_NAME, id ,productDto);
         if(status && status.statusCode === 200){
             return {

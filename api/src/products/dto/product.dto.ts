@@ -69,4 +69,8 @@ export class ProductDto {
   @ArrayMaxSize(9)
   images: string[];
 
+  
+  @IsOptional()
+  updatedAt: string
+
 }
