@@ -46,7 +46,6 @@ export class ForgotPasswordService {
         },
       })
       .then(response => {
-        console.log(response);
         console.log('Forgot Password: Send Mail successfully!');
       })
       .catch(err => {

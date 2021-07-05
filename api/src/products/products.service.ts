@@ -34,68 +34,88 @@ export class ProductsService {
         }
     }
 
-    async create(productDto: ProductDto) {
-        const now = new Date();
-        const createdAt = now.toISOString()
-        const existing = await this.esService.checkExisting(ES_INDEX_NAME, 'sku', productDto.sku)
-        if(existing){
-            return {
-                status: false,
-                message: "This SKU is existing."
+    async create(userID: number, productDto: ProductDto) {
+        try {
+            const now = new Date();
+            const createdAt = now.toISOString()
+            const existing = await this.esService.checkExisting(ES_INDEX_NAME, 'sku', productDto.sku)
+            if(existing){
+                return {
+                    status: false,
+                    message: "This SKU is existing."
+                }
             }
-        }
-        const record: any = [ 
-             { index: { _index: ES_INDEX_NAME } },  {
-            ...productDto,
-            updatedAt: createdAt,
-            createdAt
-        }]
-        //move file from Waiting to Production folder
-        record.images = await this.filesService.formalizeS3Files(record.images)
-        const res = await this.esService.createByBulk(ES_INDEX_NAME, record);
-        if(res.statusCode === 200) {
+
+            //move file from Waiting to Production folder
+            productDto.images = await this.filesService.formalizeS3Files(productDto.images)
+
+            const record: any = [ 
+                { index: { _index: ES_INDEX_NAME } },  {
+                ...productDto,
+                userID,
+                updatedAt: createdAt,
+                createdAt
+            }]
+
+            const {  body: {items} } = await this.esService.createByBulk(ES_INDEX_NAME, record);
+            const productID = items[0].index._id
+            const { _source } =  await this.esService.findById(ES_INDEX_NAME, productID);
             return {
+                product: { ..._source},
                 status: true,
             }
+        }catch (err){
+            return {
+                product: null,
+                status: false,
+            }
         }
-        return {
-            status: false,
-        }
+        
     }
  
     async update(userID: number, productDto: ProductDto) {
- 
-        const found = await this.esService.findByFields(ES_INDEX_NAME, { sku: productDto.sku })
-        if(found.body.hits.total.value === 0  || !Array.isArray(found.body.hits.hits)){
-            return {
-                status: false,
-                message: "This SKU is not existing.",
-
+        try{    
+            const productID = productDto.id
+            const checkProduct =  await this.esService.findById(ES_INDEX_NAME, productDto.id);
+            const product = checkProduct._source
+            if(product.userID !== userID ){
+                return {
+                    status: false,
+                    message: "Permission is denied.",
+                }
             }
-        }
-
-        if(found.body.hits.hits[0]._source.userID !== userID ){
-            return {
-                status: false,
-                message: "Permission is denied.",
+            // if change SKU, let check new SKU is existing or not
+            if(productDto.sku !== product.sku){
+                const found = await this.esService.findByFields(ES_INDEX_NAME, { sku: productDto.sku })
+                if(found.body.hits.total.value >= 1  || !Array.isArray(found.body.hits.hits)){
+                    return {
+                        status: false,
+                        message: "This SKU is existing.",
+    
+                    }
+                }
             }
-        }
-
-        const id = found.body.hits.hits[0]._id
-
-        delete productDto.userID
-        const now = new Date();
-        productDto.updatedAt = now.toISOString()
-        //move file from Waiting to Production folder
-        productDto.images = await this.filesService.formalizeS3Files(productDto.images)
-        const status = await this.esService.update(ES_INDEX_NAME, id ,productDto);
-        if(status && status.statusCode === 200){
+            const now = new Date();
+            productDto.updatedAt = now.toISOString()
+     
+            //move file from Waiting to Production folder
+            const updatedImages = await this.filesService.formalizeS3Files(productDto.images)
+            productDto.images = updatedImages
+            //remove unused images
+            await this.filesService.cleanUnusedFiles(updatedImages, product.images)
+            await this.esService.update(ES_INDEX_NAME, productID ,productDto)
+            const updatedProduct =  await this.esService.findById(ES_INDEX_NAME, productID);
             return {
+                product: { ...updatedProduct._source },
                 status: true
             }
+    
+        }catch (err){
+            console.log(err)
         }
         return {
-            status: false
+            product: null,
+            status: false,
         }
     }
     async search(search: string = '') {

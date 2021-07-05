@@ -75,8 +75,8 @@ export class SearchService {
     }
 
     async update(index: string,  id: string, body: any){
+        delete body.id
         try{
-            console.log(body)
             return await this.esService.update({
                 index, type: '_doc', id,
                 body: {

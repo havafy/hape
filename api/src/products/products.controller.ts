@@ -9,9 +9,9 @@ export class ProductsController {
     @UseGuards(AuthGuard('jwt'))   
     @Post('/api/products')
     async create(@Res() res,  @Body() productDto: ProductDto): Promise<any> {
-        productDto.userID = res.req.user.id
+        const userID = res.req.user.id
         
-        const response = await this.productService.create(productDto)
+        const response = await this.productService.create(userID, productDto)
         return res.json({
             ...response
         })

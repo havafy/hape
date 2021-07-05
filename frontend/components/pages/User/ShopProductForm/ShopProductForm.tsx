@@ -11,6 +11,7 @@ const { RangePicker } = DatePicker;
 import { useAuth } from '@context/AuthContext'
 import { default as categoryTree } from '@config/category'
 import s from './ShopProductForm.module.css'
+import product from 'next-seo/lib/jsonld/product'
 
 interface Props {
   title?: string;
@@ -32,7 +33,7 @@ function getBase64(file: any) {
 const ShopProductForm: FC = () => {
   const router = useRouter()
   const { id } = router.query
-  const { user, accessToken } = useAuth();
+  const { accessToken } = useAuth();
   const [ready, setReady] = useState(false)
   const [product, setProduct] = useState({})
   const [status, setStatus] = useState(true)
@@ -41,7 +42,7 @@ const ShopProductForm: FC = () => {
   const [fileList, setFileList] = useState<any>([]);
   const [discountDate, setDiscountDate] = useState<string[] | null[]>([null, null])
   const [isLoading, setIsLoading] = useState(false)
-  const [formMessage, setFormMessage] = useState(false)
+  const [formMessage, setFormMessage] = useState<string[]>([])
   
   useEffect(() => {
     (async () => {
@@ -50,17 +51,7 @@ const ShopProductForm: FC = () => {
           headers: { 'Authorization': `Bearer ${accessToken}` } 
         })
         if(found){
-          setProduct(product)
-          setCategory(product.category)
-          // set images to review
-          setFileList(product.images.map((url: string, key:string)=> {
-                return {
-                  uid: key,
-                  name: url,
-                  status: 'done',
-                  url
-                }
-              }))
+          updateProduct(product)
 
         }
       }
@@ -69,34 +60,66 @@ const ShopProductForm: FC = () => {
   
   }, [])
 
-
-
+  const updateProduct =  (product: any) => {
+    setProduct(product)
+    setCategory(product.category)
+    // set images to review
+    setFileList(product.images.map((url: string, key:string)=> {
+          return {
+            uid: key,
+            name: url,
+            status: 'done',
+            url
+          }
+        }))
+  }
   const onFinish = async (values: any) => {
     setIsLoading(true)
-    let images = fileList.map((item: any) => item.response.url )
+    setFormMessage([])
+    const authConfig = { 
+      headers: { 'Authorization': `Bearer ${accessToken}` } 
+    }
+
+    let images = fileList.map((item: any) =>{
+      if(item.url){
+        return item.url
+      }
+      return item.response.url 
+    })
     try{
-      const discountBegin = discountDate[0]
-      const discountEnd= discountDate[1]
-      const postData = {
-        ...values, 
-        status,
-        userID: user.id,
-        category,
-        discountBegin,
-        discountEnd,
-        images
+        const discountBegin = discountDate[0]
+        const discountEnd= discountDate[1]
+        const postData = {
+          ...values, 
+          status,
+          category,
+          discountBegin,
+          discountEnd,
+          images
+        }
+        // if product is existing, let call Update API
+        let response: any = null
+
+        if(id){ // Update Case: push product ID to the post data
+          postData.id = id
+          response= await axios.put('products', postData,authConfig)
+        }else{// Create New One Case
+          response = await axios.post('products', postData,authConfig)
+        }
+        if(response.data.status){
+          updateProduct(response.data.product)
+        }else{
+          setFormMessage([response.data.message])
+        }
+
+    } catch (err){
+      console.log('response.data:', err.response.data)
+      if(err?.response?.data){
+        setFormMessage(err.response.data.message)
       }
-      console.log(postData)
-      const { data } = await axios.post('products', postData,{ 
-        headers: { 'Authorization': `Bearer ${accessToken}` } 
-      })
-      console.log('data:', data)
-      } catch (err){
-        const { data } = err.response
-        console.log('err', data)
-        setFormMessage(data.message)
-        
-      }
+ 
+      
+    }
     setIsLoading(false)
   };
 
@@ -130,9 +153,9 @@ const ShopProductForm: FC = () => {
     onFinish={onFinish}
     onFinishFailed={onFinishFailed}  >
         <div className="">
-          <div className="mt-8 md:grid md:grid-cols-3 md:gap-6">
+          <div className="md:grid md:grid-cols-3 md:gap-6">
                 <div className="md:col-span-2">
-                <h1 className={s.h1}>Thêm sản phẩm: {id}</h1>
+                <h1 className={s.h1}>{id ?  'Cập nhật sản phẩm': 'Thêm sản phẩm'}</h1>
                 </div>
                 <div className="md:col-span-1 text-right">
                   <span>

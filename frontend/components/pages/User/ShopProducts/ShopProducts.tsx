@@ -62,7 +62,7 @@ return (
                     </span>
                   </div>
                     <div className="col-span-1 text-right">
-                      <Link href="/user/shop-product-create"><a>
+                      <Link href="/user/shop-product-form"><a>
                       <Button type="primary"><RiAddFill /></Button>
                         </a></Link>
                     </div>
@@ -80,12 +80,12 @@ return (
                       />
                       <Column title="Tên sản phẩm" dataIndex="name"
                       render={(text, record: any) => (
-                        <Link href={'/user/shop-product-update?id=' + record.id }>
+                        <Link href={'/user/shop-product-form?id=' + record.id }>
                           <a>{text}</a>
                         </Link>
                       )} />
                       <Column title="SKU" dataIndex="sku" render={(text, record: any) => (
-                        <Link href={'/user/shop-product-update?id=' + record.id }>
+                        <Link href={'/user/shop-product-form?id=' + record.id }>
                           <a>{text}</a>
                         </Link>
                       )} />

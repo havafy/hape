@@ -26,8 +26,7 @@ export default function Page() {
                 {pid === 'address-book' &&  <AddressBook /> }
 
                 {pid === 'shop-products' &&  <ShopProducts /> }
-                {pid === 'shop-product-create' &&  <ShopProductForm /> }
-                {pid === 'shop-product-update' &&  <ShopProductForm /> }
+                {pid === 'shop-product-form' &&  <ShopProductForm /> }
                 
                 {pid === 'shop-orders' &&  <ShopOrders /> }
                 {pid === 'shop-settings' &&  <ShopSettings /> }

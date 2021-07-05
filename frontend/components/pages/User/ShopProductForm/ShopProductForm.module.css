@@ -24,7 +24,7 @@
  height: 20px;
 }
 .formBox{
-    @apply shadow sm:pr-16  px-12 py-5 my-10 bg-white
+    @apply shadow sm:pr-16  px-12 py-5 my-5 bg-white
 }
 .formMessage{
     @apply text-sm text-red mb-5

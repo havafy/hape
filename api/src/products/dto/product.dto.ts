@@ -8,7 +8,11 @@ import {
 } from 'class-validator';
 
 export class ProductDto {
-  
+  @IsOptional()
+  @MaxLength(70)
+  @MinLength(10)
+  id: string;
+
   @MaxLength(70)
   @MinLength(10)
   name: string;
@@ -21,9 +25,6 @@ export class ProductDto {
   @IsOptional()
   @IsBoolean()
   status: boolean;
-
-  @IsNumber()
-  userID: number;
 
   @IsOptional()
   @MaxLength(250)

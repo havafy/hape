@@ -116,20 +116,6 @@ export class LoginService {
             suppress_http_code:1
          } }
       );
-     /*     {
-    "name": "Kenzin Nguyen",
-    "email": "ntnpro@gmail.com",
-    "picture": {
-        "data": {
-            "height": 50,
-            "is_silhouette": false,
-            "url": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10159160398303948&height=50&width=50&ext=1627411798&hash=AeQfGETDGnBfMnsauxU",
-            "width": 50
-        }
-    },
-    "id": "10159160398303948",
-
-}*/      console.log(loginDto, data)
 
 
       if (data.id) {
@@ -235,7 +221,6 @@ export class LoginService {
             password: r,
             google_id: data.id,
           };
-          console.log('r:', r);
           userDto.password = bcrypt.hashSync(userDto.password, 8);
 
           user = await this.usersService.create(userDto);

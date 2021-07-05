@@ -9,7 +9,7 @@ const LoggedBox = () => {
   return (
       <div className="grid grid-cols-2 ">
           <div className="col-span-1">
-                {/* <Link href='/user/shop-product-create'><a className="button arrow">Đăng sản phẩm</a></Link> */}
+                {/* <Link href='/user/shop-product-form'><a className="button arrow">Đăng sản phẩm</a></Link> */}
         </div>
         <div className="col-span-1 text-right">
             <div className='user-logged-box'>
