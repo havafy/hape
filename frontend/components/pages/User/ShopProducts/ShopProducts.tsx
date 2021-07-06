@@ -8,39 +8,49 @@ import { useAuth } from '@context/AuthContext'
 const { Column } = Table
 const ShopProducts: FC = () => {
   const { user, accessToken } = useAuth();
-  const [isLoading, setIsLoading] = useState(false)
+  const [pagination, setPagination ]= useState({current: 1, pageSize: 1})
   const [products, setProducts] = useState([])
-
+  const [ selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [ loading, setLoading] = useState(false)
+  const headerApi = { 
+    headers: { 'Authorization': `Bearer ${accessToken}` } 
+  }
   useEffect(() => {
-    (async () => {
-      let { data: { products} } = await axios.get('/products', { 
-        headers: { 'Authorization': `Bearer ${accessToken}` } 
-      })
-      products = products.map((product: any) => {
-        return{
-          key: product.id,
-          ...product
-        }
-      })
-      setProducts(products)
-    })()
-  
+    pullProducts()
   }, [])
 
- const [ selectedRowKeys, setSelectedRowKeys] = useState([])
- const [ loading, setLoading] = useState(false)
+  const handleTableChange = (pagination: any, filters: any, sorter: any) => {
+    console.log({
+      sortField: sorter.field,
+      sortOrder: sorter.order,
+      pagination,
+      ...filters,
+    });
+  };
 
-const start = () => {
+const pullProducts = async ()=>{
+    let { data: { products} } = await axios.get('/products', headerApi)
+    products = products.map((product: any) => {
+      return{
+        key: product.id,
+        ...product
+      }
+    })
+    setProducts(products)
+}
+const deleteProducts = async () => {
   setLoading(true)
   // ajax request after empty completing
-  setTimeout(() => {
-    setSelectedRowKeys([])
-    setLoading(false)
-  }, 1000);
+  for (const productID of selectedRowKeys){
+     await axios.delete('/products/' + productID, headerApi)
+  }
+  setSelectedRowKeys([])
+  await pullProducts()
+  setLoading(false)
 }
 
 const onSelectChange = (selectedRowKeys: any) => {
-  console.log('selectedRowKeys changed: ', selectedRowKeys);
+
   setSelectedRowKeys(selectedRowKeys)
 };
 const rowSelection = {
@@ -55,7 +65,7 @@ return (
             <div>
               <div className="mb-3 grid grid-cols-2">
                   <div className="col-span-1">
-                    <Button type="primary" onClick={start} disabled={!hasSelected} loading={loading}>
+                    <Button type="primary" onClick={deleteProducts} disabled={!hasSelected} loading={loading}>
                       <RiDeleteBin6Line />
                     </Button>
                     <span className="ml-3 text-sm text-gray-500"> {hasSelected ? `Chọn ${selectedRowKeys.length} sản phẩm` : ''}
@@ -63,12 +73,17 @@ return (
                   </div>
                     <div className="col-span-1 text-right">
                       <Link href="/user/shop-product-form"><a>
-                      <Button type="primary"><RiAddFill /></Button>
+                      <Button type="primary" className="addButton"><RiAddFill className={s.addButtonSvg} /> Thêm</Button>
                         </a></Link>
                     </div>
                   </div>
           
-                <Table dataSource={products}  rowSelection={rowSelection}>
+                <Table 
+                dataSource={products}  
+                rowSelection={rowSelection}
+                pagination={pagination}
+                loading={loading}
+                onChange={handleTableChange}  >
                     <Column
                         title="Hình ảnh"
                         key="id"
@@ -81,7 +96,7 @@ return (
                       <Column title="Tên sản phẩm" dataIndex="name"
                       render={(text, record: any) => (
                         <Link href={'/user/shop-product-form?id=' + record.id }>
-                          <a>{text}</a>
+                          <a className={s.productName}>{text}</a>
                         </Link>
                       )} />
                       <Column title="SKU" dataIndex="sku" render={(text, record: any) => (
@@ -90,10 +105,10 @@ return (
                         </Link>
                       )} />
                       <Column title="Giá" dataIndex="price" render={(text, record: any) => (
-                          <span>{text}₫</span>
+                          <span>{text} ₫</span>
                       )} />
                       <Column title="Số lượng" dataIndex="quantity"/>
-                      <Column title="Danh mục" dataIndex="name"/>
+                      <Column title="Danh mục" dataIndex="category"/>
                 </Table>
               </div>
             </div>

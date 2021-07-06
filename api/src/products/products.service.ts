@@ -148,6 +148,8 @@ export class ProductsService {
                         message: "Permission is denied.",
                     }
                 }
+                console.log('product._source.images: ', product._source.images)
+                await this.filesService.removeFromS3(product._source.images)
                 const res = await this.esService.delete(ES_INDEX_NAME, id )
                 if(res.body.result === 'deleted'){
                     return {

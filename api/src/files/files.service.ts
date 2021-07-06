@@ -7,6 +7,27 @@ export class FilesService {
   constructor(
   ) {}
 
+
+  // remove file by array
+  async removeFromS3(  files: string[]) {
+    const s3 = new S3();
+    console.log('files:', files)
+    for (const url of files) {
+      // let remove this file
+      const urlSlipt = url.split('.amazonaws.com/');
+      if (urlSlipt.length >= 2) {
+          const Key = urlSlipt[1]
+          console.log('----Key:', Key)
+          // call SDK to delete file 
+          await s3.deleteObject({
+            Bucket: process.env.AWS_S3_BUCKET,
+            Key,
+          }).promise();
+      }
+ 
+    }
+  
+  }
   // check on current files, if any file is not existing, let remove it
   async cleanUnusedFiles(reqFiles: string[], curFiles: string[]) {
     const s3 = new S3();

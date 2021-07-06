@@ -212,3 +212,7 @@ span.highlight {
     top: -20px;
     border-color: transparent transparent rgba(0,0,0,.02);
 }
+.ant-input-number-input{
+    height: auto;
+    padding: 0;
+}

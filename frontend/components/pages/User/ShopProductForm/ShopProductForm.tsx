@@ -3,33 +3,17 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import axios from 'axios'
 import InputRange from 'react-input-range'
-import { Form, Input, DatePicker, Upload, Switch, TreeSelect  } from 'antd'
+import { Form, Input, DatePicker, Upload, Switch, TreeSelect, ConfigProvider, InputNumber } from 'antd'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { AiOutlineSave } from 'react-icons/ai'
-
+import moment from 'moment'
+import locale from 'antd/lib/locale/vi_VN';
 const { RangePicker } = DatePicker;
 import { useAuth } from '@context/AuthContext'
 import { default as categoryTree } from '@config/category'
 import s from './ShopProductForm.module.css'
-import product from 'next-seo/lib/jsonld/product'
-
-interface Props {
-  title?: string;
-  inputName: string;
-  type?: string;
-  required: boolean;
-  tips?: string;
-}
 
 
-function getBase64(file: any) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
 const ShopProductForm: FC = () => {
   const router = useRouter()
   const { id } = router.query
@@ -40,7 +24,7 @@ const ShopProductForm: FC = () => {
   const [category, setCategory] = useState()
     
   const [fileList, setFileList] = useState<any>([]);
-  const [discountDate, setDiscountDate] = useState<string[] | null[]>([null, null])
+  const [discountDate, setDiscountDate] = useState<string[]>(['', ''])
   const [isLoading, setIsLoading] = useState(false)
   const [formMessage, setFormMessage] = useState<string[]>([])
   
@@ -63,6 +47,7 @@ const ShopProductForm: FC = () => {
   const updateProduct =  (product: any) => {
     setProduct(product)
     setCategory(product.category)
+    setDiscountDate([product.discountBegin, product.discountEnd])
     // set images to review
     setFileList(product.images.map((url: string, key:string)=> {
           return {
@@ -87,8 +72,8 @@ const ShopProductForm: FC = () => {
       return item.response.url 
     })
     try{
-        const discountBegin = discountDate[0]
-        const discountEnd= discountDate[1]
+        const discountBegin = discountDate[0] !== '' ? discountDate[0] : null
+        const discountEnd= discountDate[1] !== '' ? discountDate[1] : null
         const postData = {
           ...values, 
           status,
@@ -113,22 +98,15 @@ const ShopProductForm: FC = () => {
         }
 
     } catch (err){
-      console.log('response.data:', err.response.data)
       if(err?.response?.data){
         setFormMessage(err.response.data.message)
       }
- 
-      
     }
     setIsLoading(false)
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
   };
-
-
-
   const onChange = ({ fileList: newFileList }: any) => {
     setFileList(newFileList);
   };
@@ -147,12 +125,15 @@ const ShopProductForm: FC = () => {
     imgWindow.document.write(image.outerHTML);
   };
 
+
+
   return (
     <>
     {ready && <Form name="product-form" initialValues={product}
     onFinish={onFinish}
     onFinishFailed={onFinishFailed}  >
         <div className="">
+ 
           <div className="md:grid md:grid-cols-3 md:gap-6">
                 <div className="md:col-span-2">
                 <h1 className={s.h1}>{id ?  'Cập nhật sản phẩm': 'Thêm sản phẩm'}</h1>
@@ -205,12 +186,13 @@ const ShopProductForm: FC = () => {
                 </div>
                 <div className="md:col-span-1">
                  <label className={s.label}>Số lượng</label>
-                  <Form.Item name="quantity" >
-                    <Input placeholder='Số lượng sản phẩm(nếu có)' className={s.input}  />
+                  <Form.Item name="quantity">
+                    <InputNumber min={1} max={1000} placeholder='Số lượng sản phẩm(nếu có)' className={s.input}  />
                   </Form.Item>
                 </div>
                 <div className="md:col-span-1">
                 <label className={s.label}>Danh mục</label>
+       
                   <TreeSelect
                     showSearch
                       style={{ width: '100%' }}
@@ -220,26 +202,36 @@ const ShopProductForm: FC = () => {
                       placeholder="Chọn danh mục"
                       treeDefaultExpandAll
                       onChange={(value: any) => setCategory(value)}
-                    />  </div>
+                    /> 
+                    </div>
                 </div>
               <div className="mt-8 md:grid md:grid-cols-3 md:gap-6">
                 <div className="md:col-span-1">
-                  <label className={s.label}>Giá sản phẩm</label>
+                  <label className={s.label}>Giá sản phẩm(₫)</label>
                    <Form.Item name="price"   
-                   rules={[{ required: true, message: 'Vui lòng nhập giá.' }]}>
-                    <Input placeholder='Giá sản phẩm' type="number"  className={s.input}  />
+                   rules={[
+                     { required: true, message: 'Vui lòng nhập giá.', }]}>
+                   <InputNumber min={1000} max={90000000} placeholder='Giá sản phẩm' className={s.input}  />
                   </Form.Item>
                 </div>
                 <div className="md:col-span-1">
-                  <label className={s.label}>Giá khuyến mãi</label>
+                  <label className={s.label}>Giá khuyến mãi(₫)</label>
                    <Form.Item name="priceDiscount" >
-                    <Input placeholder='Giá sản phẩm' type="number" className={s.input}  />
+                    <InputNumber min={1000} max={90000000} placeholder='Giá sản phẩm' type="number" className={s.input}  />
                   </Form.Item>
                 </div>
                 <div className="md:col-span-1">
                   <div className="relative w-full mb-6">
                     <label className={s.label}>Thời hạn khuyến mãi</label>
-                    <RangePicker  onChange={(value:any, dateString: string[]) => setDiscountDate(dateString)} />
+         
+                    <ConfigProvider locale={locale}>
+                      <RangePicker 
+                        onChange={(value:any, dateString: string[]) => setDiscountDate(dateString)}
+                        defaultValue={discountDate[0] ? [
+                          moment(discountDate[0]),
+                          moment(discountDate[1]),
+                      ]: null} />
+                    </ConfigProvider>
                   </div>
                
               </div>
