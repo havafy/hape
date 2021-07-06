@@ -23,12 +23,14 @@ export class ProductsController {
         const response = await this.productService.update(userID, productDto)
         return res.json(response)
     }
+    
     @UseGuards(AuthGuard('jwt'))   
     @Get('/api/products')
-    async getByUserID(@Res() res,  @Param() params: any): Promise<any> {
+    async getByUserID(@Res() res): Promise<any> {
         const userID = res.req.user.id
-        const {size = 20, from =0 } = params
-        const response = await this.productService.getByUserID(userID, size, from)
+        const {pageSize = 30, current = 1 } = res.req.query
+        const from = pageSize * (current - 1)
+        const response = await this.productService.getByUserID(userID, pageSize, from )
         return res.json(response)
     }
     @Get('/api/products/:id')

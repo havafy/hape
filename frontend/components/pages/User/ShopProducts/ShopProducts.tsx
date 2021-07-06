@@ -8,7 +8,7 @@ import { useAuth } from '@context/AuthContext'
 const { Column } = Table
 const ShopProducts: FC = () => {
   const { user, accessToken } = useAuth();
-  const [pagination, setPagination ]= useState({current: 1, pageSize: 1})
+  const [pagination, setPagination ]= useState({ total: 30, current: 1, pageSize: 2})
   const [products, setProducts] = useState([])
   const [ selectedRowKeys, setSelectedRowKeys] = useState([])
   const [ loading, setLoading] = useState(false)
@@ -19,23 +19,30 @@ const ShopProducts: FC = () => {
     pullProducts()
   }, [])
 
-  const handleTableChange = (pagination: any, filters: any, sorter: any) => {
+  const handleTableChange = async (pagination: any, filters: any, sorter: any) => {
     console.log({
       sortField: sorter.field,
       sortOrder: sorter.order,
       pagination,
       ...filters,
     });
+
+    await pullProducts()
+    setPagination({...pagination})
   };
 
 const pullProducts = async ()=>{
-    let { data: { products} } = await axios.get('/products', headerApi)
+    let { data: { products, count} } = await axios.get('/products',
+     { 
+       params:   { ...pagination } , ...headerApi 
+    } )
     products = products.map((product: any) => {
       return{
         key: product.id,
         ...product
       }
     })
+    setPagination({...pagination, total: count})
     setProducts(products)
 }
 const deleteProducts = async () => {
