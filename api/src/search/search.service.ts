@@ -104,8 +104,6 @@ export class SearchService {
         return true
     }
     async findByFields(index: string, queryMatch: any, size = 30, from = 0) {
-        console.log('size:',size)
-        console.log('from:',from)
         const reqParams = {
             index,
             body: {

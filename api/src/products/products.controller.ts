@@ -29,7 +29,7 @@ export class ProductsController {
     async getByUserID(@Res() res): Promise<any> {
         const userID = res.req.user.id
         const {pageSize = 30, current = 1 } = res.req.query
-        const from = pageSize * (current - 1)
+        const from = pageSize * (current -1 )
         const response = await this.productService.getByUserID(userID, pageSize, from )
         return res.json(response)
     }

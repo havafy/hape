@@ -2,10 +2,16 @@ import { FC, useState, ChangeEvent, Component, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import axios from 'axios'
-import InputRange from 'react-input-range'
-import { Form, Input, DatePicker, Upload, Switch, TreeSelect, ConfigProvider, InputNumber } from 'antd'
+import { 
+  Form, Input, DatePicker, 
+  Upload, Switch, TreeSelect, 
+  ConfigProvider, InputNumber,
+  Popconfirm, message 
+  } from 'antd'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { AiOutlineSave } from 'react-icons/ai'
+import { RiDeleteBin6Line } from 'react-icons/ri'
+
 import moment from 'moment'
 import locale from 'antd/lib/locale/vi_VN';
 const { RangePicker } = DatePicker;
@@ -27,13 +33,14 @@ const ShopProductForm: FC = () => {
   const [discountDate, setDiscountDate] = useState<string[]>(['', ''])
   const [isLoading, setIsLoading] = useState(false)
   const [formMessage, setFormMessage] = useState<string[]>([])
-  
+  const headerApi = { 
+    headers: { 'Authorization': `Bearer ${accessToken}` } 
+  }
+
   useEffect(() => {
     (async () => {
       if(id){
-        let { data: { found, product} } = await axios.get('/products/' + id, { 
-          headers: { 'Authorization': `Bearer ${accessToken}` } 
-        })
+        let { data: { found, product} } = await axios.get('/products/' + id, headerApi)
         if(found){
           updateProduct(product)
 
@@ -43,7 +50,13 @@ const ShopProductForm: FC = () => {
     })()
   
   }, [])
+  const deleteProduct = async ()=>{
+    await axios.delete('/products/' + id, headerApi)
+    setTimeout(function() { //Start the timer
+        router.push('/user/shop-products')
+    }.bind(this), 1500)
 
+  }
   const updateProduct =  (product: any) => {
     setProduct(product)
     setCategory(product.category)
@@ -90,6 +103,7 @@ const ShopProductForm: FC = () => {
           response= await axios.put('products', postData,authConfig)
         }else{// Create New One Case
           response = await axios.post('products', postData,authConfig)
+          router.push('/user/shop-product-form?id=' + response.data.product.id)
         }
         if(response.data.status){
           updateProduct(response.data.product)
@@ -141,9 +155,17 @@ const ShopProductForm: FC = () => {
                 <div className="md:col-span-1 text-right">
                   <span>
                   <Link href="/user/shop-products">
-                    <a className={s.backButton}><IoMdArrowRoundBack className="inline" /> Quay lại</a>
+                    <a className={s.iconLink}><IoMdArrowRoundBack className="inline" /> Quay lại</a>
                     </Link>
                     </span>
+
+                { id && <span className={s.iconAction}>
+                  <Popconfirm
+                    title="Bạn muốn xoá sản phẩm này?"
+                    onConfirm={deleteProduct}
+                    onCancel={e=>{}}
+                    okText="Đúng, tôi muốn xoá."
+                    cancelText="Bỏ qua" ><RiDeleteBin6Line /></Popconfirm></span> }
                   <button type="submit" className={s.button} > 
                   <AiOutlineSave className="inline mr-1" /> { !isLoading ? 'Lưu' : 'Xử lý....' }
                     </button>

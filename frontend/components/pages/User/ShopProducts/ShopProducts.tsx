@@ -6,9 +6,11 @@ import s from './ShopProducts.module.css'
 import { RiDeleteBin6Line, RiAddFill } from 'react-icons/ri'
 import { useAuth } from '@context/AuthContext'
 const { Column } = Table
+const PAGE_SIZE = 1
 const ShopProducts: FC = () => {
   const { user, accessToken } = useAuth();
-  const [pagination, setPagination ]= useState({ total: 30, current: 1, pageSize: 2})
+  const [current, setCurrent]= useState<number>(1)
+  const [productTotal, setProductTotal] = useState(0)
   const [products, setProducts] = useState([])
   const [ selectedRowKeys, setSelectedRowKeys] = useState([])
   const [ loading, setLoading] = useState(false)
@@ -19,22 +21,17 @@ const ShopProducts: FC = () => {
     pullProducts()
   }, [])
 
-  const handleTableChange = async (pagination: any, filters: any, sorter: any) => {
-    console.log({
-      sortField: sorter.field,
-      sortOrder: sorter.order,
-      pagination,
-      ...filters,
-    });
-
-    await pullProducts()
-    setPagination({...pagination})
+  const handleTableChange = (pagination: any, filters: any, sorter: any) => {
+    setLoading(true)
+    pullProducts(pagination.current)
+    setLoading(false);
   };
 
-const pullProducts = async ()=>{
+
+const pullProducts = async (currentPage = 1)=>{
     let { data: { products, count} } = await axios.get('/products',
      { 
-       params:   { ...pagination } , ...headerApi 
+       params:   { current: currentPage, pageSize: PAGE_SIZE } , ...headerApi 
     } )
     products = products.map((product: any) => {
       return{
@@ -42,7 +39,9 @@ const pullProducts = async ()=>{
         ...product
       }
     })
-    setPagination({...pagination, total: count})
+
+    setProductTotal(count)
+    setCurrent(currentPage)
     setProducts(products)
 }
 const deleteProducts = async () => {
@@ -88,7 +87,7 @@ return (
                 <Table 
                 dataSource={products}  
                 rowSelection={rowSelection}
-                pagination={pagination}
+                pagination={{total: productTotal, current, pageSize: PAGE_SIZE}}
                 loading={loading}
                 onChange={handleTableChange}  >
                     <Column

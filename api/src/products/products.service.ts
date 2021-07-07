@@ -61,7 +61,7 @@ export class ProductsService {
             const productID = items[0].index._id
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, productID);
             return {
-                product: { ..._source},
+                product: { ..._source, id: productID},
                 status: true,
             }
         }catch (err){
