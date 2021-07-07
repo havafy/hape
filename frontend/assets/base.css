@@ -139,15 +139,15 @@ body.layout{
 .navMenu > li{
   margin: 0;
   padding: 0px 0px 27px 0px;
-  display: inline;
+  vertical-align: top;
+  display: inline-block;
+  position: static;
 }
-.navMenu > li::after {
-  content: "/";
-  color: rgb(239, 83, 102);
-  font-weight: bold;
-  font-family: Graphik;
-  padding: 0px 0px 0px 8px;
-  font-size: 17px;
+.navMenu li svg{
+  fill: #666;
+  width: 19px;
+  height: 19px;
+  margin-top: -1px;
 }
 .navMenu > li:last-child::after {
   content: "";
@@ -179,12 +179,13 @@ body.layout{
   pointer-events: auto;
 }
 .navMenu > li .submenu {
+  display: block;
   position: absolute;
-  width: 100%;
+  transform: translate(0%, 0px);
+  top: 22px;
   left: 0;
-  transform: translate(-50%, 10px);
-  top: 21px;
-  background: rgb(255, 255, 255);
+  right: 0;
+  background: white;
   box-shadow: rgb(0 0 0 / 20%) 0px 4px 8px 0px;
   opacity: 0;
   visibility: hidden;
@@ -192,6 +193,7 @@ body.layout{
   border-radius: 5px;
   transition: all 0.3s ease 0s;
   margin-top: 25px;
+  width: 100%;
 }
 
 .navMenu > li.dropdown:hover a:before {

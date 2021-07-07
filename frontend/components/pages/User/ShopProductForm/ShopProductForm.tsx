@@ -54,7 +54,7 @@ const ShopProductForm: FC = () => {
     await axios.delete('/products/' + id, headerApi)
     setTimeout(function() { //Start the timer
         router.push('/user/shop-products')
-    }.bind(this), 1500)
+    }.bind(this), 1200)
 
   }
   const updateProduct =  (product: any) => {

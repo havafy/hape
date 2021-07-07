@@ -1,8 +1,7 @@
 .root {
   height: 47px !important;
-  @apply fixed w-full top-0 z-40 transition-all duration-150;
-  transition: padding 100ms ease 0s;
-  transition: background-color 100ms linear;
+  @apply fixed w-full shadow top-0 z-40 transition-all duration-150;
+
 }
 
 .link, .link_last{
@@ -21,5 +20,6 @@
 
 .logo {
   width: 120px;
-  @apply cursor-pointer transform duration-100 pt-1 ease-in-out mr-9;
+  margin-top: 2px;
+  @apply inline-block cursor-pointer transform duration-100 pt-1 ease-in-out mr-9;
 }
