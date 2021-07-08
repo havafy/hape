@@ -1,5 +1,5 @@
 .categoryMenu{
-    @apply my-10 mx-12 shadow
+    @apply my-10 mx-12
 }
 .menuItem{
     border-bottom: 1px solid #f2f2f2;

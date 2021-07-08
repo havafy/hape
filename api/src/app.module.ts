@@ -7,6 +7,7 @@ import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./users/users.module";
 import { SearchModule } from "./search/search.module";
 import { ProductsModule } from "./products/products.module"
+import { PagesModule } from "./pages/pages.module"
 import { FilesModule } from "./files/files.module"
 import { ForgotPasswordModule } from "./forgot-password/forgot-password.module";
 import { ChangePasswordModule } from "./change-password/change-password.module";
@@ -20,6 +21,7 @@ import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handleba
     UsersModule,
     ForgotPasswordModule,
     ChangePasswordModule,
+    PagesModule,
     FilesModule,
     SearchModule, 
     ProductsModule,
