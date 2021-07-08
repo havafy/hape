@@ -3,7 +3,7 @@ import { Layout } from '@components/common'
 import { Error } from '@components/pages'
 
 
-function Custom500({ statusCode }) {
+function Error500({ statusCode }) {
     return (
         <Layout>
             <Error statusCode={statusCode} title="Không tìm thấy đường dẫn này!" />
@@ -11,9 +11,5 @@ function Custom500({ statusCode }) {
     )
   }
   
-  ErrorPage.getInitialProps = ({ res, err }) => {
-    const statusCode = res ? res.statusCode : err ? err.statusCode : 404
-    return { statusCode }
-  }
   
-  export default Custom500
+  export default Error500

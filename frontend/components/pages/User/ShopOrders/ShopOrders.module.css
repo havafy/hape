@@ -11,7 +11,7 @@
 
 .button{
     color: #fff!important;
-    background: #DB4140!important;
+    background: var(--main-color)!important;
   @apply flex hover:text-white tracking-wide items-center justify-center text-white text-sm font-bold uppercase px-7 py-3 shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150
  
 }

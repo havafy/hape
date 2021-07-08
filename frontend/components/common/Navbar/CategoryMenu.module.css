@@ -1,0 +1,12 @@
+.categoryMenu{
+    @apply my-10 mx-12 shadow
+}
+.menuItem{
+    border-bottom: 1px solid #f2f2f2;
+    padding: 0 0 10px 10px;
+    font-size: 1rem;
+}
+.menuItem:hover a,
+.menuItem a:hover{
+ color: var(--main-color);
+}

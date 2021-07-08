@@ -1,6 +1,7 @@
 :root {
   --primary: #ffffff;
   --primary-2: #f1f3f5;
+  --main-color: #DB4140;
   --secondary: #000000;
   --secondary-2: #111;
   --selection: var(--cyan);
@@ -95,6 +96,16 @@ a {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+input:focus, 
+input:focus-visible,
+button:focus, 
+button:focus-visible{
+  border:none!important;
+  outline: none !important;
+  border-color: none!important;
+  box-shadow: none!important;
+}
+
 .animated {
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
@@ -127,7 +138,7 @@ a {
   }
 }
 body.layout{
-  background-image: linear-gradient(to top, rgb(255, 255, 255), rgb(236, 245, 255));
+  background-image: linear-gradient(to top, white, #fff4ec);
   background-repeat: no-repeat;
 }
 .heading-red{
@@ -147,8 +158,15 @@ body.layout{
   fill: #666;
   width: 19px;
   height: 19px;
-  margin-top: -1px;
+  margin-top: 2px;
 }
+.navMenu li:hover svg{
+  fill: var(--main-color);  
+}
+.navMenu li:hover > a{
+  color: var(--main-color);
+}
+
 .navMenu > li:last-child::after {
   content: "";
 }
@@ -173,7 +191,6 @@ body.layout{
 
 
 .navMenu > li:hover .submenu {
-  transform: translate(-50%, 0px);
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -190,7 +207,7 @@ body.layout{
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  border-radius: 5px;
+  border-radius: 0px;
   transition: all 0.3s ease 0s;
   margin-top: 25px;
   width: 100%;

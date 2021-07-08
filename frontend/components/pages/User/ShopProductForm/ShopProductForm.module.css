@@ -16,7 +16,7 @@
 
 .button{
     color: #fff!important;
-    background: #DB4140!important;
+    background: var(--main-color)!important;
   @apply inline ml-5 hover:text-white tracking-wide items-center justify-center text-white text-sm font-bold uppercase px-5 py-2 shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150 
  
 }
@@ -30,7 +30,7 @@
     display: inline-block;
 }
 .iconAction:hover svg{
-     fill: #DB4140!important;
+     fill: var(--main-color)!important;
      cursor: pointer;
 }
 .button svg {

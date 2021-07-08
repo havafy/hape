@@ -23,3 +23,31 @@
   margin-top: 2px;
   @apply inline-block cursor-pointer transform duration-100 pt-1 ease-in-out mr-9;
 }
+
+
+
+.searchBarBox{
+  margin-top: 8px;
+  background: #f2f2f2;
+  border-radius: 3px;
+  height: 31px;
+  @apply relative
+}
+.searchInput{
+  padding: 5px 10px;
+  font-size: 13px;
+  width: 100%;
+  background: transparent;
+}
+
+
+.searchBarBox svg{
+  width: 20px;
+  height: 20px;
+  fill: #666;
+  margin: 4px 0 0 7px;
+}
+.searchBarBox button{
+  width: 100%;
+  height: 100%;
+}

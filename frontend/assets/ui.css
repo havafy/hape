@@ -2,7 +2,7 @@
 .button {
     display: inline-block;
     padding: 10px 40px;
-    background: #DB4140;
+    background: var(--main-color);
 }
 .button:hover{
 
@@ -122,10 +122,10 @@ span.highlight {
     @apply py-3 px-6 block flex
 }
 .user-sidebar .list-menu .menu-item.active svg{
-    fill: #db4140;
+    fill: var(--main-color);
 }
 .user-sidebar .list-menu .menu-item.active a{
-    color: #db4140;
+    color: var(--main-color);
  
 }
 .user-sidebar .list-menu .menu-item a:hover svg{
@@ -180,10 +180,10 @@ span.highlight {
     display: inline-block;
 }
 .user-menu-dropdown .menu-item:hover a{
-    color: #db4140;
+    color: var(--main-color);
 }
 .user-menu-dropdown .menu-item:hover svg{
-    fill: #db4140;
+    fill: var(--main-color);
 }
 .user-menu-dropdown .menu-item:hover a{
     background: #f2f2f2;
@@ -215,45 +215,4 @@ span.highlight {
 .ant-input-number-input{
     height: auto;
     padding: 0;
-}
-
-.searchBar .ant-select{
-    margin-top: 5px;
-}
-.searchBar .ant-input,
-.searchBar .ant-input-group-addon{
-    border: none;
-    background: transparent;
-
-}
-.searchBar .ant-btn{
-    border: none;
-    background: transparent;
-}
-.searchBar  .ant-select-selector:hover{
-
- border:none;
-    border-color: none;
-}
-.searchBar .ant-input-group-wrapper{
-    background: #f2f2f2;
-    border-radius: 3px;
-}
-.searchBar .ant-input:focus{
-    border:none;
-    border-color: none;
-    box-shadow: none;
-}
-.searchBar .ant-input.ant-input-lg{
-    padding: 5px 20px;
-    font-size:14px;
-}
-.searchBar .ant-input-search-button{
-    height: 31px;
-}
-.searchBar .ant-btn-icon-only.ant-btn-lg {
-
-    padding: 0;
-    font-size: 10px;
-
 }

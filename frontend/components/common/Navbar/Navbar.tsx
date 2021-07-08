@@ -1,79 +1,52 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router' 
 import { Logo, Container } from '@components/ui'
 import { Burger, UserNav } from '@components/common'
 import { Hape } from '@components/icons'
 import { Burger as BurgerIcon } from '@components/icons'
+import { BiSearch } from 'react-icons/bi'
 import NavbarRoot from './NavbarRoot'
 import s from './Navbar.module.css'
+import CategoryMenu  from './CategoryMenu'
 interface Props {
   darkMode?: boolean 
 }
 
-import { Input, AutoComplete } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-
-const renderTitle = (title: string) => (
-  <span>
-    {title}
-    <a
-      style={{ float: 'right' }}
-      href="/search?q=antd"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      more
-    </a>
-  </span>
-);
-
-const renderItem = (title: string) => ({
-  value: title,
-  label: (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-      }}
-    >
-      {title}
-
-    </div>
-  ),
-});
-
-const options = [
-  {
-    label: renderTitle('Libraries'),
-    options: [renderItem('AntDesign'), renderItem('AntDesign UI')],
-  },
-  {
-    label: renderTitle('Solutions'),
-    options: [renderItem('AntDesign UI FAQ'), renderItem('AntDesign FAQ')],
-  },
-  {
-    label: renderTitle('Articles'),
-    options: [renderItem('AntDesign design language')],
-  },
-];
-
-const SearchBarComplete: React.FC = () =>{
-const router = useRouter() 
-const handleSearch = (value: string) => {
-  router.push('/search?k='+value)
-}
-return (
-  <AutoComplete
-    dropdownClassName="certain-category-search-dropdown"
-    dropdownMatchSelectWidth={300}
-    style={{ width: 300 }}
-    options={options}
-    onSearch={handleSearch}
-  >
-    <Input.Search size="large" placeholder="Tìm sản phẩm" />
-  </AutoComplete>
-)
+const SearchBar: React.FC = () =>{
+  
+    const router = useRouter() 
+    const { k } = router.query
+    console.log(k)
+    const [ keyword, setKeyword ] = useState<string>()
+    const handleSearchChange = (e: any) => {
+      setKeyword(e.target.value)
+  
+    }
+    const handleKeyPress = (e: any) => {
+      if(e.key === 'Enter'){
+        gotoSearchPage()
+      }
+    }
+    const gotoSearchPage = () => {
+      router.push('/search?k=' +keyword)
+    }
+    return (
+      <div className={s.searchBarBox}>
+        <div className="flex">
+          <div className="flex-grow">
+            <input type="text" 
+            placeholder="Tìm sản phẩm" 
+            value={keyword? keyword : k}
+            className={s.searchInput} 
+            onKeyPress={handleKeyPress}
+            onChange={e=>handleSearchChange(e)} />
+          </div>     
+          <div className="flex-none w-10">
+            <button type="button" onClick={gotoSearchPage}><BiSearch /></button></div>
+        </div>
+      </div>
+    )
 }
 const Navbar: FC<Props> = ({darkMode}) => (
   <NavbarRoot>
@@ -87,92 +60,33 @@ const Navbar: FC<Props> = ({darkMode}) => (
           </Link>
           </div>
           <div className="col-span-5">
-            <ul className="navMenu mt-4 ml-10 space-x-4 block">
+            <ul className="navMenu mt-3 ml-10 space-x-5 block">
             <li className="dropdown">
-                <Link href="/page/Magento-Development-Services">
-                  <a className={s.link}><BurgerIcon /></a>
-                </Link>
+                  <span className={s.link}><BurgerIcon /></span>
                 <div className="submenu">
-                  <ul>
-                  <li>
-                      <Link href="/page/Magento-Development-Services" >
-                        <a className="pale-grey-four">
-                          <div className="icon">
-                            <img
-                              src="/pages/services/magento.png"
-                              alt="Magento Development Services"
-                            />
-                          </div>
-                          <div className="title">
-                            Magento Development Services
-                          </div>
-                        </a>
-                      </Link>
-                    </li>
-                    <li>
-                    <Link href="/page/Mobile-Application-Development-Services" >
-                      <a className="pale-grey-four"   >
-                        <div className="icon">
-                          <img
-                            src="/pages/services/user-interface.svg"
-                            alt="Mobile Application Development Services"
-                          />
-                        </div>
-                        <div className="title">
-                          Mobile Application Development Services
-                        </div>
-                      </a></Link>
-                    </li>
-      
-                    <li>
-                    <Link href="/page/ReactJs-Development-Services/" >
-                      <a
-                        className="pale-grey-four"
-                      >
-                        <div className="icon">
-                          <img
-                            src="/pages/services/reactjs.png"
-                            alt="ReactJs Development Services"
-                          />
-                        </div>
-                        <div className="title">ReactJs Development Services</div>
-                      </a></Link>
-                    </li>
-                    <li>
-                    <Link href="/page/Hire-Magento-ReactJs-Developers/" >
-                      <a
-                        className="pale-grey-four"
-                      >
-                        <div className="icon">
-                          <img
-                            src="/pages/services/web-development.svg"
-                            alt="Hire Magento/ReactJs Developers"
-                          />
-                        </div>
-                        <div className="title">Hire Magento/ReactJs Developers</div>
-                      </a></Link>
-                    </li>
-                  </ul>
+                <i className="header-popover-arrow" style={{'transform': `translate(0px, 0px)`, 'right': `15px`}}></i>
+                  <CategoryMenu />
                 </div>
               </li>
+                
               <li>
-                <Link href="/page/about-us">
+                <Link href="/page/cua-hang-yeu-thich">
+                  <a className={s.link}>Cửa hàng</a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/page/khuyen-mai">
                   <a className={s.link}>Khuyến Mãi</a>
                 </Link>
               </li>
-  
+
               <li>
-                <Link href="/page/about-us">
-                  <a className={s.link}>Mã giảm giá</a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/page/about-us">
+                <Link href="/page/bestseller">
                   <a className={s.link}>Bán Chạy</a>
                 </Link>
               </li>
               <li>
-                <Link href="/page/Hire-Magento-ReactJs-Developers">
+                <Link href="/page/don-kho">
                   <a className={s.link}>Dọn kho</a>
                 </Link>
               </li>
@@ -181,7 +95,7 @@ const Navbar: FC<Props> = ({darkMode}) => (
           </div>
         
           <div className="col-span-3 searchBar">
-           <SearchBarComplete />
+           <SearchBar />
           </div>
 
    
