@@ -1,3 +1,6 @@
 .root{
-    
+    @apply mx-auto max-w-7xl my-10
+}
+.root h3{ 
+    @apply text-xl font-semibold mb-5 text-gray-700
 }

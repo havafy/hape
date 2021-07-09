@@ -1,3 +1,21 @@
 .root{
     
 }
+.name{
+    margin: 6px 0 3px 0;
+    display: inline-block;
+    word-wrap: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+.price{
+    font-size: 15px;
+    color: var(--main-color);
+    @apply font-semibold my-1
+}
+.priceOriginal{
+    @apply text-gray-400 line-through ml-2
+}

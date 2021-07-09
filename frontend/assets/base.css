@@ -145,6 +145,9 @@ body.layout{
   -webkit-text-fill-color: transparent;
   display: inline;
 }
+.currency{
+  font-size: 0.75rem;
+}
 .navMenu > li{
   margin: 0;
   padding: 0px 0px 27px 0px;

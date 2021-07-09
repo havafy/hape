@@ -15,15 +15,17 @@ interface Props {
   }
   const ProductBox: FC<Props> = ({data: { title, data:{ products }}}) =>{
     return (
-      <div className={s.root}>
+     <> 
+     {Array.isArray(products) && products.length > 0 && <div className={s.root}>
           <h3>{title}</h3>
-            <div className="grid grid-flow-col grid-cols-3 grid-rows-6 gap-6">
-                {Array.isArray(products) && products.map((product: IProduct, key) => (
+            <div className="grid grid-flow-col grid-cols-6 grid-rows-1 gap-6">
+                { products.map((product: IProduct, key) => (
                     <ProductItem product={product} key={key}/>
                 ))}
                
             </div>
-           </div>
+           </div>}
+      </>
     )
   }
   export default ProductBox
