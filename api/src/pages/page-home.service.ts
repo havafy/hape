@@ -4,7 +4,7 @@ import { SearchService } from '../search/search.service';
 import { ProductsService } from "../products/products.service";
 
 @Injectable()
-export class PageHomeService {
+export class HomePageService {
     constructor(readonly esService: SearchService,
         readonly productsService: ProductsService) {}
     
@@ -53,7 +53,7 @@ export class PageHomeService {
         return {blocks}
     }
     async getBlockByCategory(category: string, title = ''){
-        let  match = [ 
+        let  must = [ 
             {match: { category }},
             {match: { status: true }}
         ]
@@ -61,7 +61,7 @@ export class PageHomeService {
             type: 'productSlide',
             title,
             category,
-            data: await this.productsService.getByMultiFields(match)
+            data: await this.productsService.getByMultiFields({must})
         }
     }
 }

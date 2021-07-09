@@ -3,10 +3,11 @@ import { ProductsService } from './products.service';
 import { ProductDto } from './dto/product.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ProductGetDto  } from './dto/product-get.dto';
+@UseGuards(AuthGuard('jwt'))  
 @Controller()
 export class ProductsController {
     constructor(public readonly productService: ProductsService) {}
-    @UseGuards(AuthGuard('jwt'))   
+ 
     @Post('/api/products')
     async create(@Res() res,  @Body() productDto: ProductDto): Promise<any> {
         const userID = res.req.user.id
@@ -16,20 +17,22 @@ export class ProductsController {
             ...response
         })
     }
-    @UseGuards(AuthGuard('jwt'))   
     @Put('/api/products')
     async update(@Res() res,  @Body() productDto: ProductDto): Promise<any> {
         const userID = res.req.user.id
         const response = await this.productService.update(userID, productDto)
         return res.json(response)
     }
-    
-    @UseGuards(AuthGuard('jwt'))   
+ 
     @Get('/api/products')
     async getByUserID(@Res() res): Promise<any> {
         const userID = res.req.user.id
-        const {pageSize = 30, current = 1 } = res.req.query
+        let {pageSize = 30, current = 1 } = res.req.query
+        if(pageSize > 100){
+            pageSize = 30
+        } 
         const from = pageSize * (current -1 )
+     
         const response = await this.productService.getByUserID(userID, pageSize, from )
         return res.json(response)
     }
@@ -39,7 +42,7 @@ export class ProductsController {
         const data = await this.productService.get(id)
         return res.json(data)
     }
-    @UseGuards(AuthGuard('jwt'))  
+
     @Delete('/api/products/:id')
     async delete(@Res() res, @Param() params: ProductGetDto): Promise<any> {
         const userID = res.req.user.id

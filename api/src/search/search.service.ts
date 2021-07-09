@@ -113,14 +113,14 @@ export class SearchService {
         const res = await this.esService.search(reqParams)
         return res
     }
-    async findByMultiFields(index: string, must: any, size = 30, from = 0) {
-
+    async findByMultiFields({index, must, size = 30, from = 0, sort}) {
+console.log(must)
         const reqParams = {
             index,
             body: {
                 size,
                 from,
-                sort: [{"createdAt": "desc"}],
+                sort,
                 query: { bool: { must }  }
             }      
         }

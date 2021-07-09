@@ -33,13 +33,13 @@ export class ProductsService {
             products
         }
     }
-    async getByMultiFields(match,  size: number = 12, from: number = 0) {
+    async getByMultiFields({must, size = 12, from = 0, sort = [{"createdAt": "desc"}]}) {
      
         const { body: { 
             hits: { 
                 total, 
                 hits 
-            } } } = await this.esService.findByMultiFields(ES_INDEX_NAME, match, size, from)
+            } } } = await this.esService.findByMultiFields({index: ES_INDEX_NAME, must, size, from, sort})
         const count = total.value
         let products = []
         if(count){
