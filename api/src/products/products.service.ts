@@ -15,7 +15,31 @@ export class ProductsService {
             hits: { 
                 total, 
                 hits 
-            } } } = await this.esService.findByFields(ES_INDEX_NAME, { userID }, size, from)
+            } } } = await this.esService.findBySingleField(ES_INDEX_NAME, { userID }, size, from)
+        const count = total.value
+        let products = []
+        if(count){
+            products = hits.map((item: any) => {
+                return{
+                    id: item._id,
+                    ...item._source
+                 }
+            })
+        }
+        return {
+            count,
+            size,
+            from,
+            products
+        }
+    }
+    async getByMultiFields(match,  size: number = 12, from: number = 0) {
+     
+        const { body: { 
+            hits: { 
+                total, 
+                hits 
+            } } } = await this.esService.findByMultiFields(ES_INDEX_NAME, match, size, from)
         const count = total.value
         let products = []
         if(count){
@@ -86,7 +110,7 @@ export class ProductsService {
             }
             // if change SKU, let check new SKU is existing or not
             if(productDto.sku !== product.sku){
-                const found = await this.esService.findByFields(ES_INDEX_NAME, { sku: productDto.sku })
+                const found = await this.esService.findBySingleField(ES_INDEX_NAME, { sku: productDto.sku })
                 if(found.body.hits.total.value >= 1  || !Array.isArray(found.body.hits.hits)){
                     return {
                         status: false,

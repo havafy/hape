@@ -20,6 +20,12 @@ const categoryTree = [
       "title": "Thiết Bị Điện Tử",
       "value": "Thiet-Bi-Dien-Tu"
     },
+
+    {
+      "title": "Thực phẩm và đồ uống",
+      "value": "Thuc-Pham-Do-Uong"
+    },
+
     {
       "title": "Nhà Cửa & Đời Sống",
       "value": "Nha-Cua-Doi-Song"
@@ -69,10 +75,6 @@ const categoryTree = [
       "value": "The-Thao-Du-Lich"
     },
     {
-      "title": "Bách Hóa Online",
-      "value": "Bach-Hoa-Online"
-    },
-    {
       "title": "Ô Tô & Xe Máy & Xe Đạp",
       "value": "O-To-Xe-May-Xe-Dap"
     },
@@ -93,8 +95,8 @@ const categoryTree = [
       "value": "Do-Choi"
     },
     {
-      "title": "Giặt Giũ & Chăm Sóc Nhà Cửa",
-      "value": "Giat-Giu-Cham-Soc-Nha-Cua"
+      "title": "Nhà cửa & Đời sống",
+      "value": "Nha-cua-Doi-song"
     },
     {
       "title": "Chăm Sóc Thú Cưng",

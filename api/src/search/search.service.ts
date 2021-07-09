@@ -96,28 +96,35 @@ export class SearchService {
         try {
             const query = {}
             query[field]= fieldValue
-            const { body: { hits: { total: { value } } }} = await this.findByFields(index, query);
+            const { body: { hits: { total: { value } } }} = await this.findBySingleField(index, query);
             return value > 0 ? true : false
         }catch (err){
             console.log(err)
         }
         return true
     }
-    async findByFields(index: string, queryMatch: any, size = 30, from = 0) {
+    async findBySingleField(index: string, queryMatch: any, size = 30, from = 0) {
+        const reqParams = {
+            index,
+            body: { size,  from,
+                sort: [{"createdAt": "desc"}],
+                query: {  match: { ...queryMatch }   }  }
+        }
+        const res = await this.esService.search(reqParams)
+        return res
+    }
+    async findByMultiFields(index: string, must: any, size = 30, from = 0) {
+
         const reqParams = {
             index,
             body: {
                 size,
                 from,
                 sort: [{"createdAt": "desc"}],
-                query: {
-                    match: {
-                        ...queryMatch
-                    }
-                  }
-                  
-            }
+                query: { bool: { must }  }
+            }      
         }
+        
         const res = await this.esService.search(reqParams)
         return res
     }

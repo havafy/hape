@@ -100,9 +100,7 @@ input:focus,
 input:focus-visible,
 button:focus, 
 button:focus-visible{
-  border:none!important;
   outline: none !important;
-  border-color: none!important;
   box-shadow: none!important;
 }
 

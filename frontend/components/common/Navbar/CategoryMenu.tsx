@@ -10,9 +10,9 @@ const CategoryMenu: React.FC = () =>{
           
         <div className="grid grid-flow-col grid-cols-3 grid-rows-6 gap-6">
 
-            {categoryTree.map((category=>(
+            {categoryTree.map(((category, key)=>(
 
-                <div className={s.menuItem}>
+                <div className={s.menuItem} key={key}>
                     <Link href={'/category/' + category.value} >
                         <a>{category.title}</a>
                    </Link>

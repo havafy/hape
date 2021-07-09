@@ -7,6 +7,7 @@ interface Props {
     product: IProduct;
 }
 const ProductItem: FC<Props> = ({product}) =>{
+  console.log(product)
     return (
       <div className={s.root}>
           <div className={s.productName}>{product.name}</div>
