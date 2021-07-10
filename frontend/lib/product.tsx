@@ -7,7 +7,7 @@ export const getProductUrl = (product: IProduct) =>{
  export const currencyFormat = (number: number) => {
     return (
         <span>
-    <span className="currency">₫</span>
-    {number.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}
+    <span>₫</span>
+    {number.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}
     </span>)
 }

@@ -1,5 +1,5 @@
 
-const categoryTree = [
+const categoryTree: {title: string, value: string}[] = [
     {
       "title": "Thời Trang Nam",
       "value": "Thoi-Trang-Nam"
@@ -107,7 +107,17 @@ const categoryTree = [
       "value": "Voucher-Dich-Vu"
     }
   ]
+export const getName = (value: string) =>{
+     
+    for(let category of categoryTree){
+      if( category.value === value ){
+        return category.title
 
+      }
+    }
+    return
+
+}
 export default categoryTree
 
 

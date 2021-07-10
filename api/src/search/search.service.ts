@@ -1,58 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
-const moviesJson = [{
-    "title": "After Dark in Central Park",
-    "year": 1900,
-    "cast": [],
-    "genres": []
-}, {
-    "title": "Boarding School Girls' Pajama Parade",
-    "year": 1900,
-    "cast": [],
-    "genres": []
-}, {
-    "title": "Buffalo Bill's Wild West Parad",
-    "year": 1900,
-    "cast": [],
-    "genres": []
-}, {
-    "title": "Caught",
-    "year": 1900,
-    "cast": [],
-    "genres": []
-}, {
-    "title": "Clowns Spinning Hats",
-    "year": 1900,
-    "cast": [],
-    "genres": []
-}, {
-    "title": "Capture of Boer Battery by British",
-    "year": 1900,
-    "cast": [],
-    "genres": ["Short", "Documentary"]
-}, {
-    "title": "The Enchanted Drawing",
-    "year": 1900,
-    "cast": [],
-    "genres": []
-}, {
-    "title": "Feeding Sea Lions",
-    "year": 1900,
-    "cast": ["Paul Boyton"],
-    "genres": []
-}, {
-    "title": "How to Make a Fat Wife Out of Two Lean Ones",
-    "year": 1900,
-    "cast": [],
-    "genres": ["Comedy"]
-}]
-
-interface MoviesJsonResponse {
-    title: string;
-    year: number;
-    cast: string[];
-    genres: string[];
-}
 
 @Injectable()
 export class SearchService {
@@ -114,7 +61,6 @@ export class SearchService {
         return res
     }
     async findByMultiFields({index, must, size = 30, from = 0, sort}) {
-console.log(must)
         const reqParams = {
             index,
             body: {
@@ -166,26 +112,4 @@ console.log(must)
         return { results, total: body.hits.total.value };
     }
 
-    async parseAndPrepareData() {
-        let body = [];
-        const listMovies: MoviesJsonResponse[] = moviesJson;
-        listMovies.map((item, index) => {
-            let actorsData = [];
-            item.cast.map(actor => {
-                const splited = actor.split(' ');
-                actorsData.push({ firstName: splited[0], lastName: splited[1] });
-            });
-
-            body.push(
-                { index: { _index: 'test', _id: index } },
-                {
-                    title: item.title,
-                    year: item.year,
-                    genres: item.genres.map(genre => ({ genre })),
-                    actors: actorsData,
-                },
-            );
-        });
-        return body;
-    }
 }

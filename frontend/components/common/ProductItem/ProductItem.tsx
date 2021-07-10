@@ -18,7 +18,6 @@ const PriceOnly: FC<Props> = ({product}) =>{
   </div>
 }
 const ProductItem: FC<Props> = ({product}) =>{
-  console.log(product)
     return (
       <div className={s.root}>
           <div className={s.image}>
@@ -27,7 +26,7 @@ const ProductItem: FC<Props> = ({product}) =>{
               </a></Link>
           </div>
           <div className={s.name}>
-          <Link href={getProductUrl(product)}><a>{product.name}</a></Link>
+            <Link href={getProductUrl(product)}><a>{product.name}</a></Link>
             </div>
 
            { product.priceDiscount ? 

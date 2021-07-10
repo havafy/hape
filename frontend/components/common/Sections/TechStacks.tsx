@@ -5,7 +5,6 @@ import s from './TechStacks.module.css'
 const { TabPane } = Tabs;
 
 function callback(key: any) {
-  console.log(key);
 }
 
 const TechStacks: FC = () => (

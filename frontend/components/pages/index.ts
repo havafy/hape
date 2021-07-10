@@ -22,5 +22,5 @@ export { default as ShopSettings } from './User/ShopSettings'
 export { default as Profile } from './User/Profile'
 export { default as ChangePassword } from './User/ChangePassword'
 export { default as CategoryPage } from './CategoryPage'
-export { default as ProductPage } from './CategoryPage'
+export { default as ProductPage } from './ProductPage'
 

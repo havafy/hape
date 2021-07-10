@@ -5,6 +5,7 @@ import { FilesService } from "../files/files.service";
 import { ProductDto } from './dto/product.dto';
 
 const ES_INDEX_NAME = 'products'
+const CDN = 'https://'+process.env.AWS_CLOUDFRONT+'/';
 @Injectable()
 export class ProductsService {
     constructor(readonly esService: SearchService,
@@ -22,7 +23,7 @@ export class ProductsService {
             products = hits.map((item: any) => {
                 return{
                     id: item._id,
-                    ...item._source
+                    ...item._source,
                  }
             })
         }
@@ -32,6 +33,19 @@ export class ProductsService {
             from,
             products
         }
+    }
+
+    applyCDN(files: string[]){
+        const newFiles = []
+        for (const url of files) {
+            // let remove this file
+            const urlSlipt = url.split('.amazonaws.com/');
+            if (urlSlipt.length >= 2) {
+                const Key = urlSlipt[1]
+                newFiles.push(CDN+Key) 
+            }
+        }
+        return newFiles
     }
     async getByMultiFields({must, size = 12, from = 0, sort = [{"createdAt": "desc"}]}) {
      
@@ -46,7 +60,8 @@ export class ProductsService {
             products = hits.map((item: any) => {
                 return{
                     id: item._id,
-                    ...item._source
+                    ...item._source, 
+                    images: this.applyCDN(item._source.images)
                  }
             })
         }
@@ -145,7 +160,7 @@ export class ProductsService {
     async search(search: string = '') {
         return await this.esService.search(search);
     }
-    async get(id: string) {
+    async getRawProduct(id: string) {
         try {
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
             return {
@@ -161,7 +176,23 @@ export class ProductsService {
         }
 
     }
+    async getFullyProduct(id: string) {
+        try {
+            const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
+            return {
+                found: true,
+                product: {
+                    ..._source,
+                    images: this.applyCDN(_source.images)
+                }
+            }
+        }catch (err) {
+            return {
+                found: false,
+            }
+        }
 
+    }
     async remove(userID: number, id: string) {
         try {
             const product = await this.esService.findById(ES_INDEX_NAME, id )

@@ -2,74 +2,79 @@ import { FC, useEffect, useState } from 'react'
 import Link from 'next/link'
 import s from './CategoryPage.module.css'
 import axios from 'axios'
-import { ProductBox } from '@components/common'
+import { ProductItem } from '@components/common'
+import {getName} from '@config/category'
+import { Pagination } from 'antd';
+import { useRouter } from 'next/router'
 interface Props {
   pid: string;
 }
+const PAGE_SIZE = 1
 const CategoryPage: FC<Props> = ({pid}) => {
-  const [ data, setData ] = useState([])
-  const [ ready, setReady ] = useState<boolean>(false)
+  const router = useRouter()
+  let { page } = router.query
+  const [ total, setTotal ] = useState(1)
+  const [ products, setProducts ] = useState([])
+  const [ loading, setLoading ] = useState<boolean>(true)
   useEffect(() => {
+    pullProducts()
+  }, [pid, page])
+  const pullProducts = async () =>{
+    setLoading(true);
     (async () => {
-        let {data: {products}} = await axios.get('/pages/category/'+ pid)
-        setData(products)
-     
-        setReady(true)
+        let {data: {products, count}} = await axios.get('/pages/category/'+ pid,  { 
+          params: { pageSize: PAGE_SIZE, current: page ? page : 1 }
+        })
+        setProducts(products)
+        setTotal(count)
+        setLoading(false)
     })()
-  }, [])
+  }
+  const onPageNumberChange = (pageRq: number) => {
+
+    router.push({
+          pathname: '/category/'+ pid,
+          query: { page: pageRq},
+        })
+  };
+
   return (
-    <main className="mt-16">
-      { ready && Array.isArray(data) && <>
-          {data.map((block: any, key) => {
-                if(block.type === 'MainBanners')
-                  return <Banners data={block} key={key}/>
-                if(block.type === 'productSlide')
-                  return <ProductBox data={block}key={key} />
-              })
-    
-            }
-         </>
-      }
+    <main className="mt-24">
+      <div className={s.root}>
+      <div className="md:grid md:grid-cols-12 md:gap-6">
+        <div className="md:col-span-2">
+            <Sidebar />
+          </div>
+          <div className="md:col-span-10"> 
+          <h1 className={s.pageTitle}>{getName(pid)}</h1>
+            { !loading && Array.isArray(products) && <div>
+     
+              <div className={s.productList}>
+                {products.map((product: any, key) => {
+
+                  return( 
+                    <ProductItem product={product} key={key}/>
+                    )
+              
+                    })}
+            </div> 
+            <div className="text-center">
+            <Pagination current={Number(page)} 
+                  onChange={onPageNumberChange} 
+                  pageSize={PAGE_SIZE} total={total} />
+                  </div>
+            </div> }
+        </div>
+      </div>
+      </div>
     </main>
   )
 }
 
-const Banners: FC<{data: any}> = ({data: {data}}) => {
+const Sidebar: FC = () => {
   return (
-  <div className="mx-auto max-w-7xl">
-  <div className="md:grid md:grid-cols-2 md:gap-6">
-    <div className="md:col-span-1">
-      <div className="px-4 sm:px-0">
-        <Link href={data.bannerBig.link}>
-          <a><img src={data.bannerBig.src} /></a>
-        </Link>
-      </div>
-    </div>
-    <div className="md:col-span-1">
-    <div className="md:grid md:grid-cols-2 md:gap-6">
-        <div className="md:col-span-1">
-        <Link href={data.banner1.link}>
-          <a><img src={data.banner1.src} /></a>
-        </Link>
-        </div>
-        <div className="md:col-span-1">
-        <Link href={data.banner2.link}>
-          <a><img src={data.banner2.src} /></a>
-        </Link>
-        </div>
-        <div className="md:col-span-1">
-        <Link href={data.banner3.link}>
-          <a><img src={data.banner3.src} /></a>
-        </Link>
-        </div>
-        <div className="md:col-span-1">
-        <Link href={data.banner4.link}>
-          <a><img src={data.banner4.src} /></a>
-        </Link>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div className={s.sidebar}>
+  Sidebar
 </div>
 )
   }

@@ -17,7 +17,6 @@ const SearchBar: React.FC = () =>{
   
     const router = useRouter() 
     const { k } = router.query
-    console.log(k)
     const [ keyword, setKeyword ] = useState<string>()
     const handleSearchChange = (e: any) => {
       setKeyword(e.target.value)

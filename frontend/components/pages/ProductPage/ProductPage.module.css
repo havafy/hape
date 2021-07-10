@@ -1,0 +1,93 @@
+.boxWrap{
+    min-height: 50rem;
+    
+    @apply mx-auto max-w-7xl my-10
+}
+.productBox{
+    @apply py-6 px-6 bg-white mb-5
+}
+.pageTitle{
+    @apply text-2xl font-semibold tracking-normal mb-10
+}
+.priceBox{
+    background: #fafafa;
+    @apply py-2 px-2
+}
+.contentTitle{
+    @apply py-2 text-gray-700 text-xl font-semibold uppercase
+}
+.price{
+    font-size: 1.8rem;
+    color: var(--main-color);
+    @apply font-semibold my-1
+}
+.promoBox{
+
+    border-top: #f2f2f2 1px solid;
+    @apply py-6 px-3 my-7
+}
+.promoBox label{
+    
+    font-size: 15px;
+    max-width: 120px;
+    @apply inline-block
+}
+.promoBox svg{
+    vertical-align: top;
+    margin: 7px 0 0 0;
+    fill: var(--main-color);
+    width: 22px;
+    height: 22px;
+    @apply inline mr-3
+}
+.actionLabel{
+    min-width: 150px;
+    @apply inline-block text-gray-600 
+}
+.categoryMenu{
+    @apply flex
+}
+.categoryMenu a{
+    @apply font-semibold
+}
+.categoryMenu svg{
+    margin: 2px 5px 0 5px;
+    fill: #555;
+    width: 18px;
+    height: 18px;
+
+}
+.priceOriginal{
+    font-size: 1rem;
+    @apply text-gray-400 line-through mr-2
+}
+.addToCartBox{
+
+    @apply my-3
+}
+.addToCartBox input{
+    text-align: center;
+    font-size: 15px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    width: 50px;
+
+}
+.addToCartButton{
+    border: 1px solid var(--main-color);
+    background: rgb(175 76 45 / 10%);
+    color: var(--main-color);
+    @apply my-2 px-5 py-3
+}
+.addToCartButton svg{
+    fill: var(--main-color);
+    width: 22px;
+    height: 22px;
+    margin: -6px 6px 0 0;
+    @apply inline
+}
+.addNowButton{
+    color: #fff;
+    background: var(--main-color);
+    @apply my-2 px-10 py-3 mr-6
+}

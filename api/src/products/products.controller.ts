@@ -39,7 +39,7 @@ export class ProductsController {
     @Get('/api/products/:id')
     async get(@Res() res, @Param() params: ProductGetDto): Promise<any> {
         const id = params.id
-        const data = await this.productService.get(id)
+        const data = await this.productService.getRawProduct(id)
         return res.json(data)
     }
 

@@ -107,12 +107,11 @@ const RegisterForm = () => {
   
 
   const responseGoogleOnFailure = (response: any) => {
-    console.log('responseGoogleOnFailure:', response);
+    // console.log('responseGoogleOnFailure:', response);
    } 
    const handleGoogleSuccess = async (response: any) => {
      const { tokenObj, profileObj } = response
      if (tokenObj) {
-         console.log(tokenObj, profileObj)
          try {
              //send register data to API
              const { data } = await axios.post('auth/loginByParty', {

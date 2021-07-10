@@ -2,75 +2,155 @@ import { FC, useEffect, useState } from 'react'
 import Link from 'next/link'
 import s from './ProductPage.module.css'
 import axios from 'axios'
-import { ProductBox } from '@components/common'
+import { ProductItem } from '@components/common'
+import {getName} from '@config/category'
+import { Pagination } from 'antd';
+import { useRouter } from 'next/router'
+import IProduct from '@interfaces/product'
+import { getProductUrl, currencyFormat } from '@lib/product'
+import { BiCart } from 'react-icons/bi'
+import { IoIosArrowForward } from 'react-icons/io'
+import { GiReturnArrow } from 'react-icons/gi'
+import { FaCertificate, FaShippingFast } from 'react-icons/fa'
+
+import { Carousel } from 'antd';
 interface Props {
-  products: any[];
-  title: string;
+  pid: string;
 }
-const ProductPage: FC = () => {
-  const [ data, setData ] = useState([])
-  const [ ready, setReady ] = useState<boolean>(false)
+interface ProductInfoProps {
+  product: IProduct;
+}
+const extractID = (pid: string) =>{
+  if(!pid) return ''
+  const urlSlipt = pid.split('-');
+  return urlSlipt[urlSlipt.length-1]
+}
+const PAGE_SIZE = 1
+const ProductPage: FC<Props> = ({pid}) => {
+  const productID = extractID(pid)
+  const router = useRouter()
+  let { page } = router.query
+  const [ total, setTotal ] = useState(1)
+  const [ quantity, setQuantity ] = useState(1)
+  const [ product, setProduct ] = useState<IProduct | null>(null)
+  const [ loading, setLoading ] = useState<boolean>(true)
   useEffect(() => {
+    pullProducts()
+  }, [pid, page])
+  const pullProducts = async () =>{
+    setLoading(true);
     (async () => {
-        let {data: {blocks}} = await axios.get('/pages/home')
-        setData(blocks)
-     
-        setReady(true)
+        let {data: {product, count}} = await axios.get('/pages/product/'+ productID,  { 
+          params: { pageSize: PAGE_SIZE, current: page ? page : 1 }
+        })
+        setProduct(product)
+        setTotal(count)
+        setLoading(false)
     })()
-  }, [])
+  }
+
   return (
-    <main className="mt-16">
-      { ready && Array.isArray(data) && <>
-          {data.map((block: any, key) => {
-                if(block.type === 'MainBanners')
-                  return <Banners data={block} key={key}/>
-                if(block.type === 'productSlide')
-                  return <ProductBox data={block}key={key} />
-              })
-    
-            }
-         </>
-      }
+    <main className="mt-24">
+      { !loading &&   product &&       
+            <div className={s.boxWrap}>
+                  <div className="mb-3">
+                  <div className={s.categoryMenu}>
+                          <Link href={'/category/'+ product.category}>
+                            <a>{getName(product.category)}</a>
+                            </Link> 
+                            <IoIosArrowForward />
+                            {product.name} 
+                        </div>
+                    </div>
+            <div className={s.productBox}>    
+             <div className="md:grid md:grid-cols-12 md:gap-12">
+                  <div className="md:col-span-5"> 
+                        <div className={s.galleryBox}>
+                        <Carousel effect="fade">
+                          {
+                            product.images.map((url) =>{
+                              return <div> <img src={url} alt={product.name} /></div>
+                            })
+
+                          }
+                        </Carousel>
+
+                        </div>
+
+                  </div>
+                <div className="md:col-span-7">
+                      <h1 className={s.pageTitle}>{product?.name}</h1>
+                      <div className={s.priceBox}>
+                          { product.priceDiscount ? 
+                            <PriceDiscountIncl product={product} /> : 
+                            <PriceOnly product={product}/>    }
+                      </div>
+                      <div className={s.addToCartBox}>
+                            <div className="my-5">
+                              <span className={s.actionLabel}>Số Lượng: </span>
+                              <input 
+                                value={quantity} type="text"
+                                onChange={(e:any)=> setQuantity(e.target.value)} />
+                            </div>
+                
+                            <button className={s.addNowButton}>Mua Ngay</button>
+                            <button className={s.addToCartButton}><BiCart />Thêm Giỏ Hàng</button>
+                  
+                        </div>
+
+                        <PromoBox />
+
+                  </div>
+
+            </div>      
+            </div>    
+            <div className={s.productBox}>  
+              <div className={s.contentTitle}>Mô Tả Sản phẩm</div>
+              <div className="my-5 mr-10">{product.description}</div>
+            </div>
+       </div>
+ }
+
+ 
     </main>
   )
 }
-
-const Banners: FC<{data: any}> = ({data: {data}}) => {
+const PromoBox: FC<any> = ()=>{
   return (
-  <div className="mx-auto max-w-7xl">
-  <div className="md:grid md:grid-cols-2 md:gap-6">
-    <div className="md:col-span-1">
-      <div className="px-4 sm:px-0">
-        <Link href={data.bannerBig.link}>
-          <a><img src={data.bannerBig.src} /></a>
-        </Link>
-      </div>
-    </div>
-    <div className="md:col-span-1">
-    <div className="md:grid md:grid-cols-2 md:gap-6">
-        <div className="md:col-span-1">
-        <Link href={data.banner1.link}>
-          <a><img src={data.banner1.src} /></a>
-        </Link>
-        </div>
-        <div className="md:col-span-1">
-        <Link href={data.banner2.link}>
-          <a><img src={data.banner2.src} /></a>
-        </Link>
-        </div>
-        <div className="md:col-span-1">
-        <Link href={data.banner3.link}>
-          <a><img src={data.banner3.src} /></a>
-        </Link>
-        </div>
-        <div className="md:col-span-1">
-        <Link href={data.banner4.link}>
-          <a><img src={data.banner4.src} /></a>
-        </Link>
-        </div>
-      </div>
-    </div>
+    <div className={s.promoBox}>
+       <div className="md:grid md:grid-cols-3 md:gap-6">
+          <div className="md:col-span-1">
+            <GiReturnArrow /> 
+            <label>7 ngày miễn phí trả hàng</label>
+            </div>
+            <div className="md:col-span-1"> <FaCertificate />
+            <label>Hàng chính hãng 100%</label>
+            </div>
+            <div className="md:col-span-1"> 
+            <FaShippingFast />
+            <label>Miễn phí vận chuyển</label>
+            </div>
+
+          </div>
+       </div>
+  )
+}
+const PriceDiscountIncl: FC<ProductInfoProps> = ({product}) =>{
+  return <div>
+      <span className={s.priceOriginal}>{currencyFormat(product.price)}</span>
+  <span className={s.price}>{currencyFormat(product.priceDiscount)}</span>
+
   </div>
+}
+const PriceOnly: FC<ProductInfoProps> = ({product}) =>{
+return <div>
+<div className={s.price}>{currencyFormat(product.price)}</div>
+</div>
+}
+const Sidebar: FC = () => {
+  return (
+  <div className={s.sidebar}>
+  Sidebar
 </div>
 )
   }
