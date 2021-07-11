@@ -28,7 +28,7 @@ export class FilesController {
     }
     const res = await this.filesService.uploadPublicFile(file.buffer, file.originalname)
 
-    if(res?.Key){
+    if(res){
       const fileUrl = res.Location
       return  {
           name: file.originalname,

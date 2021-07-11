@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { S3 } from 'aws-sdk';
+const sharp = require('sharp')
 import { nanoid } from 'nanoid'
 const WAITING_ROOM = '__WaitingRoom/'
 @Injectable()
@@ -47,17 +48,33 @@ export class FilesService {
     }
   
   }
-  async uploadPublicFile(dataBuffer: Buffer, fileName: string) {
-    const s3 = new S3();
-    let Key = WAITING_ROOM + nanoid(6) +'-' + fileName
-    const uploadResult = await s3.upload({
-      Bucket: process.env.AWS_S3_BUCKET,
-      Body: dataBuffer,
-      Key,
-      ACL:'public-read'
-    })
-      .promise();
-    return uploadResult;
+  async uploadPublicFile(dataBuffer: Buffer,fileName: string ) {
+    
+    const uniqueName = nanoid(6) + '-' +fileName
+    const pathResize = UPLOAD_DIR + uniqueName
+
+    try {
+
+        const fileResize = await sharp(dataBuffer).resize(1024, 1024, {
+                    fit: 'contain',
+                    background: { r: 255, g: 255, b: 255, alpha: 1 } })
+                    .toBuffer();
+        const s3 = new S3();
+        let Key = WAITING_ROOM + uniqueName
+        const uploadResult = await s3.upload({
+          Bucket: process.env.AWS_S3_BUCKET,
+          Body: fileResize,
+          Key,
+          ACL:'public-read'
+        })
+          .promise();
+    
+        return uploadResult
+        
+    }catch (err) {
+      console.log(err)
+    }
+    return
   }
   isValidateS3URL(url: string): boolean {
     const Bucket = process.env.AWS_S3_BUCKET
