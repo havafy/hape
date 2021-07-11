@@ -21,6 +21,11 @@
 .ant-select-multiple .ant-select-selection-item-remove > .anticon {
   vertical-align: 1px;
 }
+.ant-select-selector {
+  height: 40px!important;;
+  padding: 0 11px!important;;
+  border-radius: 4px!important;
+}
 /*----------- checkedList ----------*/
 
 .menuDropdown  .ant-drawer-content {

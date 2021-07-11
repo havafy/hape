@@ -4,7 +4,7 @@ import s from './ProductPage.module.css'
 import axios from 'axios'
 import { ProductItem } from '@components/common'
 import {getName} from '@config/category'
-import { Pagination } from 'antd';
+import moment from 'moment'
 import { useRouter } from 'next/router'
 import IProduct from '@interfaces/product'
 import { getProductUrl, currencyFormat } from '@lib/product'
@@ -24,7 +24,7 @@ const extractID = (pid: string) =>{
   const urlSlipt = pid.split('-');
   return urlSlipt[urlSlipt.length-1]
 }
-const PAGE_SIZE = 1
+const PAGE_SIZE = 30
 const ProductPage: FC<Props> = ({pid}) => {
   const productID = extractID(pid)
   const router = useRouter()
@@ -103,24 +103,64 @@ const ProductPage: FC<Props> = ({pid}) => {
 
             </div>      
             </div>    
+ 
             <div className={s.productBox}>  
               <div className={s.contentTitle}>THÔNG TIN CHI TIẾT</div>
-              <div className="my-5 mr-10">2222</div>
-            </div>
-            <div className={s.productBox}>  
-              <div className={s.contentTitle}>THÔNG TIN CHI TIẾT</div>
-              <div className="my-5 mr-10">2222</div>
+              <div className="my-5 mr-10">
+                <AttributeList product={product} />
+              </div>
             </div>
             <div className={s.productBox}>  
               <div className={s.contentTitle}>Mô Tả Sản phẩm</div>
               <div className="my-5 mr-10">{product.description}</div>
             </div>
-   
+  
        </div>
   }
 
  
     </main>
+  )
+}
+
+const AttributeList: FC<ProductInfoProps> = ({product})=>{
+
+  let attributes: {label: string, value: string}[] = []
+  if(product.weight){
+    attributes.push({
+      label: 'Cân nặng',
+      value: product.weight + ' gram'
+    })
+  }
+  if(product.length && product.width){
+    attributes.push({
+      label: 'Kích thước',
+      value: product.length + ' x ' + product.width + ' x ' + product.height + ' cm'
+    })
+  }
+  if(product.countryOrigin){
+    attributes.push({
+      label: 'Xuất xứ',
+      value: product.countryOrigin 
+    })
+  }
+  if(product.expiryDate){
+    attributes.push({
+      label: 'Ngày hết hạn',
+      value: moment(product.expiryDate).format('D-M-Y')
+    })
+  }
+  return (
+    <div className={s.attributeList}>
+      {attributes.map((attr, key)=>{
+        return(<div className={s.attributeRow} key={key}>
+          <label>{attr.label}</label>
+           <div className={s.attributeValue}>{attr.value}</div>
+           </div>)
+      })}
+    
+ 
+       </div>
   )
 }
 const PromoBox: FC<any> = ()=>{

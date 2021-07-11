@@ -9,7 +9,6 @@ import {
   Popconfirm, message, Select, Tabs
   } from 'antd'
   const { TabPane } = Tabs
-  const { Option } = Select;
 
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { AiOutlineSave } from 'react-icons/ai'
@@ -34,6 +33,7 @@ const ShopProductForm: FC = () => {
   const [category, setCategory] = useState()
     
   const [fileList, setFileList] = useState<any>([]);
+  const [expiryDate, setExpiryDate] = useState<string>()
   const [discountDate, setDiscountDate] = useState<string[]>(['', ''])
   const [isLoading, setIsLoading] = useState(false)
   const [formMessage, setFormMessage] = useState<string[]>([])
@@ -75,6 +75,7 @@ const ShopProductForm: FC = () => {
           }
         }))
     setTags(product.tags)
+    setExpiryDate(product.expiryDate)
   }
   const onFinish = async (values: any) => {
     setIsLoading(true)
@@ -99,7 +100,8 @@ const ShopProductForm: FC = () => {
           discountBegin,
           discountEnd,
           images,
-          tags
+          tags,
+          expiryDate
         }
         // if product is existing, let call Update API
         let response: any = null
@@ -148,7 +150,10 @@ const ShopProductForm: FC = () => {
   const changeTags = (value: string[]) =>{
       setTags(value)
   }
-
+  const onExpiryDateChange = (date: any, dateString: string) => {
+    setExpiryDate(dateString);
+  }
+  
   return (
     <>
     {ready && <Form name="product-form" initialValues={product}
@@ -304,7 +309,7 @@ const ShopProductForm: FC = () => {
                   </div>
     
               </TabPane>
-                <TabPane tab="Thuột tính" key="2">
+                <TabPane tab="Đặc tính" key="2">
                       <div>
                         <div className="flex my-3">
                         <label className={s.labelRow}>Từ khoá(#hashtag)<span>(giúp tìm sản phẩm)</span></label>
@@ -353,7 +358,9 @@ const ShopProductForm: FC = () => {
                                   <label className={s.labelRow}>Hạn sử dụng
                                   <span>(Áp dụng cho hàng thực phẩm)</span></label>
                                   <Form.Item name="expiryDate" className={s.inputRow}>
-                                    <Input placeholder='Ngày hết hạn sử dụng' className={s.input}  />
+                                    <ConfigProvider locale={locale}>
+                                       <DatePicker defaultValue={moment(expiryDate)} onChange={onExpiryDateChange} />
+                                    </ConfigProvider>
                                 </Form.Item>
                         </div>
                       </div>
