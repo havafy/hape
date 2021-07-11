@@ -18,7 +18,9 @@
 .burgerMenuDrawer .ant-drawer-header{
     display: none;
 }
-
+.ant-select-multiple .ant-select-selection-item-remove > .anticon {
+  vertical-align: 1px;
+}
 /*----------- checkedList ----------*/
 
 .menuDropdown  .ant-drawer-content {

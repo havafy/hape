@@ -5,8 +5,10 @@ import { Table, Button  } from 'antd'
 import s from './ShopProducts.module.css'
 import { RiDeleteBin6Line, RiAddFill } from 'react-icons/ri'
 import { useAuth } from '@context/AuthContext'
+import {getName} from '@config/category'
+import { getProductUrl, currencyFormat } from '@lib/product'
 const { Column } = Table
-const PAGE_SIZE = 1
+const PAGE_SIZE = 30
 const ShopProducts: FC = () => {
   const { user, accessToken } = useAuth();
   const [current, setCurrent]= useState<number>(1)
@@ -95,7 +97,13 @@ return (
                         key="id"
                         render={(text, record: any) => (
                           <div>
-                              { record.images[0] && <img className="max-h-8" src={record.images[0]} />}
+                             
+                             { record.images[0] && 
+                              <Link href={'/user/shop-product-form?id=' + record.id }>
+                                <a><img className="max-h-8" src={record.images[0]} /> </a> 
+                                </Link>}
+ 
+                           
                             </div>
                         )}
                       />
@@ -107,14 +115,16 @@ return (
                       )} />
                       <Column title="SKU" dataIndex="sku" render={(text, record: any) => (
                         <Link href={'/user/shop-product-form?id=' + record.id }>
-                          <a>{text}</a>
+                        <span>{text}</span>
                         </Link>
                       )} />
                       <Column title="Giá" dataIndex="price" render={(text, record: any) => (
-                          <span>{text} ₫</span>
+                          <span>{currencyFormat(text)}</span>
                       )} />
                       <Column title="Số lượng" dataIndex="quantity"/>
-                      <Column title="Danh mục" dataIndex="category"/>
+                      <Column title="Danh mục" dataIndex="category" render={(text, record: any) => (
+                          <span>{getName(text)}</span>
+                      )} />
                 </Table>
               </div>
             </div>

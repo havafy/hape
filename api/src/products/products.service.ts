@@ -88,7 +88,7 @@ export class ProductsService {
             //move file from Waiting to Production folder
             productDto.images = await this.filesService.formalizeS3Files(productDto.images)
 
-            const record: any = [ 
+            const record: any = [
                 { index: { _index: ES_INDEX_NAME } },  {
                 ...productDto,
                 userID,
@@ -272,7 +272,17 @@ export class ProductsService {
                         category: { type: 'text'},
                         status: { type: 'boolean' },
                         images: { type: 'text' },
+                        tags: { type: 'text' },
                         userID: { type: 'long' },
+                        //------
+                        weight: { type: 'short' },
+                        length: { type: 'short' },
+                        width: { type: 'short' },
+                        height: { type: 'short' },
+                        countryOrigin: { type: 'text' },
+                        brand: { type: 'short' },
+                        expiryDate: { type: 'text' },
+                        //--------
                         updatedAt: { type: 'date' },
                         createdAt: { type: 'date' },
                     },

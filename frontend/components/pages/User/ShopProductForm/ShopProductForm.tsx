@@ -6,8 +6,11 @@ import {
   Form, Input, DatePicker, 
   Upload, Switch, TreeSelect, 
   ConfigProvider, InputNumber,
-  Popconfirm, message 
+  Popconfirm, message, Select, Tabs
   } from 'antd'
+  const { TabPane } = Tabs
+  const { Option } = Select;
+
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { AiOutlineSave } from 'react-icons/ai'
 import { RiDeleteBin6Line } from 'react-icons/ri'
@@ -27,6 +30,7 @@ const ShopProductForm: FC = () => {
   const [ready, setReady] = useState(false)
   const [product, setProduct] = useState({})
   const [status, setStatus] = useState(true)
+  const [tags, setTags] = useState<string[]>([])
   const [category, setCategory] = useState()
     
   const [fileList, setFileList] = useState<any>([]);
@@ -70,6 +74,7 @@ const ShopProductForm: FC = () => {
             url
           }
         }))
+    setTags(product.tags)
   }
   const onFinish = async (values: any) => {
     setIsLoading(true)
@@ -93,7 +98,8 @@ const ShopProductForm: FC = () => {
           category,
           discountBegin,
           discountEnd,
-          images
+          images,
+          tags
         }
         // if product is existing, let call Update API
         let response: any = null
@@ -139,13 +145,17 @@ const ShopProductForm: FC = () => {
     imgWindow.document.write(image.outerHTML);
   };
 
-
+  const changeTags = (value: string[]) =>{
+      setTags(value)
+  }
 
   return (
     <>
     {ready && <Form name="product-form" initialValues={product}
     onFinish={onFinish}
     onFinishFailed={onFinishFailed}  >
+
+
         <div className="">
  
           <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -178,6 +188,9 @@ const ShopProductForm: FC = () => {
                           return (<div key={i}>• {item}</div>) 
                         })}
                 </div>
+              <Tabs defaultActiveKey="1">
+                  <TabPane tab="Chung" key="1">
+          
               <div className="mt-8 md:grid md:grid-cols-3 md:gap-6">
                   <div className="md:col-span-2">
                     <label className={s.label}>Tên sản phẩm</label>
@@ -243,20 +256,20 @@ const ShopProductForm: FC = () => {
                   </Form.Item>
                 </div>
                 <div className="md:col-span-1">
-                  <div className="relative w-full mb-6">
-                    <label className={s.label}>Thời hạn khuyến mãi</label>
-         
-                    <ConfigProvider locale={locale}>
-                      <RangePicker 
-                        onChange={(value:any, dateString: string[]) => setDiscountDate(dateString)}
-                        defaultValue={discountDate[0] ? [
-                          moment(discountDate[0]),
-                          moment(discountDate[1]),
-                      ]: null} />
-                    </ConfigProvider>
-                  </div>
-               
-              </div>
+                    <div className="relative w-full mb-6">
+                      <label className={s.label}>Thời hạn khuyến mãi</label>
+          
+                      <ConfigProvider locale={locale}>
+                        <RangePicker 
+                          onChange={(value:any, dateString: string[]) => setDiscountDate(dateString)}
+                          defaultValue={discountDate[0] ? [
+                            moment(discountDate[0]),
+                            moment(discountDate[1]),
+                        ]: null} />
+                      </ConfigProvider>
+                    </div>
+                
+                </div>
               </div>
 
               <div className="relative w-full mb-3">
@@ -290,10 +303,67 @@ const ShopProductForm: FC = () => {
                       </Upload>
                   </div>
     
+              </TabPane>
+                <TabPane tab="Thuột tính" key="2">
+                      <div>
+                        <div className="flex my-3">
+                        <label className={s.labelRow}>Từ khoá(#hashtag)<span>(giúp tìm sản phẩm)</span></label>
+                          <Select mode="tags" className={s.inputRow}
+                                defaultValue={tags}
+                            onChange={changeTags} tokenSeparators={[',']}></Select>
 
+                
+                          </div>
+                          <div className="flex my-3">
+                                  <label className={s.labelRow}>Trọng lượng(gram)
+                        
+                                  <span>(Sau khi đóng gói)</span></label>
+                                  <Form.Item name="weight" className={s.inputRow}>
+                                    <InputNumber min={100} max={50000} placeholder='Cân nặng sản phẩm(gram)' className={s.input}  />
+                                </Form.Item>
+                        </div>
+                        <div className="flex my-3">
+                              <label className={s.labelRow}>Kích thước đóng gói(cm)</label>
+                              <div className="w-96 flex">
+                                  <Form.Item name="length" className="w-44 mr-5">
+                                    <InputNumber min={10} max={50000} placeholder='Dài' className={s.input}  />
+                                </Form.Item>
+                                <Form.Item name="width" className="w-44 mr-5">
+                                    <InputNumber min={10} max={50000} placeholder='Rộng' className={s.input}  />
+                                </Form.Item>
+                                <Form.Item name="height" className="w-44 mr-5">
+                                    <InputNumber min={10} max={50000} placeholder='Cao' className={s.input}  />
+                                </Form.Item>
+                            </div>
+                        </div>
+                        <div className="flex my-3">
+                                  <label className={s.labelRow}>Thương hiệu</label>
+                                  <Form.Item name="brand" className={s.inputRow}>
+                                    <Input placeholder='Thuơng hiệu' className={s.input}  />
+                                </Form.Item>
+                        </div>
+                        <div className="flex my-3">
+                                  <label className={s.labelRow}>Xuất xứ 
+                                  <span>(Quốc gia sản xuất)</span></label>
+                                  <Form.Item name="countryOrigin" className={s.inputRow}>
+                                    <Input placeholder='Xuất xứ' className={s.input}  />
+                                </Form.Item>
+                        </div>
+                        <div className="flex my-3">
+                                  <label className={s.labelRow}>Hạn sử dụng
+                                  <span>(Áp dụng cho hàng thực phẩm)</span></label>
+                                  <Form.Item name="expiryDate" className={s.inputRow}>
+                                    <Input placeholder='Ngày hết hạn sử dụng' className={s.input}  />
+                                </Form.Item>
+                        </div>
+                      </div>
+                </TabPane>
+      
+              </Tabs>
             </div>
 
         </div>
+  
      </Form> }
      </>
   )

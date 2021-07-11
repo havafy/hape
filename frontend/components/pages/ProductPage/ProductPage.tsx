@@ -12,8 +12,7 @@ import { BiCart } from 'react-icons/bi'
 import { IoIosArrowForward } from 'react-icons/io'
 import { GiReturnArrow } from 'react-icons/gi'
 import { FaCertificate, FaShippingFast } from 'react-icons/fa'
-
-import { Carousel } from 'antd';
+import { Carousel } from 'antd'
 interface Props {
   pid: string;
 }
@@ -105,11 +104,20 @@ const ProductPage: FC<Props> = ({pid}) => {
             </div>      
             </div>    
             <div className={s.productBox}>  
+              <div className={s.contentTitle}>THÔNG TIN CHI TIẾT</div>
+              <div className="my-5 mr-10">2222</div>
+            </div>
+            <div className={s.productBox}>  
+              <div className={s.contentTitle}>THÔNG TIN CHI TIẾT</div>
+              <div className="my-5 mr-10">2222</div>
+            </div>
+            <div className={s.productBox}>  
               <div className={s.contentTitle}>Mô Tả Sản phẩm</div>
               <div className="my-5 mr-10">{product.description}</div>
             </div>
+   
        </div>
- }
+  }
 
  
     </main>
@@ -143,16 +151,16 @@ const PriceDiscountIncl: FC<ProductInfoProps> = ({product}) =>{
   </div>
 }
 const PriceOnly: FC<ProductInfoProps> = ({product}) =>{
-return <div>
-<div className={s.price}>{currencyFormat(product.price)}</div>
-</div>
+  return <div>
+      <div className={s.price}>{currencyFormat(product.price)}</div>
+      </div>
 }
 const Sidebar: FC = () => {
   return (
-  <div className={s.sidebar}>
-  Sidebar
-</div>
-)
-  }
+      <div className={s.sidebar}>
+      Sidebar
+    </div>
+  )
+}
 
 export default ProductPage

@@ -5,6 +5,18 @@
     font-size: 0.8rem!important;
     @apply block uppercase text-xs font-bold mb-2 ml-1 text-gray-700
   }
+.labelRow{
+      min-width: 200px;
+      margin-top: 12px;
+      font-size: 0.8rem!important;
+      @apply block  text-xs font-bold mb-2 ml-1 text-gray-700
+  }
+.labelRow span {
+    @apply text-gray-500 text-xs font-normal block
+} 
+.inputRow{
+    min-width: 55%;
+}
 .input {
     @apply px-3 py-2 bg-white rounded text-sm  focus:outline-none focus:ring w-full ease-linear transition-all duration-150
 }   
@@ -24,7 +36,7 @@
     @apply ml-7 mr-3 
 }
 .iconAction svg{
-    fill: #888;
+    fill: #444;
     width: 20px;
     height: 20px;
     display: inline-block;

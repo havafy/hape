@@ -23,6 +23,7 @@ export class SearchService {
 
     async update(index: string,  id: string, body: any){
         delete body.id
+        console.log('productDto:', body)
         try{
             return await this.esService.update({
                 index, type: '_doc', id,

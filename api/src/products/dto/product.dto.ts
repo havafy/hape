@@ -70,7 +70,51 @@ export class ProductDto {
   @ArrayMaxSize(9)
   images: string[];
 
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(10)
+  tags: string[];
+
   
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(100000)
+  weight: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(100000)
+  length: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(100000)
+  width: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(100000)
+  height: number;
+
+  @IsOptional()
+  @MaxLength(100)
+  @MinLength(3)
+  brand: string;
+
+  @IsOptional()
+  @MaxLength(100)
+  @MinLength(3)
+  countryOrigin: string;
+
+  @IsOptional()
+  @MaxLength(100)
+  @MinLength(3)
+  expiryDate: string;
+
   @IsOptional()
   updatedAt: string
 
