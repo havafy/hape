@@ -6,6 +6,7 @@ import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./users/users.module";
 import { SearchModule } from "./search/search.module";
+import { AddressModule } from "./address/address.module";
 import { ProductsModule } from "./products/products.module"
 import { PagesModule } from "./pages/pages.module"
 import { FilesModule } from "./files/files.module"
@@ -25,6 +26,7 @@ import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handleba
     FilesModule,
     SearchModule, 
     ProductsModule,
+    AddressModule,
     MailerModule.forRootAsync({
       useFactory: () => ({
         transport: {

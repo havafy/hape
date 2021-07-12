@@ -16,6 +16,13 @@ export class SearchService {
             return res
         }
     }
+    async checkIndexExisting(index: string){
+        const checkIndex = await this.esService.indices.exists({ index  });
+        if (checkIndex?.statusCode && checkIndex.statusCode === 200) {
+            return true;
+        }
+        return false;
+    }
     async createByBulk(index: string, body: any){
         
         return await this.esService.bulk({ index, body })
@@ -23,7 +30,7 @@ export class SearchService {
 
     async update(index: string,  id: string, body: any){
         delete body.id
-        console.log('productDto:', body)
+
         try{
             return await this.esService.update({
                 index, type: '_doc', id,
@@ -55,7 +62,6 @@ export class SearchService {
         const reqParams = {
             index,
             body: { size,  from,
-                sort: [{"createdAt": "desc"}],
                 query: {  match: { ...queryMatch }   }  }
         }
         const res = await this.esService.search(reqParams)

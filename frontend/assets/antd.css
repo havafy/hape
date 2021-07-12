@@ -14,7 +14,12 @@
   }
 
 
+.ant-cascader-input.ant-input {
 
+    padding-right: 24px!important;
+    padding: 10px 22px!important;
+
+  }
 .burgerMenuDrawer .ant-drawer-header{
     display: none;
 }

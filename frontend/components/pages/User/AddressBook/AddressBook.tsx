@@ -1,40 +1,91 @@
-import { FC, useState, ChangeEvent } from 'react'
+import React, { FC, useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
-import { Form, Input, DatePicker, Upload, Switch  } from 'antd'
+import { Button, Modal } from 'antd'
 import s from './AddressBook.module.css'
-
+import { RiDeleteBin6Line, RiAddFill } from 'react-icons/ri'
+import { useAuth } from '@context/AuthContext'
+import { AddressForm } from '@components/common'
 const AddressBook: FC = () => {
-  
-  const [isLoading, setIsLoading] = useState(false)
+  const { user, accessToken } = useAuth();
+  const [ visible, setVisible] =useState(false)
+  const [addresses, setAddresses] = useState([])
+  const [ loading, setLoading] = useState(false)
+  const handleClose = useCallback((e:any) => {
+      setVisible(false)
+  }, [])  
+  const headerApi = { 
+    headers: { 'Authorization': `Bearer ${accessToken}` } 
+  }
+  useEffect(() => {
+    pullAddress()
+  }, [])
 
-  const siteName = process.env.NEXT_PUBLIC_SITE
-  const onFinish = async (values: any) => {
-    setIsLoading(true)
-    const { data: { status, error } } = await axios.post('customer-contact', {
-            ...values, 
 
-        })
-    setIsLoading(false)
-  };
+const pullAddress = async (currentPage = 1)=>{
+    // let { data: { addresses } } = await axios.get('/users/address', { ...headerApi } )
+    // setAddresses(addresses)
+}
+const deleteProducts = async () => {
+  setLoading(true)
+  // ajax request after empty completing
+  // for (const productID of selectedRowKeys){
+  //    await axios.delete('/products/' + productID, headerApi)
+  // }
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
+  await pullAddress()
+  setLoading(false)
+}
 
-  return (
+const handleOk = () => {
+  setVisible(false);
+};
 
+const onCancel = () => {
+  setVisible(false);
+}
+const onFinish = async (values: any) => {
+}
+const onAddressCreate = async (values: any) => {
+}
+
+return (<>
         <div className="">
-          <h1 className={s.h1}>AddressBook</h1>
+          <h1 className={s.h1}>Địa Chỉ Của Tôi</h1>
             <div className={s.formBox}>
-            <Form name="basic" initialValues={{ remember: true }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}    >
-              AddressBook
-              </Form>
+            <div>
+              <div className="mb-3 grid grid-cols-2">
+                  <div className="col-span-1">
+       
+                  </div>
+                    <div className="col-span-1 text-right">
+            
+                      <Button type="primary" 
+                      onClick={e=>setVisible(true)} className="addButton">
+                      <RiAddFill className={s.addButtonSvg} /> Thêm Địa Chỉ Mới</Button>
+
+                      <Modal title="Thêm địa chỉ" className="auth-form-modal"
+                          visible={visible}
+                          onOk={onAddressCreate}
+                          onCancel={onCancel}
+                          maskClosable={false}
+                          okText="Create"
+                        footer={null} >
+                        <AddressForm closeModal={handleClose}/>
+
+                        </Modal>
+                     
+
+                    </div>
+                  </div>
+          
+              
+              </div>
             </div>
 
         </div>
+        
+        </>
   )
 }
 

@@ -51,8 +51,6 @@ export class FilesService {
   async uploadPublicFile(dataBuffer: Buffer,fileName: string ) {
     
     const uniqueName = nanoid(6) + '-' +fileName
-    const pathResize = UPLOAD_DIR + uniqueName
-
     try {
 
         const fileResize = await sharp(dataBuffer).resize(1024, 1024, {
