@@ -17,6 +17,31 @@ export class AddressService {
         return  {}
     
     }
+    async getByParent(parentID: string | null ) {
+        const { body:
+            { hits: { 
+                hits, 
+                total 
+            }}} = await this.esService.findBySingleField(
+                ES_INDEX_REGION, 
+                {parentID: parentID},
+                50, 0
+            )
+        const count = total.value
+        let regions: any[] = []
+        if(count){
+            regions = hits.map((item: any) => {
+                return{
+                    id: item._id,
+                    ...item._source
+                    }
+            })
+        }
+        return {
+            count: total.value,
+            regions
+        }
+    }
     async createData(){
 
         const existing = await this.esService.checkIndexExisting(ES_INDEX_REGION)
@@ -26,20 +51,20 @@ export class AddressService {
         }
     }
     async importVietnamRegionData(){
-
-
         let { data: { data }} = await axios.get('https://hape.s3.ap-southeast-1.amazonaws.com/Assets/inititalData/cityData.json');
 
         const records: any = []
-        let parentID = null
+        let parentID: string
         for(let region of data){
+            parentID = 'VN'
             records.push( { index: { _index: ES_INDEX_REGION } })
             records.push( {
                 id: region.id,
                 parentID,
-                name: region.name,
+                name: region.name.replace('Tỉnh ', '').replace('Thành phố ', ''),
                 type: region.type
              })
+            
              if(region.sub && region.sub.length){
                 for(let regionLevel1 of region.sub){
                     parentID = region.id
@@ -65,11 +90,8 @@ export class AddressService {
                 }
              }
         }
-    
         
-        const {  body: {items} } = await this.esService.createByBulk(
-            ES_INDEX_REGION, records
-            )
+         await this.esService.createByBulk(ES_INDEX_REGION, records )
      }
 
 }

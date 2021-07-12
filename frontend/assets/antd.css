@@ -8,10 +8,10 @@
   .techstacks .ant-tabs-nav::before{
     border-bottom: none;
   }
-  .ant-scrolling-effect {
+  /* .ant-scrolling-effect {
     width: 100%!important;
     overflow-y:visible !important;
-  }
+  } */
 
 
 .ant-cascader-input.ant-input {

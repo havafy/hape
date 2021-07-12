@@ -12,5 +12,10 @@ export class AddressController {
 
         return res.json({})
     }
+    @Get('/api/regions')
+    async regions(@Res() res): Promise<any> {
+        let {parent = '' } = res.req.query
+        return res.json(await this.addressService.getByParent(parent))
+    }
 
 }

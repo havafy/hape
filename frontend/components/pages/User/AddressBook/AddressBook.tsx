@@ -68,7 +68,7 @@ return (<>
                           visible={visible}
                           onOk={onAddressCreate}
                           onCancel={onCancel}
-                          maskClosable={false}
+                
                           okText="Create"
                         footer={null} >
                         <AddressForm closeModal={handleClose}/>

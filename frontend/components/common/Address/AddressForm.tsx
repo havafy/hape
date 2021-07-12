@@ -5,46 +5,6 @@ import { Cascader, Form, Input, Radio, Checkbox } from 'antd'
 import s from './AddressForm.module.css'
 import { RiDeleteBin6Line, RiAddFill } from 'react-icons/ri'
 import { useAuth } from '@context/AuthContext'
-const options = [
-  {
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [
-      {
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [
-          {
-            value: 'xihu',
-            label: 'West Lake',
-          },
-          {
-            value: 'xiasha',
-            label: 'Xia Sha',
-            disabled: true,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [
-          {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua men',
-          },
-        ],
-      },
-    ],
-  },
-];
-
 interface Props {
     title?: string;
     name: string;
@@ -53,9 +13,30 @@ interface Props {
   }
 const AddressForm: FC<any>= ({closeModal }) => {
     const { login } = useAuth();
-  
+    const [options, setOptions] = React.useState([]);
+    const [parentID, setParentID] = React.useState('VN');
     const [isLoading, setIsLoading] = useState(false)
-   
+    useEffect(() => {
+      getVNProvince()
+    },[])
+    const getVNProvince = async () => {
+      try {
+        //send register data to API
+        const { data:{regions} } = await axios.get('regions',{ 
+          params: { parent: parentID }
+        }) 
+        setOptions(regions.map((item: any) => {
+          console.log('---', item)
+          return  {
+            value: item.id,
+            label: item.name,
+            isLeaf: false,
+          }
+        }))
+       
+      } catch (err){
+      }
+    }
     const onFinish = async (values: any) => {
     } 
     const onFinishFailed = (errorInfo: any) => {
@@ -72,7 +53,29 @@ const AddressForm: FC<any>= ({closeModal }) => {
       const onSetDefaultChange = (e)  =>{
         console.log(`checked = ${e.target.checked}`);
       }
-      
+      const loadData = async (selectedOptions: any) => {
+        console.log('-->', selectedOptions)
+        const parent = selectedOptions[0].value
+        const targetOption = selectedOptions[selectedOptions.length - 1];
+        targetOption.loading = true;
+    
+        try {
+          //send register data to API
+          const { data:{regions} } = await axios.get('regions',{ 
+            params: { parent }
+          }) 
+    
+          targetOption.loading = false;
+          targetOption.children = regions.map((item: any) => {
+            return  {
+              value: item.id,
+              label: item.name
+            }
+          })
+          setOptions([...options]);
+        } catch (err){
+        }
+      };
       return (<>
 
 
@@ -103,6 +106,7 @@ const AddressForm: FC<any>= ({closeModal }) => {
                     <Cascader style={{width: '100%'}}
                       options={options}
                       onChange={onChange}
+                      loadData={loadData}
                       placeholder="Thành phố - Tỉnh / Quận / Huyện"
                       showSearch={{ filter }}
                     />

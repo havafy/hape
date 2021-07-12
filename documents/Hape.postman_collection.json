@@ -10,34 +10,50 @@
 			"item": [
 				{
 					"name": "TEST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
 						},
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/kenz/www/vue_storefront/vue-storefront/static/icons/langs/de.webp"
+								}
+							]
+						},
 						"url": {
-							"raw": "http://localhost:3500/movies?search=Dark",
+							"raw": "http://localhost:3500/api/file",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3500",
 							"path": [
-								"movies"
-							],
-							"query": [
-								{
-									"key": "search",
-									"value": "Dark"
-								}
+								"api",
+								"file"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Find by ID",
+					"name": "Find by Product ID",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -73,6 +89,46 @@
 					"response": []
 				},
 				{
+					"name": "List by UserID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtlbm5ndXllbjczMiIsImlkIjo1LCJpYXQiOjE2MjUyMDM5ODgsImV4cCI6MTYyNjQ5OTk4OH0.5wM2KFnAqb3ZYIUTdZVWtdK-2-uAUIWRwqMr3I720GM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3500/api/products?pageSize=30&current=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "30"
+								},
+								{
+									"key": "current",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create new Product",
 					"request": {
 						"auth": {
@@ -89,7 +145,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"11111 name sample name sample name sample name \",\n    \"price\": 10000,\n    \"sku\": \"11111\",\n    \"priceOriginal\": 11000,\n    \"dealBegin\": \"2012-04-23T18:25:43.511Z\",\n    \"dealEnd\": \"2012-04-23T18:25:43.511Z\",\n    \"status\": true,\n    \"url\": \"https://wwww.aaaaa.com/2222222\",\n    \"description\": \"sample name sample name sample name sample nam e sample name sample na e sample name sample na e sample name sample na\",\n    \"categorySlug\": \"222222\",\n    \"images\": [\"aaaa\",\"aaaaaa\"]\n }",
+							"raw": "{\n    \"name\": \"11111 name sample name sample name sample name \",\n    \"price\": 10000,\n    \"quantity\": 1101,\n    \"sku\": \"apapaapapa\",\n    \"priceDiscount\": 11000,\n    \"discountBegin\": \"2021-08-09\",\n    \"discountEnd\": \"2021-08-19\",\n    \"status\": true,\n    \"url\": \"https://wwww.aaaaa.com/2222222\",\n    \"description\": \"sample name sample name sample name sample nam e sample name sample na e sample name sample na e sample name sample na\",\n    \"category\": \"222222\",\n    \"images\": [\"https://hape.s3.ap-southeast-1.amazonaws.com/__WaitingRoom/mISsXU-805a6299-c4c7-4cfd-b8d0-0726e64b8ad4-aaaaa.jpg\",\"aaaaaa\",\"aaaaaa\"]\n }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -112,7 +168,7 @@
 					"response": []
 				},
 				{
-					"name": "Update a Product by SKU",
+					"name": "Update a Product by ID",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -128,7 +184,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"6666 name sample name sample name sample name \",\n    \"sku\": \"88888e88999811\",\n    \"price\": 10000,\n    \"priceOriginal\": 11000,\n    \"dealBegin\": \"2012-04-23T18:25:43.511Z\",\n    \"dealEnd\": \"2012-04-23T18:25:43.511Z\",\n    \"status\": true,\n    \"url\": \"https://wwww.aaaaa.com/2222222\",\n    \"description\": \"sample name sample name sample name sample nam e sample name sample na e sample name sample na e sample name sample na\",\n    \"categorySlug\": \"222222\",\n    \"images\": [\"aaaa\",\"aaaaaa\"]\n }",
+							"raw": "{\n    \"id\": \"0pIZdnoBUhKjfIKsw5zu\",\n    \"name\": \"11111 name sample name sample name sample name \",\n    \"price\": 10000,\n        \"quantity\": 111,\n    \"sku\": \"88888e88999811\",\n    \"priceDiscount\": 11000,\n    \"discountBegin\": \"2012-04-23T18:25:43.511Z\",\n    \"discountEnd\": \"2012-04-23T18:25:43.511Z\",\n    \"status\": true,\n    \"url\": \"https://wwww.aaaaa.com/2222222\",\n    \"description\": \"sample name sample name sample name sample nam e sample name sample na e sample name sample na e sample name sample na\",\n    \"category\": \"222222\",\n    \"images\": [\n            \"https://hape.s3.ap-southeast-1.amazonaws.com/2021_6_5/-oiys08-e453e8a3-af54-41f3-9a93-5846b42240eb-aaaaa.png\"]\n }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -193,12 +249,19 @@
 					"name": "Delete Product",
 					"request": {
 						"auth": {
-							"type": "noauth"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im50bnBybzNAZ21haWwuY29tIiwiaWQiOjYsImlhdCI6MTYyNDUyMjQyNCwiZXhwIjoxNjI1ODE4NDI0fQ.jZVyIeFgNNcNKpnJ-6ekNa2geb6FKtxhAiDmKVqjxlw",
+									"type": "string"
+								}
+							]
 						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3500/api/products",
+							"raw": "http://localhost:3500/api/products/ErSZWHoBmObw8gIC7p_2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -206,7 +269,8 @@
 							"port": "3500",
 							"path": [
 								"api",
-								"products"
+								"products",
+								"ErSZWHoBmObw8gIC7p_2"
 							]
 						}
 					},
@@ -217,6 +281,238 @@
 		{
 			"name": "User",
 			"item": [
+				{
+					"name": "Address",
+					"item": [
+						{
+							"name": "Create",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtlbm5ndXllbjczMiIsImlkIjo1LCJpYXQiOjE2MjUyMDM5ODgsImV4cCI6MTYyNjQ5OTk4OH0.5wM2KFnAqb3ZYIUTdZVWtdK-2-uAUIWRwqMr3I720GM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"ken nguyen\",\n    \"username\": \"kennguyen2\",\n    \"email\": \"ntnpro2@gmail.com\",\n    \"password\": \"123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://0.0.0.0:3500/api/users/address",
+									"protocol": "http",
+									"host": [
+										"0",
+										"0",
+										"0",
+										"0"
+									],
+									"port": "3500",
+									"path": [
+										"api",
+										"users",
+										"address"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtlbm5ndXllbjczMiIsImlkIjo1LCJpYXQiOjE2MjUyMDM5ODgsImV4cCI6MTYyNjQ5OTk4OH0.5wM2KFnAqb3ZYIUTdZVWtdK-2-uAUIWRwqMr3I720GM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"ken nguyen\",\n    \"username\": \"kennguyen2\",\n    \"email\": \"ntnpro2@gmail.com\",\n    \"password\": \"123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://0.0.0.0:3500/api/users/address",
+									"protocol": "http",
+									"host": [
+										"0",
+										"0",
+										"0",
+										"0"
+									],
+									"port": "3500",
+									"path": [
+										"api",
+										"users",
+										"address"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtlbm5ndXllbjczMiIsImlkIjo1LCJpYXQiOjE2MjUyMDM5ODgsImV4cCI6MTYyNjQ5OTk4OH0.5wM2KFnAqb3ZYIUTdZVWtdK-2-uAUIWRwqMr3I720GM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"ken nguyen\",\n    \"username\": \"kennguyen2\",\n    \"email\": \"ntnpro2@gmail.com\",\n    \"password\": \"123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://0.0.0.0:3500/api/users/address",
+									"protocol": "http",
+									"host": [
+										"0",
+										"0",
+										"0",
+										"0"
+									],
+									"port": "3500",
+									"path": [
+										"api",
+										"users",
+										"address"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtlbm5ndXllbjczMiIsImlkIjo1LCJpYXQiOjE2MjUyMDM5ODgsImV4cCI6MTYyNjQ5OTk4OH0.5wM2KFnAqb3ZYIUTdZVWtdK-2-uAUIWRwqMr3I720GM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"ken nguyen\",\n    \"username\": \"kennguyen2\",\n    \"email\": \"ntnpro2@gmail.com\",\n    \"password\": \"123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://0.0.0.0:3500/api/users/address",
+									"protocol": "http",
+									"host": [
+										"0",
+										"0",
+										"0",
+										"0"
+									],
+									"port": "3500",
+									"path": [
+										"api",
+										"users",
+										"address"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get by Parent ID",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtlbm5ndXllbjczMiIsImlkIjo1LCJpYXQiOjE2MjUyMDM5ODgsImV4cCI6MTYyNjQ5OTk4OH0.5wM2KFnAqb3ZYIUTdZVWtdK-2-uAUIWRwqMr3I720GM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"ken nguyen\",\n    \"username\": \"kennguyen2\",\n    \"email\": \"ntnpro2@gmail.com\",\n    \"password\": \"123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://0.0.0.0:3500/api/regions",
+									"protocol": "http",
+									"host": [
+										"0",
+										"0",
+										"0",
+										"0"
+									],
+									"port": "3500",
+									"path": [
+										"api",
+										"regions"
+									],
+									"query": [
+										{
+											"key": "parent",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "Register",
 					"request": {
@@ -509,6 +805,302 @@
 								"api",
 								"users",
 								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pages",
+			"item": [
+				{
+					"name": "Home",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/pages/home",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"pages",
+								"home"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/pages/category/Thuc-Pham-Do-Uong?pageSize=1&current=1",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"pages",
+								"category",
+								"Thuc-Pham-Do-Uong"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "1"
+								},
+								{
+									"key": "current",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/pages/product/Ts7liXoBWCTBnJ7wcODv",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"pages",
+								"product",
+								"Ts7liXoBWCTBnJ7wcODv"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Checkout",
+			"item": [
+				{
+					"name": "Add To Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtlbm5ndXllbjczMiIsImlkIjo1LCJpYXQiOjE2MjUyMDM5ODgsImV4cCI6MTYyNjQ5OTk4OH0.5wM2KFnAqb3ZYIUTdZVWtdK-2-uAUIWRwqMr3I720GM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productID\": \"\",\n    \"quantity\": 12,\n    \"options\":[\"red\",\"xl\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/checkout",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"checkout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place Order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtlbm5ndXllbjczMiIsImlkIjo1LCJpYXQiOjE2MjUyMDM5ODgsImV4cCI6MTYyNjQ5OTk4OH0.5wM2KFnAqb3ZYIUTdZVWtdK-2-uAUIWRwqMr3I720GM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shopID\": \"\",\n    \"addressID\": \"\",\n    \"paypment\": \"COD\",\n    \"shipping\": \"fix_rate\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/cart",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apply Coupon",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtlbm5ndXllbjczMiIsImlkIjo1LCJpYXQiOjE2MjUyMDM5ODgsImV4cCI6MTYyNjQ5OTk4OH0.5wM2KFnAqb3ZYIUTdZVWtdK-2-uAUIWRwqMr3I720GM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shopID\": \"\",\n    \"coupon\": \"ABC123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/cart",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtlbm5ndXllbjczMiIsImlkIjo1LCJpYXQiOjE2MjUyMDM5ODgsImV4cCI6MTYyNjQ5OTk4OH0.5wM2KFnAqb3ZYIUTdZVWtdK-2-uAUIWRwqMr3I720GM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/cart",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get shipping cost",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtlbm5ndXllbjczMiIsImlkIjo1LCJpYXQiOjE2MjUyMDM5ODgsImV4cCI6MTYyNjQ5OTk4OH0.5wM2KFnAqb3ZYIUTdZVWtdK-2-uAUIWRwqMr3I720GM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shopID\": \"\",\n    \"addressID\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:3500/api/cart/shipping-cost",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "3500",
+							"path": [
+								"api",
+								"cart",
+								"shipping-cost"
 							]
 						}
 					},
