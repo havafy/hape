@@ -1,14 +1,16 @@
 import React, { FC, useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
-import { Button, Modal } from 'antd'
+import { Button, Modal, Popconfirm } from 'antd'
 import s from './AddressBook.module.css'
 import { RiDeleteBin6Line, RiAddFill } from 'react-icons/ri'
 import { useAuth } from '@context/AuthContext'
 import { AddressForm } from '@components/common'
+
 const AddressBook: FC = () => {
-  const { user, accessToken } = useAuth();
+  const { accessToken, updateAction } = useAuth();
   const [ visible, setVisible] =useState(false)
+  const [updateAddress, setUpdateAddress] = useState<any>()
   const [addresses, setAddresses] = useState([])
   const [ loading, setLoading] = useState(false)
   const handleClose = useCallback((e:any) => {
@@ -22,33 +24,35 @@ const AddressBook: FC = () => {
   }, [])
 
 
-const pullAddress = async (currentPage = 1)=>{
-    // let { data: { addresses } } = await axios.get('/users/address', { ...headerApi } )
-    // setAddresses(addresses)
+const pullAddress = async ()=>{
+    let { data: { addresses } } = await axios.get('/address', { ...headerApi } )
+    setAddresses(addresses)
 }
-const deleteProducts = async () => {
-  setLoading(true)
-  // ajax request after empty completing
-  // for (const productID of selectedRowKeys){
-  //    await axios.delete('/products/' + productID, headerApi)
-  // }
-
-  await pullAddress()
-  setLoading(false)
-}
-
-const handleOk = () => {
-  setVisible(false);
-};
 
 const onCancel = () => {
   setVisible(false);
 }
-const onFinish = async (values: any) => {
+const createNewAddress = () =>{
+  setUpdateAddress({})
+  setVisible(true);
 }
+
+const editAddress = (address: any) => {
+  // updateAction({event: 'ADDRESS_EDIT', payload: id})
+  setUpdateAddress(address)
+  setVisible(true);
+}
+
 const onAddressCreate = async (values: any) => {
 }
 
+const deleteAddress = async (id: string) => {
+  await axios.delete('/address/' + id, headerApi)
+
+  setTimeout(function() { //Start the timer
+      pullAddress()
+  }.bind(this), 1200)
+}
 return (<>
         <div className="">
           <h1 className={s.h1}>Địa Chỉ Của Tôi</h1>
@@ -61,17 +65,18 @@ return (<>
                     <div className="col-span-1 text-right">
             
                       <Button type="primary" 
-                      onClick={e=>setVisible(true)} className="addButton">
+                      onClick={createNewAddress} className="addButton">
                       <RiAddFill className={s.addButtonSvg} /> Thêm Địa Chỉ Mới</Button>
 
-                      <Modal title="Thêm địa chỉ" className="auth-form-modal"
+                      <Modal title={updateAddress?.id ? "Cập nhật địa chỉ" : "Thêm địa chỉ" } className="auth-form-modal"
+                          width="750px"
                           visible={visible}
                           onOk={onAddressCreate}
                           onCancel={onCancel}
                 
                           okText="Create"
                         footer={null} >
-                        <AddressForm closeModal={handleClose}/>
+                        <AddressForm address={updateAddress} closeModal={handleClose}/>
 
                         </Modal>
                      
@@ -79,7 +84,60 @@ return (<>
                     </div>
                   </div>
           
+              <div>
+              {addresses.map((address: any) => {
+                
+                return (
+                  <div className={s.addressItem}>
+                <div className="grid grid-cols-3">
+                  <div className="col-span-2">
+                      <div className={s.fieldRow}>
+                        <span className={s.label}>Họ Và Tên</span>
+                        <span className={s.value}><b className="mr-3">{address.fullName}</b>  
+                        { address.default && <span className="label label-green">Mặc định</span> }
+                        </span>
+                        </div>
+                        <div className={s.fieldRow}>
+                          <span className={s.label}>Số Điện Thoại</span>
+                          <span className={s.value}>{address.phoneNumber}</span>
+                        </div>
+                        <div className={s.fieldRow}>
+                          <span className={s.label}>Địa Chỉ</span>
+                          <span className={s.value}>
+                            <span>     
+                              {address.address}
+                              <br/>
+                              {address.regionFull}
+                              </span>
+                       
+                            </span>
+                        </div>   
+                    </div>
+                    <div className="col-span-1 ">
+                      
+                      <div className="mt-7 text-right">
+                        <button className={s.linkBtn} onClick={e=>editAddress(address)}>Sửa</button>
               
+
+                        { !address.default && 
+                  <Popconfirm
+                    title="Bạn muốn xoá?"
+                    onConfirm={e=> deleteAddress(address.id)}
+                    onCancel={e=>{}}
+                    okText="Đúng, tôi muốn xoá."
+                    cancelText="Bỏ qua" ><button className={s.linkBtn}>xoá</button></Popconfirm>}
+                        <div className="mt-3">
+                          <button className={s.actionButton}>Làm mặc định</button>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    </div>
+                )
+
+              })}
+
+              </div>
               </div>
             </div>
 

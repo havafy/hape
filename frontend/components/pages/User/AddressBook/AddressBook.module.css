@@ -24,3 +24,34 @@
     max-width: 200px;
     display: block;
   }
+.addressItem{
+    border-top: 1px solid #f2f2f2;
+    @apply my-5 pl-20 pt-8 pb-6 pr-5
+}
+.fieldRow{
+    @apply my-2 flex
+}
+.value{
+    min-width: 200px;
+    @apply ml-5
+    
+}
+.linkBtn{
+    @apply underline ml-5
+}
+.linkBtn:hover{
+    color: var(--main-color);
+}
+.actionButton{
+    padding: 5px 15px;
+    border: 1px solid #f2f2f2;
+}
+.actionButton:hover{
+    color: var(--main-color);
+
+    border: 1px solid  var(--main-color);
+}
+.label{
+    min-width: 100px;
+    @apply text-gray-500 text-right inline-block
+}

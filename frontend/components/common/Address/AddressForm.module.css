@@ -6,3 +6,7 @@
   @apply  text-xs font-semibold hover:text-white items-center justify-center text-white bg-gray-700 hover:bg-gray-900 uppercase px-7 py-3 shadow-md  hover:shadow-lg outline-none focus:outline-none  ease-linear transition-all duration-150
  
 }
+.formMessage{
+  @apply text-sm text-red mb-5
+
+}

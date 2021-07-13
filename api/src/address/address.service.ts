@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { url } from 'inspector';
 import { SearchService } from '../search/search.service';
+import { AddressDto  } from './dto/address.dto';
 import axios from 'axios'
 const ES_INDEX_REGION = 'region'
-
+const ES_INDEX_ADDRESS = 'addresses'
 @Injectable()
 export class AddressService {
     constructor(readonly esService: SearchService) {}
@@ -16,6 +17,136 @@ export class AddressService {
         
         return  {}
     
+    }
+    async getByUserID(userID: number,  size: number, from: number) {
+        const { body: { 
+            hits: { 
+                total, 
+                hits 
+            } } } = await this.esService.findBySingleField(ES_INDEX_ADDRESS, { userID }, size, from)
+        const count = total.value
+        let addresses = []
+        if(count){
+            for(let region of hits){
+                addresses.push({
+                    id: region._id,
+                    ...region._source,
+                    regionFull: await this.getFullNameRegion(region._source)
+                 })
+            }
+        }
+        return {
+            count,
+            size,
+            from,
+            addresses
+        }
+    }
+    async getFullNameRegion(address: AddressDto) {
+      
+        return await this.getRegionName(address.ward) + ', '
+                + await this.getRegionName(address.district) + ', '
+                +await this.getRegionName(address.province)
+
+        
+    }
+    async getRegionName(id: string) {
+
+        const { body:
+            { hits: { 
+                hits, 
+                total 
+            }}} = await this.esService.findBySingleField( ES_INDEX_REGION, {id})
+            const count = total.value
+            if(count){
+                return hits[0]._source.name
+            }
+        return ''
+    }
+    async remove(userID: number, id: string) {
+        try {
+            const checking = await this.esService.findById(ES_INDEX_ADDRESS, id )
+            if(checking.found){
+                if(checking._source.userID !== userID ){
+                    return {
+                        status: false,
+                        message: "Permission is denied.",
+                    }
+                }
+                const res = await this.esService.delete(ES_INDEX_ADDRESS, id )
+                if(res.body.result === 'deleted'){
+                    return {
+                        status: true
+                    }
+                }
+       
+            }
+
+        }catch (err) {
+          
+        }
+        return {
+            status: false,
+            message: "This is not found.",
+        }
+    }
+
+    async update(userID: number, addressDto: AddressDto) {
+        try{    
+            const addressID = addressDto.id
+            const checking =  await this.esService.findById(ES_INDEX_ADDRESS, addressDto.id);
+            const address = checking._source
+            if(address.userID !== userID ){
+                return {
+                    status: false,
+                    message: "Permission is denied.",
+                }
+            }
+            const now = new Date();
+            addressDto.updatedAt = now.toISOString()
+
+            await this.esService.update(ES_INDEX_ADDRESS, addressID ,addressDto)
+            const updated =  await this.esService.findById(ES_INDEX_ADDRESS, addressID);
+            return {
+                address: { ...updated._source },
+                status: true
+            }
+    
+        }catch (err){
+            console.log(err)
+        }
+        return {
+            address: null,
+            status: false,
+        }
+    }
+    async create(userID: number, addressDto: AddressDto) {
+        try {
+            const now = new Date();
+            const createdAt = now.toISOString()
+    
+            const record: any = [
+                { index: { _index: ES_INDEX_ADDRESS } },  {
+                ...addressDto,
+                userID,
+                updatedAt: createdAt,
+                createdAt
+            }]
+
+            const {  body: {items} } = await this.esService.createByBulk(ES_INDEX_ADDRESS, record);
+            const addressID = items[0].index._id
+            const { _source } =  await this.esService.findById(ES_INDEX_ADDRESS, addressID);
+            return {
+                address: { ..._source, id: addressID},
+                status: true,
+            }
+        }catch (err){
+            return {
+                address: null,
+                status: false,
+            }
+        }
+        
     }
     async getByParent(parentID: string | null ) {
         const { body:

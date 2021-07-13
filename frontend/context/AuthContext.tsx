@@ -5,13 +5,21 @@ const guestUser = { username: '', email: ''}
 type authContextType = {
     accessToken: string;
     user: any;
+    action: actionType;
+    updateAction: (action: actionType) => void;
     login: (accessToken: string, user: userInterface) => void;
     logout: () => void;
 };
+type actionType = {
+    event: string, 
+    payload: string
+}
 
 const authContextDefaultValues: authContextType = {
     accessToken: '',
     user: guestUser,
+    action: { event: '', payload: ''},
+    updateAction: (action: actionType) => {},
     login: () => {},
     logout: () => {},
 };
@@ -37,6 +45,7 @@ if(!isServer){
 export function AuthProvider({ children }: Props) {
     const [accessToken, setAccessToken] = useState<string>(initialAccessToken);
     const [user, setUser] = useState<userInterface>(initialUser);
+    const [action, setAction] = useState<actionType>({ event: '', payload: ''});
     const getUserProfile = async ()=>{
         if(!isServer && initialAccessToken !== ''){
             try {
@@ -73,11 +82,16 @@ export function AuthProvider({ children }: Props) {
         setUser(guestUser)
     };
 
+    const updateAction = (action: actionType) => {
+        setAction(action)
+    };
     const value: authContextType = {
         accessToken,
         user,
         login,
         logout,
+        action,
+        updateAction
     };
 
     return (

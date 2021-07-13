@@ -6,7 +6,8 @@ import s from './AddressForm.module.css'
 import { RiDeleteBin6Line, RiAddFill } from 'react-icons/ri'
 import { useAuth } from '@context/AuthContext'
 
-const AddressForm: FC<{closeModal: any, address: any}>= ({closeModal, address}) => {
+const AddressForm: FC<any> = ({closeModal, address}) => {
+
 const { accessToken, action } = useAuth();
 const headerApi = { 
   headers: { 'Authorization': `Bearer ${accessToken}` } 
@@ -24,15 +25,12 @@ const [formMessage, setFormMessage] = useState<string[]>([])
 
 
 useEffect(() => {
-
-  if(address?.id){
-    fillAddress(address)
-  }else{
-    resetForm()
-  }
-
+  fillAddress(address)
+  setReady(false)
+  setTimeout(function() { //Start the timer
+    setReady(true)
+    }.bind(this), 100)
 },[address])
-
 useEffect(() => {
   pullProvinces()
 },[])
@@ -51,34 +49,9 @@ const pullDistricts = async () => {
 const pullProvinces = async () => {
   setProvinces(await getRegions('VN'))
 }
-const fillAddress = async (address: any) => {
-  setReady(false)
-  setTimeout(function() { //Start the timer
-    setReady(true)
-    }.bind(this), 100)
-  console.log('address', address)
-  setFormMessage([])
-  setSelectedProvince(address.province)
-  setSelectedDistrict(address.district)
-  setSelectedWard(address.ward)
-  setIsDefault(address.default)
-  setTypeAddress(address.addressType)
-  
-  await pullDistricts()
-  await pullWards()
-
-
+const fillAddress = (address: any) => {
+  setWards(await getRegions(selectedDistrict))
 }
-const resetForm = () =>{
-
-  setSelectedProvince('')
-  setSelectedDistrict('')
-  setSelectedWard('')
-  setIsDefault(false)
-  setReady(false)
-  setTimeout(function() { //Start the timer
-    setReady(true)
-    }.bind(this), 100)
 }
 
 const getRegions = async (parent: string) => {
@@ -235,7 +208,7 @@ return (<>
                 </div>
                 <div className="mt-7">
       
-                <Checkbox defaultChecked={isDefault} onChange={onSetDefaultChange}>Đặt làm địa chỉ mặc định</Checkbox>
+                <Checkbox onChange={onSetDefaultChange}>Đặt làm địa chỉ mặc định</Checkbox>
                 </div>
                 <div className="mt-7 text-right">
                 <button onClick={closeModal} className="mr-6">Trở về</button>

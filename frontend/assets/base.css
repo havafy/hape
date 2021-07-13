@@ -95,6 +95,14 @@ body {
 a {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+/*-----------------ANIMATION --------*/
+a, button, input{
+  transition: color 375ms ease;
+  transition: background-url 275ms ease;
+  transition: background-color 275ms ease;
+  transition: border 275ms ease;
+}
+
 
 input:focus, 
 input:focus-visible,
@@ -103,6 +111,7 @@ button:focus-visible{
   outline: none !important;
   box-shadow: none!important;
 }
+
 
 .animated {
   -webkit-animation-duration: 1s;
@@ -375,4 +384,21 @@ body.layout{
   margin-right: 10px;
   color: #3578e5;
   font-size: 1.3rem;
+}
+.label{
+  display: inline-block;
+  background: #f2f2f2;
+  color: #fff;
+  border-radius: 3px;
+  padding: 3px 7px 2px;
+  text-transform: capitalize;
+  font-size: 13px;
+  font-weight: 500;
+  width: auto;
+  white-space: nowrap;
+  margin-right: 12px;
+
+}
+.label-green{
+  background: #00bf7b;
 }

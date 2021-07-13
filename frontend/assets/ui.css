@@ -126,6 +126,7 @@ span.highlight {
 }
 .user-sidebar .list-menu .menu-item.active a{
     color: var(--main-color);
+    transition: background-color 275ms ease;
  
 }
 .user-sidebar .list-menu .menu-item a:hover svg{
@@ -133,7 +134,7 @@ span.highlight {
 }
 
 .user-sidebar .list-menu .menu-item a:hover{
-    background: #f2f2f2;
+    background-color: #f2f2f2;
 }
 /* ---------- User Nav ------------ */
 
