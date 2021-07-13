@@ -56,7 +56,6 @@ const fillAddress = async (address: any) => {
   setTimeout(function() { //Start the timer
     setReady(true)
     }.bind(this), 100)
-  console.log('address', address)
   setFormMessage([])
   setSelectedProvince(address.province)
   setSelectedDistrict(address.district)
@@ -117,19 +116,23 @@ const onFinish = async (values: any) => {
     return
   }
   try {
-    //send data to API
-    const { data: { status } } = await axios.post('address', { 
+    const submitData = {
       ...values,
       province: selectedProvince,
       district: selectedDistrict,
       ward: selectedWard,
-
       default: isDefault,
       addressType: typeAddress,
-    }, headerApi) 
-    if(status){
-      closeModal()
     }
+    //send data to API
+    if(address?.id){
+      await axios.put('address', { ...submitData, id: address.id }, headerApi) 
+    }else{
+      await axios.post('address', submitData, headerApi) 
+    }
+  
+    closeModal()
+    
   } catch (err){
     if(err?.response?.data){
       setFormMessage(err.response.data.message)

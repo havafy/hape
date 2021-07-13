@@ -23,7 +23,10 @@ export class AddressService {
             hits: { 
                 total, 
                 hits 
-            } } } = await this.esService.findBySingleField(ES_INDEX_ADDRESS, { userID }, size, from)
+            } } } = await this.esService.findBySingleField(
+                ES_INDEX_ADDRESS, 
+                { userID }, size, from, 
+                [{"createdAt": "desc"}])
         const count = total.value
         let addresses = []
         if(count){

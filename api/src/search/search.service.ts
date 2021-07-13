@@ -58,11 +58,14 @@ export class SearchService {
         }
         return true
     }
-    async findBySingleField(index: string, queryMatch: any, size = 30, from = 0) {
+    async findBySingleField(index: string, queryMatch: any, size = 30, from = 0, sort = []) {
         const reqParams = {
             index,
             body: { size,  from,
                 query: {  match: { ...queryMatch }   }  }
+        }
+        if(sort.length){
+            reqParams.body['sort'] = sort
         }
         const res = await this.esService.search(reqParams)
         return res

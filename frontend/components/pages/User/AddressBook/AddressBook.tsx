@@ -14,7 +14,13 @@ const AddressBook: FC = () => {
   const [addresses, setAddresses] = useState([])
   const [ loading, setLoading] = useState(false)
   const handleClose = useCallback((e:any) => {
-      setVisible(false)
+
+      setTimeout(function() { //Start the timer
+        setVisible(false)
+        pullAddress()
+        }.bind(this), 1000)
+           
+ 
   }, [])  
   const headerApi = { 
     headers: { 'Authorization': `Bearer ${accessToken}` } 
