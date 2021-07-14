@@ -43,6 +43,12 @@ export class CartDto {
 }
 export class Items {
 
+  @IsOptional()
+  active: boolean;
+
+  @IsOptional()
+  productStatus: boolean; // this product Out of stock or disabled
+
   @MaxLength(100)
   @MinLength(5)
   productID: string;
@@ -51,5 +57,23 @@ export class Items {
   @Min(1)
   @Max(10000)
   quantity: number;
+
+  @IsOptional()
+  @MaxLength(20)
+  @MinLength(1)
+  variant: string;
+
+  @IsNumber()
+  @Min(1)
+  @Max(10000)
+  price: number;
+
+  @MaxLength(150)
+  @MinLength(3)
+  name: string;
+
+  @MaxLength(300)
+  @MinLength(5)
+  thumb: string;
 
 }

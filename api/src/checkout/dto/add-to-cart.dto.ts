@@ -18,5 +18,5 @@ export class AddToCartDto {
   @IsOptional()
   @MaxLength(20)
   @MinLength(1)
-  option: string;
+  variant: string;
 }

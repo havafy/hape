@@ -28,10 +28,10 @@ export class CartService {
                     return {message: 'Product is not found.'}
                 }
                 const shopID = product.userID
-             
+            
                  // check any cart with this shopID and this user
                 const cart = await this.getCartByUser(userID, shopID)
-
+                return { cart}
                 //IF existing: let update product to this cart
                 if(cart){
                     return await this.update(productID, quantity , cart)
@@ -77,6 +77,7 @@ export class CartService {
             
         }
         async getCartByUser(userID: string, shopID: string) {
+          
           try{
                     let must = [ 
                     {match: { userID }},
@@ -92,24 +93,64 @@ export class CartService {
 
                 //IF existing: let update product to this cart
                 if(count){
-                    if(count > 0) console.log('[ALERT] CART count over 1', userID)
+                    if(count > 1){
+                        console.log('[ALERT] CART count over 1', userID)
+             
+                    }
                     return {
                             id: hits[0]._id,
                             ...hits[0]._source, 
                         }
                 }
             }catch (err){
+
             }
             return false
 
         }
         
-        async update(productID: string, quantity: number, cart: CartDto) {
+        async update(productID: string, quantity: number, cart: any) {
+  
             try{
-
+                if(!cart.id || !cart.items.length){
+                    return {message:"Cart is missing!"};
+                }
+                const cartID = cart.id
+          
+                let i = 0
+                for( const item of cart.items){
+                    if(item.productID === productID){
+                     break;
+                    }
+                    i++
+                }
+                return {i, cart}
+                // IF product is existing on cart
+                if(i){
+                    // increase quantity to this product
+                    cart.items[i].quantity += quantity
+                }else{ // IF product not existing on cart
+                    cart.items.push({productID, quantity})
+                }
+                return {cart}
+                const reCart = await this.calcGrandTotal(cart)
+                return {reCart}
+                const now = new Date();
+                reCart.updatedAt = now.toISOString()
+    
+                await this.esService.update(ES_INDEX_CART, cartID ,reCart)
+                const updated = await this.esService.findById(ES_INDEX_CART, reCart);
+                return {
+                    address: { id: cartID, ...updated._source },
+                    status: true
+                }
+        
+         
             }catch (err){
+                console.log(err)
             }
-            return false
+            return {status: false}
+
 
         }
         async create(
@@ -123,15 +164,16 @@ export class CartService {
             const now = new Date();
             const createdAt = now.toISOString()
             try{
-                const cart = this.calcGrandTotal({
+                const cart = await this.calcGrandTotal({
                     userID, 
                     shopID,
                     items:[{productID, quantity}],
                     updatedAt: createdAt,
                     createdAt
                 })
-                
+         
                 const record: any = [{index: { _index: ES_INDEX_CART }}, cart]
+    
                 const {  body: {items} } = await this.esService.createByBulk(ES_INDEX_CART, record);
                 const cartID = items[0].index._id
                 const { _source } =  await this.esService.findById(ES_INDEX_CART, cartID);
@@ -140,7 +182,7 @@ export class CartService {
                     status: true,
                 }
             }catch (err){
-            
+                console.log(err)
             }
             return {status: false}
 
@@ -155,10 +197,16 @@ export class CartService {
                 let i = 0
                 for(const { productID, quantity } of cart.items){
                     const {found, product} = await this.productsService.getRawProduct(productID)
+                    cart.items[i].name = product.name
+                    cart.items[i].price = product.price
+                    cart.items[i].thumb = product.images[0]
                     if(found && product.status){
                         subtotal += product.price * quantity
+                        cart.items[i].productStatus = true
+                        cart.items[i].active = true
                     }else{
-                        delete cart.items[i]
+                        cart.items[i].price = false
+                        cart.items[i].productStatus = false
                     }
                     i++
                 }

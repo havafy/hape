@@ -53,10 +53,17 @@ export class Items {
   @MinLength(1)
   variant: string;
 
-  @MaxLength(100)
-  @MinLength(5)
-  productName: string;
-
   @IsNumber()
+  @Min(1)
+  @Max(10000)
   price: number;
+
+  @MaxLength(150)
+  @MinLength(3)
+  name: string;
+
+  @MaxLength(300)
+  @MinLength(5)
+  thumb: string;
+
 }

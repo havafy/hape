@@ -13,10 +13,7 @@ export class CheckoutController {
     @Post('/api/cart')
     async create(@Res() res,  @Body() addToCartDto: AddToCartDto): Promise<any> {
         const userID = res.req.user.id
-        const response = await this.cartService.addToCart(userID, addToCartDto)
-        return res.json({
-            ...response
-        })
+        return res.json(await this.cartService.addToCart(userID, addToCartDto))
     }
 
 }
