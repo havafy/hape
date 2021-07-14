@@ -1,18 +1,22 @@
-import { Controller, Get,Put, Body, Res, Post, Param, Delete } from '@nestjs/common';
+import { Controller, Get,Put, Body, Res, Post, Param, Delete, UseGuards} from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CheckoutService } from './checkout.service';
 import { AddToCartDto  } from './dto/add-to-cart.dto';
-import { get } from 'https';
+import { AuthGuard } from '@nestjs/passport';
+@UseGuards(AuthGuard('jwt'))  
 @Controller()
 export class CheckoutController {
-    constructor(public readonly homePageService: CheckoutService,
-        public readonly categoryPageService: CartService,
+    constructor(
+        public readonly cartService: CartService,
         ) {}
 
-    @Put('/api/cart')
-    async home(@Res() res, @Param() params: AddToCartDto): Promise<any> {
-
-        return res.json({})
+    @Post('/api/cart')
+    async create(@Res() res,  @Body() addToCartDto: AddToCartDto): Promise<any> {
+        const userID = res.req.user.id
+        const response = await this.cartService.addToCart(userID, addToCartDto)
+        return res.json({
+            ...response
+        })
     }
 
 }

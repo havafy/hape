@@ -5,15 +5,13 @@ import { CheckoutController } from './checkout.controller';
 import { SearchModule } from '../search/search.module';
 import { FilesService } from "../files/files.service";
 import { ProductsService } from "../products/products.service";
-import { ElasticsearchService } from '@nestjs/elasticsearch';
 @Module({
     imports: [SearchModule],
     providers: [
         CartService, 
         CheckoutService, 
         FilesService, 
-        ProductsService,
-        ElasticsearchService
+        ProductsService
     ],
     controllers: [CheckoutController],
 })

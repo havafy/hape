@@ -8,7 +8,6 @@ import { AddressActionDto  } from './dto/address-action.dto';
 import { AuthGuard } from '@nestjs/passport';
 @UseGuards(AuthGuard('jwt'))  
 @Controller()
-@Controller()
 export class AddressController {
     constructor(
         public readonly addressService: AddressService
