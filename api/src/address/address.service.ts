@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { url } from 'inspector';
 import { SearchService } from '../search/search.service';
 import { AddressDto  } from './dto/address.dto';
+import { AddressActionDto  } from './dto/address-action.dto';
 import axios from 'axios'
 const ES_INDEX_REGION = 'region'
 const ES_INDEX_ADDRESS = 'addresses'
@@ -93,6 +94,17 @@ export class AddressService {
             message: "This is not found.",
         }
     }
+    async removeDefaultAnother(userID: number) {
+
+       await this.esService.updateByQuery({
+            index: ES_INDEX_ADDRESS, type: '_doc', 
+            body: {
+                "query": { "match": { "userID": userID } },
+                "script": { "inline": "ctx._source.default = false"}
+            }})
+
+
+    }
 
     async update(userID: number, addressDto: AddressDto) {
         try{    
@@ -104,6 +116,16 @@ export class AddressService {
                     status: false,
                     message: "Permission is denied.",
                 }
+            }
+            const checkWard = await this.getRegionName(addressDto.ward)
+            if(checkWard === ''){
+                return {
+                    status: false,
+                    message: "An error occurred on Ward Number.",
+                }
+            }
+            if(addressDto.default){
+                await this.removeDefaultAnother(userID)
             }
             const now = new Date();
             addressDto.updatedAt = now.toISOString()
@@ -123,11 +145,49 @@ export class AddressService {
             status: false,
         }
     }
+
+    async action(userID: number, addressActionDto: AddressActionDto) {
+        try{    
+            const addressID = addressActionDto.id
+            const checking =  await this.esService.findById(ES_INDEX_ADDRESS, addressID);
+            const address = checking._source
+            if(address.userID !== userID ){
+                return {
+                    status: false,
+                    message: "Permission is denied.",
+                }
+            }
+           if(addressActionDto.action === 'setIsDefault'){
+                await this.removeDefaultAnother(userID)
+                await this.esService.update(ES_INDEX_ADDRESS, addressID , { default: true })
+                const updated =  await this.esService.findById(ES_INDEX_ADDRESS, addressID);
+                return {
+                    address: { ...updated._source },
+                    status: true
+                }
+           }
+        }catch (err){
+            console.log(err)
+        }
+        return {
+            address: null,
+            status: false,
+        }
+    }
     async create(userID: number, addressDto: AddressDto) {
         try {
+            const checkWard = await this.getRegionName(addressDto.ward)
+            if(checkWard === ''){
+                return {
+                    status: false,
+                    message: "An error occurred on Ward Number.",
+                }
+            }
             const now = new Date();
             const createdAt = now.toISOString()
-    
+            if(addressDto.default){
+                await this.removeDefaultAnother(userID)
+            }
             const record: any = [
                 { index: { _index: ES_INDEX_ADDRESS } },  {
                 ...addressDto,

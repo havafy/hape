@@ -388,7 +388,7 @@ body.layout{
 .label{
   display: inline-block;
   background: #f2f2f2;
-  color: #fff;
+  color: #333;
   border-radius: 3px;
   padding: 3px 7px 2px;
   text-transform: capitalize;
@@ -400,5 +400,6 @@ body.layout{
 
 }
 .label-green{
+  color: #fff;
   background: #00bf7b;
 }

@@ -14,25 +14,25 @@ const AddressBook: FC = () => {
   const [addresses, setAddresses] = useState([])
   const [ loading, setLoading] = useState(false)
   const handleClose = useCallback((e:any) => {
+      setVisible(false)
+      pullAddress()
 
-      setTimeout(function() { //Start the timer
-        setVisible(false)
-        pullAddress()
-        }.bind(this), 1000)
-           
- 
+
   }, [])  
   const headerApi = { 
     headers: { 'Authorization': `Bearer ${accessToken}` } 
   }
   useEffect(() => {
-    pullAddress()
+    pullAddress(0)
   }, [])
 
 
-const pullAddress = async ()=>{
+const pullAddress = async (timeout = 1000)=>{
+  setTimeout(async function() { //Start the timer
     let { data: { addresses } } = await axios.get('/address', { ...headerApi } )
     setAddresses(addresses)
+    }.bind(this), timeout)
+
 }
 
 const onCancel = () => {
@@ -54,11 +54,16 @@ const onAddressCreate = async (values: any) => {
 
 const deleteAddress = async (id: string) => {
   await axios.delete('/address/' + id, headerApi)
+  await pullAddress()
 
-  setTimeout(function() { //Start the timer
-      pullAddress()
-  }.bind(this), 1200)
 }
+const setThisIsDefault = async (address: any) => {
+  await axios.put('/address/action',{ id: address.id, 'action': 'setIsDefault' }, headerApi)
+  await pullAddress()
+
+}
+
+
 return (<>
         <div className="">
           <h1 className={s.h1}>Địa Chỉ Của Tôi</h1>
@@ -99,7 +104,10 @@ return (<>
                   <div className="col-span-2">
                       <div className={s.fieldRow}>
                         <span className={s.label}>Họ Và Tên</span>
-                        <span className={s.value}><b className="mr-3">{address.fullName}</b>  
+                        <span className={s.value}><b className="mr-5">{address.fullName}</b>  
+                        <span className="label">
+                              {address.addressType==='home'? 'Nhà riêng': "Văn phòng"} 
+                              </span>
                         { address.default && <span className="label label-green">Mặc định</span> }
                         </span>
                         </div>
@@ -111,7 +119,8 @@ return (<>
                           <span className={s.label}>Địa Chỉ</span>
                           <span className={s.value}>
                             <span>     
-                              {address.address}
+                              {address.address} 
+                              
                               <br/>
                               {address.regionFull}
                               </span>
@@ -131,9 +140,9 @@ return (<>
                     onConfirm={e=> deleteAddress(address.id)}
                     onCancel={e=>{}}
                     okText="Đúng, tôi muốn xoá."
-                    cancelText="Bỏ qua" ><button className={s.linkBtn}>xoá</button></Popconfirm>}
+                    cancelText="Bỏ qua" ><button className={s.linkBtn}>Xoá</button></Popconfirm>}
                         <div className="mt-3">
-                          <button className={s.actionButton}>Làm mặc định</button>
+                          {!address.default && <button className={s.actionButton} onClick={e=>setThisIsDefault(address)}>Làm mặc định</button> }
                         </div>
                       </div>
                     </div>

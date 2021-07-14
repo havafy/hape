@@ -1,10 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
+import { query } from 'express';
 
 @Injectable()
 export class SearchService {
     constructor(private readonly esService: ElasticsearchService) {}
 
+    async updateByQuery(query: any) {
+        try{  
+            return await this.esService.updateByQuery(query)
+        }catch(err){
+            console.log(err)
+        }
+    }
     async createIndex(index, body) {
         const checkIndex = await this.esService.indices.exists({ index  });
         if (checkIndex?.statusCode && checkIndex.statusCode === 404) {
