@@ -1,7 +1,7 @@
 import { FC, useState } from 'react'
 import IProduct from '@interfaces/product' 
 export const getProductUrl = (product: IProduct) =>{
-    let url = '/product/' + product.name.replace(/\s/g, '-') + '-' + product.id
+    let url = '/product/' + product.name.replace(/\s/g, '-') + '--' + product.id
     return url
   }
  export const currencyFormat = (number: number) => {

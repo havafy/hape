@@ -31,7 +31,7 @@ export class CartService {
             
                  // check any cart with this shopID and this user
                 const cart = await this.getCartByUser(userID, shopID)
-                return { cart}
+    
                 //IF existing: let update product to this cart
                 if(cart){
                     return await this.update(productID, quantity , cart)
@@ -117,29 +117,29 @@ export class CartService {
                 }
                 const cartID = cart.id
           
+                let found = false
                 let i = 0
                 for( const item of cart.items){
                     if(item.productID === productID){
-                     break;
+                        found = true
+                        break;
                     }
                     i++
                 }
-                return {i, cart}
+           
                 // IF product is existing on cart
-                if(i){
+                if(found){
                     // increase quantity to this product
                     cart.items[i].quantity += quantity
                 }else{ // IF product not existing on cart
                     cart.items.push({productID, quantity})
                 }
-                return {cart}
                 const reCart = await this.calcGrandTotal(cart)
-                return {reCart}
+        
                 const now = new Date();
                 reCart.updatedAt = now.toISOString()
-    
                 await this.esService.update(ES_INDEX_CART, cartID ,reCart)
-                const updated = await this.esService.findById(ES_INDEX_CART, reCart);
+                const updated = await this.esService.findById(ES_INDEX_CART, cartID);
                 return {
                     address: { id: cartID, ...updated._source },
                     status: true
@@ -193,6 +193,7 @@ export class CartService {
             let grandTotal = 0
             let discount = 0
             let shippingCost = 0
+            let quantityTotal = 0
             try{
                 let i = 0
                 for(const { productID, quantity } of cart.items){
@@ -202,12 +203,14 @@ export class CartService {
                     cart.items[i].thumb = product.images[0]
                     if(found && product.status){
                         subtotal += product.price * quantity
+                        quantityTotal += quantity
                         cart.items[i].productStatus = true
                         cart.items[i].active = true
                     }else{
                         cart.items[i].price = false
                         cart.items[i].productStatus = false
                     }
+                    
                     i++
                 }
     
@@ -220,7 +223,8 @@ export class CartService {
                 subtotal,
                 grandTotal,
                 discount,
-                shippingCost
+                shippingCost,
+                quantityTotal
             }
 
         }

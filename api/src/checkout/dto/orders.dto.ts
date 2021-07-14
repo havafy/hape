@@ -21,6 +21,12 @@ export class CartDto {
   @IsNumber()
   subtotal: number;
 
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(10000)
+  quantityTotal: number;
+
   @IsNumber()
   discount: number;
 

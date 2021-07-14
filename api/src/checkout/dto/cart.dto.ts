@@ -29,6 +29,13 @@ export class CartDto {
   @IsOptional()
   @IsNumber()
   shippingCost: number;
+  
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(10000)
+  quantityTotal: number;
+
 
   @IsOptional()
   @IsNumber()
@@ -67,7 +74,7 @@ export class Items {
   @Min(1)
   @Max(10000)
   price: number;
-
+  
   @MaxLength(150)
   @MinLength(3)
   name: string;

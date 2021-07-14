@@ -87,7 +87,7 @@ export class FilesService {
 
     let updatedUrl =[]
     const now = new Date();
-     const folder = now.getFullYear() +'_' + now.getMonth() + '_' + now.getDate()
+     const folder = "media/" + now.getFullYear() +'_' + now.getMonth() + '_' + now.getDate()
     const Bucket = process.env.AWS_S3_BUCKET
     const s3 = new S3();
     for (const url of files) {
