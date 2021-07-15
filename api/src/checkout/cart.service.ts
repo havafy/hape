@@ -13,7 +13,6 @@ export class CartService {
 
         async addToCart(userID: string, addToCartDto: AddToCartDto) {
             try {
-                
 
                 // load product
                 //   - check this product is existing or not
@@ -24,6 +23,7 @@ export class CartService {
                 const { productID, quantity } = addToCartDto
 
                 const {found, product} = await this.productsService.getRawProduct(productID)
+                //check this product is existing or not
                 if(!found || !product.status){
                     return {message: 'Product is not found.'}
                 }
@@ -34,40 +34,12 @@ export class CartService {
     
                 //IF existing: let update product to this cart
                 if(cart){
-                    return await this.update(productID, quantity , cart)
+                    return await this.update(cart, addToCartDto)
         
                 }else{  // IF not: let create a new cart with this shopID and this user
                     return await this.create({ productID, quantity , userID, shopID })
                 }
-
-                /* const checkWard = await this.getRegionName(addToCartDto.ward)
-                if(checkWard === ''){
-                    return {
-                        status: false,
-                        message: "An error occurred on Ward Number.",
-                    }
-                }
-                const now = new Date();
-                const createdAt = now.toISOString()
-                if(addressDto.default){
-                    await this.removeDefaultAnother(userID)
-                }
-                const record: any = [
-                    { index: { _index: ES_INDEX_CART } },  {
-                    ...addressDto,
-                    userID,
-                    updatedAt: createdAt,
-                    createdAt
-                }]
-    
-                const {  body: {items} } = await this.esService.createByBulk(ES_INDEX_ADDRESS, record);
-                const addressID = items[0].index._id
-                const { _source } =  await this.esService.findById(ES_INDEX_ADDRESS, addressID);
-                return {
-                    address: { ..._source, id: addressID},
-                    status: true,
-                }
-                */
+              
             }catch (err){
                 return {
                     cart: null,
@@ -79,10 +51,7 @@ export class CartService {
         async getCartByUser(userID: string, shopID: string) {
           
           try{
-                    let must = [ 
-                    {match: { userID }},
-                    {match: { shopID }}
-                ]
+                let must = [{match: { userID }}, {match: { shopID }}]
                 const { body: { 
                     hits: { 
                         total, 
@@ -95,7 +64,6 @@ export class CartService {
                 if(count){
                     if(count > 1){
                         console.log('[ALERT] CART count over 1', userID)
-             
                     }
                     return {
                             id: hits[0]._id,
@@ -108,15 +76,14 @@ export class CartService {
             return false
 
         }
-        
-        async update(productID: string, quantity: number, cart: any) {
-  
+ 
+        async update(cart: any, addToCartDto: AddToCartDto) {
+            const { productID, quantity, action = 'addToCart' } = addToCartDto
             try{
-                if(!cart.id || !cart.items.length){
+                if(!cart.id || !cart.items.length || !cart.items[0]){
                     return {message:"Cart is missing!"};
                 }
-                const cartID = cart.id
-          
+    
                 let found = false
                 let i = 0
                 for( const item of cart.items){
@@ -126,32 +93,54 @@ export class CartService {
                     }
                     i++
                 }
-           
-                // IF product is existing on cart
+                // IF product is available from cart
                 if(found){
-                    // increase quantity to this product
-                    cart.items[i].quantity += quantity
+                    if(action === 'addToCart'){
+                        // increase quantity to this product
+                        cart.items[i].quantity += quantity
+                    }
+  
+                    if(action === 'setQuantity'){
+                       if(quantity > 0){
+                           // force to set quantity
+                            cart.items[i].quantity = quantity 
+                       }else{
+                           // IF quantity is <= 0, let remove this item from cart
+                            delete cart.items[i]
+                       }
+                    }
                 }else{ // IF product not existing on cart
-                    cart.items.push({productID, quantity})
+                    if(quantity > 0){
+                        // insert a new item to cart
+                        cart.items.push({productID, quantity})
+                    }
                 }
-                const reCart = await this.calcGrandTotal(cart)
-        
-                const now = new Date();
-                reCart.updatedAt = now.toISOString()
-                await this.esService.update(ES_INDEX_CART, cartID ,reCart)
-                const updated = await this.esService.findById(ES_INDEX_CART, cartID);
-                return {
-                    address: { id: cartID, ...updated._source },
-                    status: true
+               // return {cart, addToCartDto}
+                //IF items empty, let remove this cart
+                if(!cart.items.length || !cart.items[0]){
+                    await this.esService.delete(ES_INDEX_CART, cart.id )
+                    return {status: true, cart: null}
                 }
+                return await this.rebuildCart(cart)
         
-         
             }catch (err){
                 console.log(err)
             }
             return {status: false}
 
-
+        }
+        async rebuildCart(cart: any){
+            const cartID = cart.id
+            const reCart = await this.calcGrandTotal(cart)
+        
+            const now = new Date();
+            reCart.updatedAt = now.toISOString()
+            await this.esService.update(ES_INDEX_CART, cartID ,reCart)
+            const updated = await this.esService.findById(ES_INDEX_CART, cartID);
+            return {
+                cart: { id: cartID, ...updated._source },
+                status: true
+            }
         }
         async create(
                     {productID, quantity, userID, shopID}: 
@@ -202,6 +191,7 @@ export class CartService {
                     cart.items[i].price = product.price
                     cart.items[i].thumb = product.images[0]
                     if(found && product.status){
+                        cart.items[i].total = product.price * quantity
                         subtotal += product.price * quantity
                         quantityTotal += quantity
                         cart.items[i].productStatus = true

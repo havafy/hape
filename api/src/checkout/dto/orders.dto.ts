@@ -64,6 +64,12 @@ export class Items {
   @Max(10000)
   price: number;
 
+  @IsNumber()
+  @Min(1)
+  @Max(10000)
+  total: number;
+
+
   @MaxLength(150)
   @MinLength(3)
   name: string;

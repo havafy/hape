@@ -14,3 +14,5 @@ export { default as UserSidebar } from './UserSidebar'
 export { default as ProductItem } from './ProductItem'
 export { default as ProductBox } from './ProductBox'
 export { default as AddressForm } from './Address'
+export { default as QuantityBox } from './QuantityBox'
+

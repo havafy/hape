@@ -65,14 +65,7 @@
 
     @apply my-3
 }
-.addToCartBox input{
-    text-align: center;
-    font-size: 15px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    width: 50px;
 
-}
 .addToCartButton{
     border: 1px solid var(--main-color);
     background: rgb(175 76 45 / 10%);

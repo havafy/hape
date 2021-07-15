@@ -1,0 +1,34 @@
+
+.root{
+    border: 1px solid #f2f2f2;
+    @apply inline-block
+}
+.root button{
+    padding: 10px 9px;
+    @apply inline-block
+}
+.root svg{
+    width: 20px;
+    height: 20px;
+    fill: #555;
+}
+
+.root button:hover{
+    background: #f2f2f2;
+}
+.root button:hover svg{
+    fill: #000;
+}
+.root input{
+    text-align: center;
+    font-size: 15px;
+    padding: 5px;
+    width: 50px;
+    border:none;
+    box-shadow: none;
+    border-left: 1px solid #f2f2f2;
+    border-right: 1px solid #f2f2f2;
+    height: 40px;
+    vertical-align: top;
+    @apply inline-block
+}

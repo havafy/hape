@@ -1,8 +1,8 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import s from './ProductPage.module.css'
 import axios from 'axios'
-import { ProductItem } from '@components/common'
+import { QuantityBox } from '@components/common'
 import {getName} from '@config/category'
 import moment from 'moment'
 import { useRouter } from 'next/router'
@@ -11,6 +11,7 @@ import { getProductUrl, currencyFormat } from '@lib/product'
 import { BiCart } from 'react-icons/bi'
 import { IoIosArrowForward } from 'react-icons/io'
 import { GiReturnArrow } from 'react-icons/gi'
+
 import { FaCertificate, FaShippingFast } from 'react-icons/fa'
 import { Carousel } from 'antd'
 interface Props {
@@ -48,6 +49,9 @@ const ProductPage: FC<Props> = ({pid}) => {
     })()
   }
 
+  const changeQuantity = useCallback((number: number) => {
+      setQuantity(number)
+    }, [])  
   return (
     <main className="mt-24">
       { !loading &&   product &&       
@@ -87,9 +91,8 @@ const ProductPage: FC<Props> = ({pid}) => {
                       <div className={s.addToCartBox}>
                             <div className="my-5">
                               <span className={s.actionLabel}>Số Lượng: </span>
-                              <input 
-                                value={quantity} type="text"
-                                onChange={(e:any)=> setQuantity(e.target.value)} />
+                              <QuantityBox defaultQty={1} onChange={changeQuantity} />
+                              
                             </div>
                 
                             <button className={s.addNowButton}>Mua Ngay</button>

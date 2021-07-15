@@ -11,9 +11,14 @@ export class AddToCartDto {
   productID: string;
 
   @IsNumber()
-  @Min(1)
+  @Min(0)
   @Max(10000)
   quantity: number;
+  
+  @IsOptional()
+  @MaxLength(20)
+  @MinLength(3)
+  action: string;
 
   @IsOptional()
   @MaxLength(20)
