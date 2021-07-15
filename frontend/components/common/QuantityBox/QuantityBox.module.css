@@ -5,11 +5,13 @@
 }
 .root button{
     padding: 10px 9px;
+    transition: background-color 275ms ease;
     @apply inline-block
 }
 .root svg{
     width: 20px;
     height: 20px;
+    transition: fill 275ms ease;
     fill: #555;
 }
 

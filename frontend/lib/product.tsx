@@ -1,6 +1,6 @@
 import { FC, useState } from 'react'
 import IProduct from '@interfaces/product' 
-export const getProductUrl = (product: IProduct) =>{
+export const getProductUrl = (product: {name: string, id: string}) =>{
     let url = '/product/' + product.name.replace(/\s/g, '-') + '--' + product.id
     return url
   }

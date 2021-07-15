@@ -23,4 +23,5 @@ export { default as Profile } from './User/Profile'
 export { default as ChangePassword } from './User/ChangePassword'
 export { default as CategoryPage } from './CategoryPage'
 export { default as ProductPage } from './ProductPage'
+export { default as CartPage } from './CartPage'
 

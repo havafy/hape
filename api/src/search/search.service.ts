@@ -33,7 +33,7 @@ export class SearchService {
     }
     async createByBulk(index: string, body: any){
         
-        return await this.esService.bulk({ index, body })
+        return await this.esService.bulk({ index, refresh: 'wait_for', body })
     }
 
     async update(index: string,  id: string, body: any){
@@ -42,6 +42,7 @@ export class SearchService {
         try{
             return await this.esService.update({
                 index, type: '_doc', id,
+                refresh: 'wait_for', // waiting for indexing before return
                 body: {
                     doc: {
                     ...body 

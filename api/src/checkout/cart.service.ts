@@ -34,7 +34,7 @@ export class CartService {
     
                 //IF existing: let update product to this cart
                 if(cart){
-                    return await this.update(cart, addToCartDto)
+                    return await this.update(cart, addToCartDto, userID)
         
                 }else{  // IF not: let create a new cart with this shopID and this user
                     return await this.create({ productID, quantity , userID, shopID })
@@ -77,7 +77,7 @@ export class CartService {
 
         }
  
-        async update(cart: any, addToCartDto: AddToCartDto) {
+        async update(cart: any, addToCartDto: AddToCartDto, userID: string) {
             const { productID, quantity, action = 'addToCart' } = addToCartDto
             try{
                 if(!cart.id || !cart.items.length || !cart.items[0]){
@@ -121,7 +121,11 @@ export class CartService {
                     await this.esService.delete(ES_INDEX_CART, cart.id )
                     return {status: true, cart: null}
                 }
-                return await this.rebuildCart(cart)
+                await this.rebuildCart(cart)
+
+                //wait for ES running index
+               //  await new Promise(f => setTimeout(f, 700));
+                return await this.getByUserID(userID)
         
             }catch (err){
                 console.log(err)
@@ -165,6 +169,7 @@ export class CartService {
     
                 const {  body: {items} } = await this.esService.createByBulk(ES_INDEX_CART, record);
                 const cartID = items[0].index._id
+               //  await new Promise(f => setTimeout(f, 700));
                 const { _source } =  await this.esService.findById(ES_INDEX_CART, cartID);
                 return {
                     cart: { ..._source, id: cartID},
@@ -218,5 +223,56 @@ export class CartService {
             }
 
         }
+        async getSummary(userID: string){
+            const { body: { 
+                hits: { 
+                    total,
+                    hits 
+                } } } = await this.esService.findBySingleField(
+                    ES_INDEX_CART, 
+                    { userID }, 100, 0, 
+                    [{"createdAt": "desc"}])
+            const count = total.value
+            let quantityTotal = 0
+
+            if(count){
+                for(let cart of hits){
+                    quantityTotal += cart._source.quantityTotal
+                }
+            }
+            return {
+                quantityTotal
+            }
+         }
+    async getByUserID(userID: string,  size: number = 100, from: number = 0) {
+        const { body: { 
+            hits: { 
+                total, 
+                hits 
+            } } } = await this.esService.findBySingleField(
+                ES_INDEX_CART, 
+                { userID }, size, from, 
+                [{"createdAt": "desc"}])
+        const count = total.value
+        let quantityTotal = 0
+        let carts = []
+        if(count){
+            for(let cart of hits){
+                carts.push({
+                    id: cart._id,
+                    ...cart._source,
+                  
+                 })
+                 quantityTotal += cart._source.quantityTotal
+            }
+        }
+        return {
+            count,
+            size,
+            from,
+            quantityTotal,
+            carts
+        }
+    }
     
 }

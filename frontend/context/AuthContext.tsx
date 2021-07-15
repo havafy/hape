@@ -12,13 +12,13 @@ type authContextType = {
 };
 type actionType = {
     event: string, 
-    payload: string
+    payload: any
 }
 
 const authContextDefaultValues: authContextType = {
     accessToken: '',
     user: guestUser,
-    action: { event: '', payload: ''},
+    action: { event: '', payload: {}},
     updateAction: (action: actionType) => {},
     login: () => {},
     logout: () => {},
@@ -45,7 +45,7 @@ if(!isServer){
 export function AuthProvider({ children }: Props) {
     const [accessToken, setAccessToken] = useState<string>(initialAccessToken);
     const [user, setUser] = useState<userInterface>(initialUser);
-    const [action, setAction] = useState<actionType>({ event: '', payload: ''});
+    const [action, setAction] = useState<actionType>({ event: '', payload: {}});
     const getUserProfile = async ()=>{
         if(!isServer && initialAccessToken !== ''){
             try {
@@ -58,6 +58,9 @@ export function AuthProvider({ children }: Props) {
 
                if(data?.user){
                    setUser(data.user)
+               }
+               if(data?.carts){
+                setAction({event: 'CART_ONCHANGE', payload: data.carts})
                }
             } catch (err){
                 console.log('err:' , err)

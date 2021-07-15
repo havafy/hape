@@ -50,7 +50,7 @@ const SearchBar: React.FC = () =>{
 const Navbar: FC<Props> = ({darkMode}) => (
   <NavbarRoot>
     <Container>
-      <div className="siteNavbar relative grid grid-cols-12 justify-between px-5  align-center  ">
+      <div className="siteNavbar relative grid grid-cols-12 justify-between align-center  ">
         <div className="col-span-1 items-center">
           <Link href="/">
             <a className={s.logo} aria-label="Logo">

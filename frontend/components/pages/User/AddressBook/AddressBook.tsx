@@ -17,7 +17,6 @@ const AddressBook: FC = () => {
       setVisible(false)
       pullAddress()
 
-
   }, [])  
   const headerApi = { 
     headers: { 'Authorization': `Bearer ${accessToken}` } 

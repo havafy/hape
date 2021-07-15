@@ -15,5 +15,10 @@ export class CheckoutController {
         const userID = res.req.user.id
         return res.json(await this.cartService.addToCart(userID, addToCartDto))
     }
+    @Get('/api/cart')
+    async get(@Res() res): Promise<any> {
+        const userID = res.req.user.id
+        return res.json(await this.cartService.getByUserID(userID))
+    }
 
 }

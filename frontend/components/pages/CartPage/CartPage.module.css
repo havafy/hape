@@ -1,0 +1,35 @@
+.root{
+    min-height: 50rem;
+    @apply mx-auto max-w-7xl my-10
+}
+
+.pageTitle{
+    @apply text-2xl font-semibold tracking-normal mb-10
+}
+.header{
+   @apply bg-white shadow mb-3  py-3 px-7 md:grid md:grid-cols-12 md:gap-6
+   text-gray-500
+}
+.item{
+    @apply md:grid md:grid-cols-12 md:gap-6 
+}
+.cartByShop{
+    @apply bg-white shadow
+}
+.itemBox{
+    @apply mb-10  py-3 px-7
+}
+.shopTitle{
+    border-bottom: 1px solid #f2f2f2;
+    @apply  py-3 px-7 
+}
+.thumb{
+    width: 75px;
+    @apply mr-3
+}
+.itemName{
+    margin-top: 5px;
+}
+.itemTotal{
+    color: var(--main-color);
+}

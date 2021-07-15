@@ -15,4 +15,4 @@ export { default as ProductItem } from './ProductItem'
 export { default as ProductBox } from './ProductBox'
 export { default as AddressForm } from './Address'
 export { default as QuantityBox } from './QuantityBox'
-
+export { default as CartBox } from './CartBox'

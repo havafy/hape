@@ -14,6 +14,7 @@ import { GiReturnArrow } from 'react-icons/gi'
 
 import { FaCertificate, FaShippingFast } from 'react-icons/fa'
 import { Carousel } from 'antd'
+import { useAuth } from '@context/AuthContext'
 interface Props {
   pid: string;
 }
@@ -29,6 +30,10 @@ const PAGE_SIZE = 30
 const ProductPage: FC<Props> = ({pid}) => {
   const productID = extractID(pid)
   const router = useRouter()
+  const { accessToken, updateAction } = useAuth();
+  const headerApi = { 
+    headers: { 'Authorization': `Bearer ${accessToken}` } 
+  }
   let { page } = router.query
   const [ total, setTotal ] = useState(1)
   const [ quantity, setQuantity ] = useState(1)
@@ -48,7 +53,16 @@ const ProductPage: FC<Props> = ({pid}) => {
         setLoading(false)
     })()
   }
-
+  const addToCart = async () => {
+    let {data } = await axios.post('/cart' , { 
+            productID,
+            quantity,
+            action: 'addToCart'
+            }, headerApi)
+    
+    updateAction({event: 'CART_ONCHANGE', payload: data })
+ 
+  }
   const changeQuantity = useCallback((number: number) => {
       setQuantity(number)
     }, [])  
@@ -92,11 +106,10 @@ const ProductPage: FC<Props> = ({pid}) => {
                             <div className="my-5">
                               <span className={s.actionLabel}>Số Lượng: </span>
                               <QuantityBox defaultQty={1} onChange={changeQuantity} />
-                              
                             </div>
                 
                             <button className={s.addNowButton}>Mua Ngay</button>
-                            <button className={s.addToCartButton}><BiCart />Thêm Giỏ Hàng</button>
+                            <button onClick={addToCart} className={s.addToCartButton}><BiCart />Thêm Giỏ Hàng</button>
                   
                         </div>
 

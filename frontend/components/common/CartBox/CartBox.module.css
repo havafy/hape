@@ -1,0 +1,41 @@
+
+.root{
+    @apply inline-block relative cursor-pointer
+}
+
+.root svg{
+    width: 25px;
+    height: 25px;
+    margin: 8px 0 0 0;
+    transition: fill 275ms ease;
+    fill: var(--main-color);
+    @apply inline-block
+}
+
+.root label{
+    background: var(--main-color);
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    padding: 4px;
+    font-size: 12px;
+    border-radius: 50%;
+    right: -18px;
+    @apply shadow absolute font-bold text-white cursor-pointer
+}
+.root button:hover svg{
+    fill: #000;
+}
+.root input{
+    text-align: center;
+    font-size: 15px;
+    padding: 2px;
+    width: 50px;
+    border:none;
+    box-shadow: none;
+    border-left: 1px solid #f2f2f2;
+    border-right: 1px solid #f2f2f2;
+    height: 40px;
+    vertical-align: top;
+    @apply inline-block
+}
