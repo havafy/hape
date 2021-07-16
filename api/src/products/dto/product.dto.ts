@@ -13,7 +13,7 @@ export class ProductDto {
   @MinLength(10)
   id: string;
 
-  @MaxLength(70)
+  @MaxLength(200)
   @MinLength(10)
   name: string;
 

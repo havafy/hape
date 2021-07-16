@@ -60,7 +60,7 @@ export function AuthProvider({ children }: Props) {
                    setUser(data.user)
                }
                if(data?.carts){
-                setAction({event: 'CART_ONCHANGE', payload: data.carts})
+                setAction({event: 'CART_SUMMARY_UPDATE', payload: data.carts})
                }
             } catch (err){
                 console.log('err:' , err)

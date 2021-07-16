@@ -14,17 +14,16 @@ const CartBox: FC<{}> = () => {
       // pullCart()
     },[])
     const pullCart = async () =>{
-      console.log('calling on CartBox')
       let {data} = await axios.get('/cart', headerApi)
-      updateAction({event: 'CART_ONCHANGE', payload: data})
+      updateAction({event: 'CART_SUMMARY_ONCHANGE', payload: data})
     }
     console.log(event)
     return (    
       <>
-        {event ==='CART_ONCHANGE' && 
+        {event ==='CART_SUMMARY_UPDATE' && 
              <Link href={'/cart'}><a> 
                 <span className={s.root}><RiShoppingCartLine fill="none" />
-                    <label>{payload.quantityTotal}</label>
+                    {payload.quantityTotal > 0 ? <label>{payload.quantityTotal}</label> : <></> }
                 </span>
             </a></Link>}
         </>

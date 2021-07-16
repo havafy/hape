@@ -60,7 +60,7 @@ const ProductPage: FC<Props> = ({pid}) => {
             action: 'addToCart'
             }, headerApi)
     
-    updateAction({event: 'CART_ONCHANGE', payload: data })
+    updateAction({event: 'CART_SUMMARY_UPDATE', payload: data })
  
   }
   const changeQuantity = useCallback((number: number) => {
@@ -105,7 +105,7 @@ const ProductPage: FC<Props> = ({pid}) => {
                       <div className={s.addToCartBox}>
                             <div className="my-5">
                               <span className={s.actionLabel}>Số Lượng: </span>
-                              <QuantityBox defaultQty={1} onChange={changeQuantity} />
+                              <QuantityBox productID={product.id} defaultQty={1} onChange={changeQuantity} />
                             </div>
                 
                             <button className={s.addNowButton}>Mua Ngay</button>

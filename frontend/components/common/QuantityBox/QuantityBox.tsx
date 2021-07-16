@@ -3,12 +3,15 @@ import { BiPlus, BiMinus } from 'react-icons/bi'
 
 import s from './QuantityBox.module.css'
 
-const QuantityBox: FC<{defaultQty: number, onChange: (quantity: number) => void}> 
-        = ({defaultQty, onChange}) => {
+const QuantityBox: FC<{
+        defaultQty: number, 
+        productID: string, 
+        onChange: (quantity: number, productID: string) => void
+      }>   = ({defaultQty, productID, onChange}) => {
     const [ quantity, setQuantity] = useState<number>(defaultQty)
     const update = (rqQuantity: number)=> {
         setQuantity(rqQuantity)
-        onChange(rqQuantity)
+        onChange(rqQuantity, productID)
     }
     return (    
     <span className={s.root}>

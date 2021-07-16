@@ -255,6 +255,7 @@ export class CartService {
                 [{"createdAt": "desc"}])
         const count = total.value
         let quantityTotal = 0
+        let grandTotal = 0
         let carts = []
         if(count){
             for(let cart of hits){
@@ -264,12 +265,14 @@ export class CartService {
                   
                  })
                  quantityTotal += cart._source.quantityTotal
+                 grandTotal += cart._source.grandTotal
             }
         }
         return {
             count,
             size,
             from,
+            grandTotal,
             quantityTotal,
             carts
         }

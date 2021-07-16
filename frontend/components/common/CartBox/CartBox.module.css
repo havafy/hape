@@ -14,13 +14,14 @@
 
 .root label{
     background: var(--main-color);
+    text-align: center;
     display: inline-block;
-    width: 25px;
-    height: 25px;
-    padding: 4px;
+    width: 20px;
+    min-height: 20px;
+    padding: 1px 0 0 0;
     font-size: 12px;
     border-radius: 50%;
-    right: -18px;
+    left: 18px;
     @apply shadow absolute font-bold text-white cursor-pointer
 }
 .root button:hover svg{

@@ -11,13 +11,14 @@
    text-gray-500
 }
 .item{
+    align-items: center;
     @apply md:grid md:grid-cols-12 md:gap-6 
 }
 .cartByShop{
     @apply bg-white shadow
 }
 .itemBox{
-    @apply mb-10  py-3 px-7
+    @apply py-3 px-7
 }
 .shopTitle{
     border-bottom: 1px solid #f2f2f2;
@@ -25,11 +26,52 @@
 }
 .thumb{
     width: 75px;
-    @apply mr-3
+}
+.nameWrap{
+    align-items: center;
+    vertical-align: middle;
+    display: flex;
 }
 .itemName{
-    margin-top: 5px;
+
+    max-width: 320px;
+    color: #222;
+    word-wrap: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 16px;
+    max-height: 32px;
 }
 .itemTotal{
     color: var(--main-color);
+}
+.removeButton{
+    @apply cursor-pointer inline-block
+}
+.grandTotal{
+    color: var(--main-color);
+    @apply text-xl font-bold ml-3
+}
+.removeButton svg{
+    width: 16px;
+    height: 16px;
+    fill: #555;
+}
+.removeButton svg:hover{
+    fill: #111;
+}
+.footer{
+    @apply bg-white shadow mt-5  py-3 px-7 md:grid md:grid-cols-12 md:gap-6
+ }
+.button{
+    color: #fff!important;
+    background: var(--main-color)!important;
+    width: 100%;
+    @apply tracking-wide items-center text-white font-bold  py-2
+    shadow hover:shadow-lg outline-none 
+     transition-all duration-150
+ 
 }
