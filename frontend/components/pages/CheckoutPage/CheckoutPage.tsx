@@ -1,20 +1,22 @@
 import { FC, useEffect, useState, useCallback} from 'react'
 import Link from 'next/link'
-import s from './CartPage.module.css'
+import s from './CheckoutPage.module.css'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { QuantityBox } from '@components/common'
-import {RiDeleteBin7Line} from 'react-icons/ri'
+import {FaLocationArrow} from 'react-icons/fa'
+import {MdArrowBack} from 'react-icons/md'
+
 import { useAuth } from '@context/AuthContext'
 import { getProductUrl, currencyFormat } from '@lib/product'
-import cart from 'pages/cart'
+import { Hape } from '@components/icons'
 
 
 interface Props {
 
 }
 
-const CartPage: FC<Props> = ({}) => {
+const CheckoutPage: FC<Props> = ({}) => {
   const router = useRouter()
   const { accessToken, updateAction} = useAuth();
   const [cartGroup, setCartGroup] = useState<{carts: any[], grandTotal: number}>({
@@ -40,10 +42,6 @@ const CartPage: FC<Props> = ({}) => {
 
 
   }
-  const changeQuantity = useCallback(async (quantity: number, productID) => {
-    await pushCart(productID, quantity)
-
-  }, [])  
   const pushCart = async (productID:string, quantity: number) =>{
     try{
       let {data} = await axios.post('/cart',{
@@ -55,23 +53,31 @@ const CartPage: FC<Props> = ({}) => {
 
     }
   }
-  const removeItem = async (productID: string) =>{
-    await pushCart(productID, 0)
-  }
+
   return (
-    <main className="mt-24">
+    <>
+    <LeanHeader />
+
+    <main className="mt-18">
       <div className={s.root}>
 
             <div> 
-            <h1 className={s.pageTitle}>Giỏ hàng</h1>
-              { cartGroup.grandTotal > 0 ? <div>
     
+              { cartGroup.grandTotal > 0 ? <div>
+                <div className={s.addressBox}>
+                  <div className={s.addressBoxLabel}>
+                  <FaLocationArrow />
+                  Địa Chỉ Nhận Hàng</div>
+                  <div className="flex">
+                    <div className={s.addressSelected}>aaaaa </div>
+                    <div className="">Đổi địa chỉ</div>
+                  </div>
+                </div>
                 <div className={s.header}>
-                  <div className="md:col-span-7">Sản Phẩm </div>
+                  <div className="md:col-span-8">Sản Phẩm </div>
                   <div className="md:col-span-1">Đơn Giá </div>
                   <div className="md:col-span-2 text-center">Số Lượng </div>
                   <div className="md:col-span-1">Tổng</div>
-                  <div className="md:col-span-1 text-right">Thao Tác</div>
                 </div>
                   {cartGroup?.carts?.map((cart: any, index: number) => {
                       return(
@@ -81,40 +87,25 @@ const CartPage: FC<Props> = ({}) => {
                           {cart.items.map((item: any, key: string) => {
                             return(
                               <div className={s.item} key={key}>
-                                  <div className="md:col-span-7 flex">
+                                  <div className="md:col-span-8 flex">
                                     <span className="mr-5">
-                                    <Link href={getProductUrl({
-                                            name: item.name,
-                                            id: item.productID
-                                          })}><a>
-                                            <img src={item.thumb} className={s.thumb} />
-                                            </a></Link>
+                                       <img src={item.thumb} className={s.thumb} />
                                     </span>
                                     <div className={s.nameWrap}>
                                       <span className={s.itemName}>
-                                      <Link href={getProductUrl({
-                                              name: item.name,
-                                              id: item.productID
-                                            })}><a>{item.name}</a></Link>
+                                      {item.name}
                                       </span>
                                     </div>
                                     
                                   </div>
                                   <div className="md:col-span-1">{currencyFormat(item.price)}</div>
                                   <div className="md:col-span-2 text-center">
-                                    <QuantityBox 
-                                    defaultQty={item.quantity} 
-                                    productID={item.productID} onChange={changeQuantity} />
+                                  {item.quantity}
                                    </div>
                                   <div className="md:col-span-1">
                                     <span className={s.itemTotal}>{currencyFormat(item.total)}</span>
                                     </div>
-                                  <div className="md:col-span-1 text-right">
-                                    
-                                    <span className={s.removeButton}
-                                      onClick={e=>removeItem(item.productID)}
-                                    ><RiDeleteBin7Line /></span>
-                                  </div>
+            
                               </div>)
                           })}
                           </div>
@@ -129,15 +120,15 @@ const CartPage: FC<Props> = ({}) => {
                         </div>)
                     })}
           <div className={s.footer}>
-                  <div className="md:col-span-7"></div>
+                  <div className="md:col-span-7">
+                    Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo Điều khoản Hape</div>
                   <div className="md:col-span-3 text-right">Tổng thanh toán 
                   <span className={s.grandTotal}>{currencyFormat(cartGroup.grandTotal)}</span>
                   </div>
                   <div className="md:col-span-2 text-right">
-               <Link href="/checkout"><a>
-                 <button className={s.button}>
-                      Mua Hàng
-                    </button></a></Link>  
+                    <button className={s.button}>
+                      Đặt Hàng
+                    </button>
                   </div>
                 </div>
               </div> : 
@@ -150,12 +141,32 @@ const CartPage: FC<Props> = ({}) => {
  
       </div>
     </main>
+
+    </>
   )
 }
 const CartIsEmpty = () =>{
 
   return (<div>Giỏ hàng của bạn chưa có sản phẩm nào!</div>)
 }
+const LeanHeader = () =>{
+  return(
+    <div className={s.leanHeaderWrap}>
+    <div className={s.leanHeader}>
+       <div className="md:col-span-8 flex">
+        <span className={s.gotoCartWrap}>
+            <Link href='/cart'><a className={s.gotoCart}><MdArrowBack /> Giỏ hàng</a></Link> 
+          </span> 
+         <h1 className={s.pageTitle}>Thanh Toán</h1>
+      </div>
+      <div className="md:col-span-4 text-right">
+        <Hape className="inline-block" fill="#DB4140" width="60px" />
+      </div>
 
+    </div>
+    </div>
 
-export default CartPage
+  )
+}
+
+export default CheckoutPage

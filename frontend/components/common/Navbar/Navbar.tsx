@@ -10,7 +10,8 @@ import NavbarRoot from './NavbarRoot'
 import s from './Navbar.module.css'
 import CategoryMenu  from './CategoryMenu'
 interface Props {
-  darkMode?: boolean 
+  darkMode?: boolean;
+  hideHeader?: boolean;
 }
 
 const SearchBar: React.FC = () =>{
@@ -47,8 +48,10 @@ const SearchBar: React.FC = () =>{
       </div>
     )
 }
-const Navbar: FC<Props> = ({darkMode}) => (
-  <NavbarRoot>
+
+const Navbar: FC<Props> = ({darkMode, hideHeader}) => (
+  <>
+  { !hideHeader && <NavbarRoot>
     <Container>
       <div className="siteNavbar relative grid grid-cols-12 justify-between align-center  ">
         <div className="col-span-1 items-center">
@@ -106,9 +109,10 @@ const Navbar: FC<Props> = ({darkMode}) => (
               <Burger />
             </div>
           </div>
-      </div>
+      </div> 
     </Container>
   </NavbarRoot>
+}</>
 )
 
 export default Navbar

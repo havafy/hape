@@ -10,11 +10,12 @@ import { Navbar, Footer } from '@components/common'
 
 import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 interface Props {
-
+  hideHeader?: boolean;
 }
 
 const Layout: FC<Props> = ({
-  children
+  children,
+  hideHeader
 }) => {
   const {
     displaySidebar,
@@ -33,7 +34,7 @@ const Layout: FC<Props> = ({
 
 
       <header>
-      <Navbar darkMode={darkMode} />
+      <Navbar hideHeader={hideHeader}  darkMode={darkMode} />
   
       </header>
 

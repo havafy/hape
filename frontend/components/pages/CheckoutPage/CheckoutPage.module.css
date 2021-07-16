@@ -4,11 +4,17 @@
 }
 
 .pageTitle{
-    @apply text-2xl font-semibold tracking-normal mb-10
+    color: var(--main-color);
+    border-left: 1px solid #ccc;
+
+    @apply text-xl pl-5 ml-5 font-semibold tracking-normal inline-block 
 }
 .header{
-   @apply bg-white shadow mb-3  py-3 px-7 md:grid md:grid-cols-12 md:gap-6
+   @apply bg-white shadow py-2 px-7 md:grid md:grid-cols-12 md:gap-6
    text-gray-500
+}
+.addressBox{
+    @apply bg-white shadow py-5 px-7 mb-3
 }
 .item{
     align-items: center;
@@ -25,7 +31,7 @@
     @apply  py-3 px-7 
 }
 .thumb{
-    width: 75px;
+    width: 45px;
 }
 .nameWrap{
     align-items: center;
@@ -34,16 +40,16 @@
 }
 .itemName{
 
-    max-width: 320px;
+    max-width: 400px;
     color: #222;
     word-wrap: break-word;
     overflow: hidden;
     display: -webkit-box;
     text-overflow: ellipsis;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     line-height: 16px;
-    max-height: 32px;
+    max-height: 20px;
 }
 .itemTotal{
     color: var(--main-color);
@@ -55,6 +61,14 @@
     color: var(--main-color);
     @apply text-xl font-bold ml-3
 }
+.addressBoxLabel{
+
+    color: var(--main-color)!important; 
+    @apply text-base font-semibold flex mb-3
+}
+.addressBoxLabel svg{
+    margin: 4px 9px 0 0;
+}
 .removeButton svg{
     width: 16px;
     height: 16px;
@@ -64,7 +78,7 @@
     fill: #111;
 }
 .footer{
-    @apply bg-white text-base shadow mt-5  py-3 px-7 md:grid md:grid-cols-12 md:gap-6
+    @apply bg-white text-base shadow mt-3  py-3 px-7 md:grid md:grid-cols-12 md:gap-6
  }
 .button{
     color: #fff!important;
@@ -82,4 +96,25 @@
 .grandTotalCart{
     color: var(--main-color)!important;
     @apply text-base font-semibold ml-2
+}
+.leanHeaderWrap{
+    @apply bg-white mb-5 shadow 
+}
+.leanHeader{
+    @apply  px-5 py-5 mx-auto max-w-7xl md:grid md:grid-cols-12 md:gap-6
+}
+.gotoCartWrap{
+    padding: 5px 0 0 0;
+    @apply inline-block
+
+}
+.gotoCart{
+    color: #555;
+    @apply font-bold text-sm flex
+}
+.gotoCart svg{
+    width: 22px;
+    height: 23px;
+    margin: 0px 3px 0 0;
+
 }
