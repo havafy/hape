@@ -73,9 +73,11 @@ return (<>
        
                   </div>
                     <div className="col-span-1 text-right">
-            
+              
                       <Button type="primary" 
-                      onClick={createNewAddress} className="addButton">
+                      onClick={createNewAddress} className="addButton"
+                      disabled={addresses.length >= 10}
+                      >
                       <RiAddFill className={s.addButtonSvg} /> Thêm Địa Chỉ Mới</Button>
 
                       <Modal title={updateAddress?.id ? "Cập nhật địa chỉ" : "Thêm địa chỉ" } className="auth-form-modal"

@@ -19,7 +19,7 @@ export class AddressService {
         return  {}
     
     }
-    async getByUserID(userID: number,  size: number, from: number) {
+    async getByUserID(userID: string,  size: number, from: number) {
         const { body: { 
             hits: { 
                 total, 

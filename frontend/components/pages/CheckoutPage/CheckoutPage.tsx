@@ -33,7 +33,10 @@ const CheckoutPage: FC<Props> = ({}) => {
   const pullCart = async () =>{
     setLoading(true);
     try{
-      let {data} = await axios.get('/cart', headerApi)
+      let {data} = await axios.get('/cart', { 
+        ...headerApi,
+        params: { collect: 'address,payments,shippings' }
+      })
       setCartGroup(data)
       setLoading(false)
     }catch(err){
@@ -120,10 +123,14 @@ const CheckoutPage: FC<Props> = ({}) => {
                         </div>)
                     })}
           <div className={s.footer}>
-                  <div className="md:col-span-7">
-                    Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo Điều khoản Hape</div>
-                  <div className="md:col-span-3 text-right">Tổng thanh toán 
+                  <div className="md:col-span-7 flex">
+                    <label>Nhấn "Đặt Hàng" đồng nghĩa với việc
+                       bạn đồng ý tuân theo Điều khoản Hape</label></div>
+                  <div className="md:col-span-3 flex text-right">
+                    
+                  <span className={s.grandTotalWrap}>Tổng thanh toán 
                   <span className={s.grandTotal}>{currencyFormat(cartGroup.grandTotal)}</span>
+                  </span>
                   </div>
                   <div className="md:col-span-2 text-right">
                     <button className={s.button}>

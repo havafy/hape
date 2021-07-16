@@ -1,6 +1,6 @@
 .root{
-    min-height: 50rem;
-    @apply mx-auto max-w-7xl my-10
+    min-height: 36rem;
+    @apply mx-auto max-w-7xl my-10 px-5
 }
 
 .pageTitle{
@@ -78,7 +78,7 @@
     fill: #111;
 }
 .footer{
-    @apply bg-white text-base shadow mt-3  py-3 px-7 md:grid md:grid-cols-12 md:gap-6
+    @apply bg-white text-gray-600 shadow mt-3  py-3 px-7 md:grid md:grid-cols-12 md:gap-6
  }
 .button{
     color: #fff!important;
@@ -92,6 +92,16 @@
 .cartFooter{
     @apply text-right text-gray-500
     px-5 py-5
+}
+.footer label{
+    align-items: center;
+    @apply flex
+}
+.grandTotalWrap{
+    color: #000;
+    margin-left: calc(10%);
+    align-items: center;
+    @apply flex
 }
 .grandTotalCart{
     color: var(--main-color)!important;

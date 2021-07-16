@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { url } from 'inspector';
 import { SearchService } from '../search/search.service';
 import { ProductsService } from "../products/products.service";
+import { AddressService } from '../address/address.service';
 import { AddToCartDto  } from './dto/add-to-cart.dto';
 import { CartDto  } from './dto/cart.dto';
 const ES_INDEX_CART = 'carts'
@@ -9,7 +10,8 @@ const ES_INDEX_ORDER = 'orders'
 @Injectable()
 export class CartService {
     constructor(readonly esService: SearchService,
-        readonly productsService: ProductsService) {}
+        readonly productsService: ProductsService,
+        readonly addressService: AddressService) {}
 
         async addToCart(userID: string, addToCartDto: AddToCartDto) {
             try {
@@ -244,7 +246,7 @@ export class CartService {
                 quantityTotal
             }
          }
-    async getByUserID(userID: string,  size: number = 100, from: number = 0) {
+    async getByUserID(userID: string, collect: string = '', size: number = 100, from: number = 0) {
         const { body: { 
             hits: { 
                 total, 
@@ -268,14 +270,23 @@ export class CartService {
                  grandTotal += cart._source.grandTotal
             }
         }
-        return {
+        let response: any = {
             count,
-            size,
-            from,
             grandTotal,
             quantityTotal,
             carts
         }
+
+        if(collect === 'address,payments,shippings'){
+            const { addresses } = await this.addressService.getByUserID(userID, 10, 0)
+            response = {
+                ...response,
+                addresses,
+                payments: '',
+                shippings:''
+            }
+        }
+        return response
     }
     
 }

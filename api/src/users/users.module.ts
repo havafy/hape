@@ -7,12 +7,21 @@ import { UsersController } from './users.controller';
 import { SearchModule } from '../search/search.module';
 import { ProductsService } from '../products/products.service';
 import { FilesService } from '../files/files.service';
+import { AddressService } from '../address/address.service';
+import { AddressModule } from '../address/address.module';
+
 @Module({
     imports: [
         TypeOrmModule.forFeature([Users]),
-        SearchModule
+        SearchModule, AddressModule
     ],
     controllers: [UsersController],
-    providers: [UsersService, CartService, ProductsService, FilesService]
+    providers: [
+        UsersService, 
+        CartService, 
+        ProductsService, 
+        FilesService,
+        AddressService
+    ]
 })
 export class UsersModule {}
