@@ -114,25 +114,44 @@ const CheckoutPage: FC<Props> = ({}) => {
                           </div>
       
                           <div className={s.cartFooter}>
-                            <span>
+                          <div className={s.cartInputColumn}>
+                            <label>Lời nhắn:</label>
+                            <input className={s.textInput} type="text" placeholder="Lời nhắn cho chủ shop" />
+                            </div>
+                            <div className={s.cartShippingColumn}>
+                            Phí giao hàng:  
+                            <b className="mx-2">{currencyFormat(0)} - {currencyFormat(30000)}</b> (Giao bởi chủ shop)
+                            </div>
+                            <div className={s.cartPaymentColumn}>
+                            Phương thức thanh toán: <b>Thanh toán khi nhận hàng</b>
+                            </div>
+                          <div className="md:col-span-12 text-right">
+                             <span>
                               Tổng số tiền ({cart.quantityTotal} sản phẩm):
                               </span>
                             <span className={s.grandTotalCart}>{currencyFormat(cart.grandTotal)}</span>
+                    
+                            </div>
                           </div>
                             
                         </div>)
                     })}
           <div className={s.footer}>
-                  <div className="md:col-span-7 flex">
+          <div className={s.summaryBox}>
+
+                      Tổng tiền hàng: ₫102.500
+            Phí vận chuyển: {currencyFormat(0)} - {currencyFormat(30000)}
+            <div>
+            <span className={s.grandTotalWrap}>Tổng thanh toán 
+                              <span className={s.grandTotal}>{currencyFormat(cartGroup.grandTotal)}</span>
+                              </span>
+            </div>
+          </div>
+                  <div className="">
                     <label>Nhấn "Đặt Hàng" đồng nghĩa với việc
                        bạn đồng ý tuân theo Điều khoản Hape</label></div>
-                  <div className="md:col-span-3 flex text-right">
-                    
-                  <span className={s.grandTotalWrap}>Tổng thanh toán 
-                  <span className={s.grandTotal}>{currencyFormat(cartGroup.grandTotal)}</span>
-                  </span>
-                  </div>
-                  <div className="md:col-span-2 text-right">
+    
+                  <div className="">
                     <button className={s.button}>
                       Đặt Hàng
                     </button>

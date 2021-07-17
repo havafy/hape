@@ -247,6 +247,8 @@ export class CartService {
             }
          }
     async getByUserID(userID: string, collect: string = '', size: number = 100, from: number = 0) {
+        const payments = ['COD']
+        const shippings = [{code: 'FREE_SHIPPING', cost: 0}]
         const { body: { 
             hits: { 
                 total, 
@@ -264,10 +266,13 @@ export class CartService {
                 carts.push({
                     id: cart._id,
                     ...cart._source,
+                    payments,
+                    shippings
                   
                  })
                  quantityTotal += cart._source.quantityTotal
                  grandTotal += cart._source.grandTotal
+                 
             }
         }
         let response: any = {
@@ -281,9 +286,7 @@ export class CartService {
             const { addresses } = await this.addressService.getByUserID(userID, 10, 0)
             response = {
                 ...response,
-                addresses,
-                payments: '',
-                shippings:''
+                addresses
             }
         }
         return response

@@ -403,3 +403,7 @@ body.layout{
   color: #fff;
   background: #00bf7b;
 }
+.alignCenter{
+  align-items: center;
+  display: flex;
+}
