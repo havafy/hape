@@ -34,9 +34,7 @@ const pullAddress = async (timeout = 1000)=>{
 
 }
 
-const onCancel = () => {
-  setVisible(false);
-}
+
 const createNewAddress = () =>{
   setUpdateAddress({})
   setVisible(true);
@@ -46,6 +44,9 @@ const editAddress = (address: any) => {
   // updateAction({event: 'ADDRESS_EDIT', payload: id})
   setUpdateAddress(address)
   setVisible(true);
+}
+const onCancel = () => {
+  setVisible(false);
 }
 
 const onAddressCreate = async (values: any) => {
