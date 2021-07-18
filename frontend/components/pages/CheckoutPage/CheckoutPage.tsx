@@ -33,9 +33,9 @@ const CheckoutPage: FC<Props> = ({}) => {
   }
   const [ loading, setLoading ] = useState<boolean>(true)
   useEffect(() => {+
-   pullCart()
+    initialLoad()
   }, [])
-  const pullCart = async () =>{
+  const pullCart = async (addressAction: string = '') =>{
     setLoading(true);
     try{
       let {data} = await axios.get('/cart', { 
@@ -43,17 +43,21 @@ const CheckoutPage: FC<Props> = ({}) => {
         params: { collect: 'address,payments,shippings' }
       })
       setCartGroup(data)
-
-      for (let address of data.addresses) {
-          if(address.default){
-            setSelectedAddress(address.id)
-          }
-      }
+    
       setLoading(false)
+      return data
     }catch(err){
 
     }
-
+    return null
+  }
+  const initialLoad = async () =>{
+    const data = await pullCart()
+    for (let address of data.addresses) {
+        if(address.default){
+          setSelectedAddress(address.id)
+        }
+    }
   }
   const pickupAddress = useCallback((id:string) => {
       if(id !== '' && id !== 'goBack'){
@@ -61,6 +65,7 @@ const CheckoutPage: FC<Props> = ({}) => {
         }
         setChangeAddress(false)
       }, []) 
+
   const pushCart = async (productID:string, quantity: number) =>{
     try{
       let {data} = await axios.post('/cart',{
@@ -73,10 +78,15 @@ const CheckoutPage: FC<Props> = ({}) => {
     }
   }
 
-  const modalClose = useCallback((e:any) => {
+  const modalClose = useCallback(async (res:any) => {
         setVisible(false)
-        // pullAddress()
-
+        console.log('---->', res)
+        // if created address, let refresh new data
+        if(res.data?.address.id ){
+          await pullCart()
+          //set select to new address
+          setSelectedAddress(res.data.address.id)
+        }
     }, [])  
   return (
     <>
@@ -84,9 +94,7 @@ const CheckoutPage: FC<Props> = ({}) => {
 
     <main className="mt-18">
       <div className={s.root}>
-
-            <div> 
-    
+            <div>
               { cartGroup.grandTotal > 0 ? <div>
                 <div className={s.addressBox}>
                 <div className="md:grid md:grid-cols-2">
@@ -96,10 +104,12 @@ const CheckoutPage: FC<Props> = ({}) => {
                     Địa Chỉ Nhận Hàng</div>
                     </div>
                     <div className="md:col-span-1 text-right">
-                  {changeAddress && <>                    
-                    <button onClick={e=>setVisible(true)} className={cn('mr-3',s.buttonNormal)}><RiAddFill /> Thêm</button>
-                  <button className={s.buttonNormal} >Danh sách</button>
-                  </>}
+                  {changeAddress ? <>                    
+                    <button onClick={e=>setVisible(true)} className={cn(s.buttonNormal)}><RiAddFill /> Thêm</button>
+
+                  </>:  <span className="inline-block"><button className={s.addressBoxButton} 
+                      onClick={(e: any)=>setChangeAddress(true)}><FaRegEdit /> Đổi địa chỉ</button></span>  
+                      }
                   <Modal title="Thêm địa chỉ" className="auth-form-modal"
                           width="750px"
                           visible={visible}
@@ -115,10 +125,6 @@ const CheckoutPage: FC<Props> = ({}) => {
                     <div className="md:col-span-9">
                       <ShowsAddress selectedAddress={selectedAddress} addresses={cartGroup.addresses} />
                        </div>
-                    <div className="md:col-span-3 pt-6">
-                      <button className={s.addressBoxButton} 
-                      onClick={(e: any)=>setChangeAddress(true)}><FaRegEdit /> Đổi địa chỉ</button>
-                      </div>
                   </div> }
 
                   {changeAddress && 
@@ -211,15 +217,15 @@ const LeanHeader = () =>{
 }
 const ShowsAddress: FC<{addresses: any[], selectedAddress: string}> = ({ addresses, selectedAddress }) =>{
   return(<div className="my-5 ml-5">
-    {addresses.map((address: any) =>{
-      return (<>
+    {addresses.map((address: any, index: number) =>{
+      return (<div key={index}>
         {address.id === selectedAddress && <div>
 
         <b> {address.fullName}  {address.phoneNumber}</b>
           <span className="mx-3">  {address.address}, {address.regionFull}</span>
           {address.default && <span className="label">Mặc định</span>}
         </div>   }
-        </>     
+        </div>     
       )
     })}
     </div>     
@@ -232,7 +238,10 @@ const SelectAddressForm: FC<{
 }> 
 = ({ addresses, selectedAddress, pickupAddress }) =>{
   const [selected, setSelected] = useState<string>(selectedAddress)
-  
+  useEffect(() => {
+    setSelected(selectedAddress)
+
+  },[selectedAddress])
   const onChange = (e: any) =>{
       setSelected(e.target.value)
   }

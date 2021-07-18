@@ -125,13 +125,14 @@ const onFinish = async (values: any) => {
       addressType: typeAddress,
     }
     //send data to API
+    let res 
     if(address?.id){
-      await axios.put('address', { ...submitData, id: address.id }, headerApi) 
+      res = await axios.put('address', { ...submitData, id: address.id }, headerApi) 
     }else{
-      await axios.post('address', submitData, headerApi) 
+      res = await axios.post('address', submitData, headerApi) 
     }
   
-    closeModal()
+    closeModal(res)
     
   } catch (err){
     if(err?.response?.data){
@@ -241,7 +242,7 @@ return (<>
                 <Checkbox defaultChecked={isDefault} onChange={onSetDefaultChange}>Đặt làm địa chỉ mặc định</Checkbox>
                 </div>
                 <div className="mt-7 text-right">
-                <button onClick={closeModal} className="mr-6">Trở về</button>
+                <button onClick={e=>closeModal(null)} className="mr-6">Trở về</button>
                     <button type="submit" className={s.button}>Hoàn thành</button>
                   </div>          
     </Form>

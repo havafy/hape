@@ -97,9 +97,10 @@
  
 }
 .addressBoxButton {
+    border: 1px solid #e6e6e6;
     color: #666;
     font-size: 13px;
-    @apply flex cursor-pointer uppercase
+    @apply flex uppercase py-2 px-4
 }
 .addressBoxButton svg{
 
