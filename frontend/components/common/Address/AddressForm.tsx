@@ -4,6 +4,8 @@ import axios from 'axios'
 import { Form, Input, Radio, Checkbox, TreeSelect} from 'antd'
 import s from './AddressForm.module.css'
 import { RiDeleteBin6Line, RiAddFill } from 'react-icons/ri'
+import { CgSpinner } from 'react-icons/cg'
+
 import { useAuth } from '@context/AuthContext'
 
 const AddressForm: FC<{closeModal: any, address: any}>= ({closeModal, address}) => {
@@ -12,12 +14,14 @@ const headerApi = {
   headers: { 'Authorization': `Bearer ${accessToken}` } 
 }
 const [ready, setReady] = useState(false)
+const [loading, setLoading] = useState(false);
 const [selectedProvince, setSelectedProvince] = useState('');
 const [selectedDistrict, setSelectedDistrict] = useState('');
 const [selectedWard, setSelectedWard] = useState('');
 const [provinces, setProvinces] = useState([]);
 const [wards, setWards] = useState([]);
 const [districts, setDistricts] = useState([]);
+
 const [isDefault, setIsDefault] = useState(false);
 const [typeAddress, setTypeAddress] = useState('home')
 const [formMessage, setFormMessage] = useState<string[]>([])
@@ -110,6 +114,7 @@ const onChangeDistrict = (value:string) => {
   setSelectedWard('')
 }
 const onFinish = async (values: any) => {
+  setLoading(true)
   setFormMessage([])
   if(!selectedWard){
     setFormMessage(['Vui lòng chọn phường hoặc xã.'])
@@ -131,9 +136,9 @@ const onFinish = async (values: any) => {
     }else{
       res = await axios.post('address', submitData, headerApi) 
     }
-  
+   
     closeModal(res)
-    
+    setLoading(false)
   } catch (err){
     if(err?.response?.data){
       setFormMessage(err.response.data.message)
@@ -243,7 +248,7 @@ return (<>
                 </div>
                 <div className="mt-7 text-right">
                 <button onClick={e=>closeModal(null)} className="mr-6">Trở về</button>
-                    <button type="submit" className={s.button}>Hoàn thành</button>
+                    <button type="submit" className={s.button}>{loading && <CgSpinner className="animate-spin" />} Hoàn thành</button>
                   </div>          
     </Form>
 }</>)

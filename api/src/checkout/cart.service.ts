@@ -30,7 +30,9 @@ export class CartService {
                     return {message: 'Product is not found.'}
                 }
                 const shopID = product.userID
-            
+                if(userID === shopID){
+                    return {status: 500}
+                }
                  // check any cart with this shopID and this user
                 const cart = await this.getCartByUser(userID, shopID)
     
@@ -73,7 +75,7 @@ export class CartService {
                         }
                 }
             }catch (err){
-
+                console.log(err)
             }
             return false
 
@@ -135,6 +137,9 @@ export class CartService {
             return {status: false}
 
         }
+        async remove(cartID: string){
+            return await this.esService.delete(ES_INDEX_CART, cartID )
+        }
         async rebuildCart(cart: any){
             const cartID = cart.id
             const reCart = await this.calcGrandTotal(cart)
@@ -172,13 +177,10 @@ export class CartService {
                 const {  body: {items} } = await this.esService.createByBulk(ES_INDEX_CART, record);
                 const cartID = items[0].index._id
                //  await new Promise(f => setTimeout(f, 700));
-                const { _source } =  await this.esService.findById(ES_INDEX_CART, cartID);
-                return {
-                    cart: { ..._source, id: cartID},
-                    status: true,
-                }
+                await this.esService.findById(ES_INDEX_CART, cartID);
+                return await this.getByUserID(userID)
             }catch (err){
-                console.log(err)
+                // console.log(err)
             }
             return {status: false}
 

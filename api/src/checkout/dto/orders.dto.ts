@@ -4,10 +4,14 @@ import {
   Min, Max,
 } from 'class-validator';
 
-export class CartDto {
+export class OrderDto {
   @MaxLength(100)
   @MinLength(5)
   userID: string;
+
+  @MaxLength(100)
+  @MinLength(5)
+  orderNumber: string;
 
   @MaxLength(100)
   @MinLength(5)

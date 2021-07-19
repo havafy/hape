@@ -5,6 +5,8 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import cn from 'classnames'
 import { QuantityBox } from '@components/common'
+import { CgSpinner } from 'react-icons/cg'
+
 import {FaLocationArrow, FaRegEdit} from 'react-icons/fa'
 import { RiAddFill } from 'react-icons/ri'
 import {MdArrowBack} from 'react-icons/md'
@@ -20,7 +22,9 @@ interface Props {
 const CheckoutPage: FC<Props> = ({}) => {
   const router = useRouter()
   const {accessToken, updateAction} = useAuth();
-  const [ visible, setVisible] =useState(false)
+  const [ visible, setVisible] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false);
+  const [thanksPage, setThanksPage] = useState<any>();
   const [changeAddress, setChangeAddress] = useState<boolean>(false);
   const [selectedAddress, setSelectedAddress] = useState<string>('');
   const [cartGroup, setCartGroup] = useState<{carts: any[], grandTotal: number, addresses: any[]}>({
@@ -31,20 +35,17 @@ const CheckoutPage: FC<Props> = ({}) => {
   const headerApi = { 
     headers: { 'Authorization': `Bearer ${accessToken}` } 
   }
-  const [ loading, setLoading ] = useState<boolean>(true)
-  useEffect(() => {+
+  useEffect(() => {
     initialLoad()
   }, [])
   const pullCart = async (addressAction: string = '') =>{
-    setLoading(true);
     try{
       let {data} = await axios.get('/cart', { 
         ...headerApi,
         params: { collect: 'address,payments,shippings' }
       })
       setCartGroup(data)
-    
-      setLoading(false)
+      updateAction({event: 'CART_SUMMARY_UPDATE', payload: data })
       return data
     }catch(err){
 
@@ -53,10 +54,19 @@ const CheckoutPage: FC<Props> = ({}) => {
   }
   const initialLoad = async () =>{
     const data = await pullCart()
+    if(!data.addresses.length){
+      return
+    }
+    let found = false
     for (let address of data.addresses) {
         if(address.default){
           setSelectedAddress(address.id)
+          found = true
         }
+    }
+    //IF don't found any default address
+    if(!found){
+      setSelectedAddress(data.addresses[0].id)
     }
   }
   const pickupAddress = useCallback((id:string) => {
@@ -66,23 +76,35 @@ const CheckoutPage: FC<Props> = ({}) => {
         setChangeAddress(false)
       }, []) 
 
-  const pushCart = async (productID:string, quantity: number) =>{
+  const submitPlaceOrder = async () => {
     try{
-      let {data} = await axios.post('/cart',{
-        productID, quantity, action: 'setQuantity'
-      }, headerApi)
-      setCartGroup(data)
-      updateAction({event: 'CART_SUMMARY_UPDATE', payload: data })
+      setLoading(true)
+      let carts = cartGroup.carts.map((cart: any) => {
+        return  {
+            shopID: cart.shopID,
+            shipping: "BY_SHOP",
+            payment: "COD"
+          }
+      })
+      let {data} = await axios.post('/checkout',
+                {addressID: selectedAddress, carts}, 
+                headerApi)
+      await pullCart()
+      console.log('setThanksPage:', data)
+      if(data?.orders?.length){
+        setThanksPage(data)
+      }
+  
     }catch(err){
-
+      console.log('submitPlaceOrder:', err)
     }
+    setLoading(false)
   }
 
   const modalClose = useCallback(async (res:any) => {
         setVisible(false)
-        console.log('---->', res)
         // if created address, let refresh new data
-        if(res.data?.address.id ){
+        if(res?.data?.address.id ){
           await pullCart()
           //set select to new address
           setSelectedAddress(res.data.address.id)
@@ -95,7 +117,7 @@ const CheckoutPage: FC<Props> = ({}) => {
     <main className="mt-18">
       <div className={s.root}>
             <div>
-              { cartGroup.grandTotal > 0 ? <div>
+              { cartGroup.grandTotal > 0 && <div>
                 <div className={s.addressBox}>
                 <div className="md:grid md:grid-cols-2">
                   <div className="md:col-span-1">
@@ -172,18 +194,19 @@ const CheckoutPage: FC<Props> = ({}) => {
                       bạn đồng ý tuân theo Điều khoản Hape
                       </div>
                 <div className="col-span-1 flex justify-end">
-                  <button className={s.button}>
-                    Đặt Hàng
+                  <button onClick={e=>submitPlaceOrder()} className={s.button}>
+                  {loading && <CgSpinner className="animate-spin" />} Đặt Hàng
                   </button>
                 </div>
                 </div>
           </div>
-              </div> : 
-               <CartIsEmpty />
+              </div>
               }
 
+      {thanksPage?.orders?.length && <ThanksPage data={thanksPage} />}
 
- 
+      {!thanksPage && cartGroup.grandTotal === 0 && <CartIsEmpty />}
+          
           </div>
  
       </div>
@@ -192,9 +215,35 @@ const CheckoutPage: FC<Props> = ({}) => {
     </>
   )
 }
+const ThanksPage: FC<{data: any }> = ({data}) =>{
+
+  return (<div className={s.addressBox}>
+
+    <h1 className="text-base mt-5 mb-8">Cảm ơn bạn đã đặt hàng!</h1>
+
+    <Link href="/user/orders"><a>
+    <button className={s.button}>Quản lý đơn hàng </button>
+    </a></Link>
+    {data.payments?.map((payment: any) => {
+      return (
+        <div>{payment}</div>
+      )
+    })}
+  </div>)
+}
 const CartIsEmpty = () =>{
 
-  return (<div>Giỏ hàng của bạn chưa có sản phẩm nào!</div>)
+  return (<div className={s.addressBox}>
+  <h1 className="text-xl mt-5 mb-8">  Giỏ hàng của bạn chưa có sản phẩm nào!</h1>
+  <br/>
+  <Link href="/"><a>
+    <button className={s.button}>Quay lại trang chủ</button>
+
+    </a></Link>
+
+    <br/>
+    <br/>
+</div>)
 }
 const LeanHeader = () =>{
   return(

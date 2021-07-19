@@ -3,8 +3,16 @@
 }   
 .button{
     color: #fff!important;
-  @apply  text-xs font-semibold hover:text-white items-center justify-center text-white bg-gray-700 hover:bg-gray-900 uppercase px-7 py-3 shadow-md  hover:shadow-lg outline-none focus:outline-none  ease-linear transition-all duration-150
+    width: 180px;
+  @apply  text-xs font-semibold hover:text-white items-center
+   justify-center text-white bg-gray-700 hover:bg-gray-900 
+   uppercase px-7 py-3 shadow-md  hover:shadow-lg outline-none 
+   focus:outline-none  ease-linear transition-all duration-150
  
+}
+.button svg {
+
+  @apply animate-spin h-4 w-4 mr-1 inline-block
 }
 .formMessage{
   @apply text-sm text-red mb-5

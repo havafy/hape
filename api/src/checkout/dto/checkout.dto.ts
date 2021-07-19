@@ -1,7 +1,6 @@
 import {
   MaxLength, MinLength, 
-  IsArray , ArrayMaxSize, 
-  Min, Max,
+  IsArray , ArrayMaxSize
 } from 'class-validator';
 
 export class CheckoutDto {
@@ -11,11 +10,11 @@ export class CheckoutDto {
   addressID: string;
 
   @IsArray()
-  @ArrayMaxSize(10)
-  options: Option[];
+  @ArrayMaxSize(20)
+  carts: Cart[];
 }
 
-export class Option {
+export class Cart {
 
   @MaxLength(100)
   @MinLength(5)
@@ -23,10 +22,10 @@ export class Option {
 
   @MaxLength(10)
   @MinLength(2)
-  shipping_method: string;
+  shipping: string;
 
   @MaxLength(10)
   @MinLength(2)
-  payment_method?: string;
+  payment: string;
 
   }

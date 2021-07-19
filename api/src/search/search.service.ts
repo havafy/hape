@@ -104,7 +104,8 @@ export class SearchService {
     async delete(index: string, id: string) {
         const res = await this.esService.delete({
             index,
-            id
+            id,
+            refresh: 'wait_for', 
           })
         return res
     }
