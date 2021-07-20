@@ -12,11 +12,13 @@
 .button{
     color: #fff!important;
     background: var(--main-color)!important;
-  @apply flex hover:text-white tracking-wide items-center justify-center text-white text-sm font-bold uppercase px-7 py-3 shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150
+  @apply flex hover:text-white tracking-wide  mt-5
+  items-center justify-center text-white text-sm
+   font-bold uppercase px-6 py-2 shadow
  
 }
 .labelColumn{
-    @apply md:col-span-1 pt-2 text-right text-gray-600
+    @apply md:col-span-3 pt-2 text-right text-gray-600
 }
 .formBox{
     @apply shadow sm:pr-16  px-12 pt-10 pb-20 bg-white
@@ -35,6 +37,9 @@
 .checkCard label{
 
     @apply font-semibold
+}
+.btnLink{
+    @apply underline
 }
 @media only screen and (max-width: 640px){
     .checkCard label{

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, Not} from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './entities/users.entity';
 import { IUsers } from './interfaces/users.interface';
@@ -40,6 +40,7 @@ export class UsersService {
 
     return user;
   }
+
   async createOnES(user: any) {
     try {
 
@@ -55,7 +56,7 @@ export class UsersService {
             createdAt
         }]
       await this.esService.createByBulk(ES_INDEX_USER, record);
-      await this.shopService.create({userID, shopTitle: user.username})
+      await this.shopService.create({userID, shopName: user.username})
     }catch (err){
       console.log('user create: ', err)
     }
@@ -68,6 +69,8 @@ export class UsersService {
       user.updatedAt = now.toISOString()
       const userOnES = await this.getUserOnES(user.id)
       await this.esService.update(ES_INDEX_USER, userOnES.id , user)
+
+
     }catch (err){
       if(err.meta?.statusCode == 404){
         this.createOnES(user)
@@ -169,17 +172,64 @@ export class UsersService {
 
   }
 
-  public async updateProfileUser(id: number, userProfileDto: UserProfileDto): Promise<Users> {
+  public async updateProfileUser(id: number, userProfileDto: UserProfileDto){
     try {
-      const user = await this.userRepository.findOne({id: +id});
+      const user = await this.userRepository.findOne({id});
+      console.log('userProfileDto', userProfileDto)
       user.name = userProfileDto.name;
-      user.email = userProfileDto.email;
-      user.username = userProfileDto.username;
-      
+      if(userProfileDto.email !== user.email){
+        const email = userProfileDto.email;
+        const existing = await this.userRepository.findOne({
+          email,
+            id:Not(id)
+        })
+        if(existing ){
+          return {
+            message: "Email is existing.",
+            status: 404
+          }
+        }
+        user.email = email
+      }
+      if(userProfileDto.username !== user.username){
+        const username = userProfileDto.username;
+        const existing = await this.userRepository.findOne({
+          username,
+            id:Not(id)
+        })
+        if(existing ){
+          return {
+            message: "Username is existing.",
+            status: 404
+          }
+        }
+        user.username = userProfileDto.username;
+      }
+   
+    
+      if(userProfileDto.shopName){
+        const shopName = userProfileDto.shopName
+        const userID = id.toString()
+        const existing = await this.shopService.checkShopName(userID, shopName)
+        if(existing){
+          return {
+            message: "Shop name is existing.",
+            status: 404
+          }
+        }
+        await this.shopService.updateByUser({userID, shopName})
+      }
+    
       const userUpdated =  await this.userRepository.save(user);
+ 
       await this.updateOnES(userUpdated)
-      return userUpdated
+      return {
+        user: userUpdated,
+        status: 200
+      }
+
     } catch (err) {
+      console.log(err)
       throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }
   }

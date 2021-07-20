@@ -12,5 +12,12 @@ import { FilesModule } from '../files/files.module';
     ],
     controllers: [ShopController],
 })
-export class ShopModule{}
+export class ShopModule{
+    constructor(private shopService: ShopService) {}
+    onModuleInit() {
+        // import the data about province/city/ward 
+        this.shopService.createIndex().then();
+    }
+
+}
 

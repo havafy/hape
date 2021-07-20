@@ -78,7 +78,7 @@ export class SearchService {
         const res = await this.esService.search(reqParams)
         return res
     }
-    async findByMultiFields({index, must, size = 30, from = 0, sort = []}) {
+    async findByMultiFields({index, must, must_not = null, size = 30, from = 0, sort = []}) {
         const reqParams = {
             index,
             body: {
@@ -89,6 +89,9 @@ export class SearchService {
         }
         if(sort.length){
             reqParams.body['sort'] = sort
+        }
+        if(must_not){
+            reqParams.body.query.bool['must_not'] = must_not
         }
         const res = await this.esService.search(reqParams)
         return res

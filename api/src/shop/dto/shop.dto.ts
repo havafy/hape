@@ -24,7 +24,7 @@ export class ShopDto {
 
   @MaxLength(30)
   @MinLength(2)
-  shopTitle: string;
+  shopName: string;
 
   @IsOptional()
   @MaxLength(200)

@@ -17,7 +17,70 @@ export class ShopService {
         return  {}
     
     }
+    async updateByUser(shop: {userID: string, shopName: string}){
+        try {
+            const shopCheck = await this.getByUserID(shop.userID)
+            if(shopCheck){
+                const now = new Date();
+                shop['updatedAt'] = now.toISOString()
+                await this.esService.update(ES_INDEX_SHOP, shopCheck.id , shop)
+            }else{
+                this.create(shop)
+            }
+          }catch (err){
+              console.log(err)
+          }
+        
+    }
+    async checkShopName(userID: string, shopName: string) {
+        try{
+            let must = [{match: { shopName }}]
+            let must_not = [{match: { userID }}]
+            const { body: { 
+                hits: { 
+                    total, 
+                    hits 
+                } } } = await this.esService.findByMultiFields({
+                    index: ES_INDEX_SHOP, must, must_not })
+            const count = total.value
+            if(count){
+                return true 
+            }
+        }catch (err){
+            // console.log('checkShopName:', err)
+        }
+        return false
     
+    }
+    
+    async getCartByUser(userID: string, shopID: string) {
+          
+        try{
+              let must = [{match: { userID }}, {match: { shopID }}]
+              const { body: { 
+                  hits: { 
+                      total, 
+                      hits 
+                  } } } = await this.esService.findByMultiFields({
+                      index: ES_INDEX_SHOP, must })
+              const count = total.value
+
+              //IF existing: let update product to this cart
+              if(count){
+                  if(count > 1){
+                      console.log('[ALERT] CART count over 1', userID)
+                  }
+                  return {
+                          id: hits[0]._id,
+                          ...hits[0]._source, 
+                      }
+              }
+          }catch (err){
+              console.log(err)
+          }
+          return false
+
+      }
     async remove(userID: number, id: string) {
         try {
             const checking = await this.esService.findById(ES_INDEX_SHOP, id )
@@ -129,7 +192,23 @@ export class ShopService {
         if(count){
           return { ...hits[0]._source, id: hits[0]._id}
         }
-      return
+      return null
   }
+  async createIndex(){
+    this.esService.createIndex(ES_INDEX_SHOP, this.indicateBody())
+    }
+    indicateBody() {
+        return {
+                mappings: {
+                    properties: {
+                        id:{ type: 'long'},
+                        shopName: {
+                            type: 'text'
+                        }
+                    }
+                }
+            }
+      }
 
+  
 }

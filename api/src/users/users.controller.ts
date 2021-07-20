@@ -49,12 +49,10 @@ export class UsersController {
   ): Promise<any> {
     try {
       const userId = res.req.user.id
-      await this.usersService.updateProfileUser(userId, userProfileDto);
-
-      return res.status(HttpStatus.OK).json({
-        message: "User Updated successfully!",
-        status: 200,
-      });
+  
+      return res.status(HttpStatus.OK).json( 
+         await this.usersService.updateProfileUser(userId, userProfileDto)
+         );
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: "Error: User not updated!",

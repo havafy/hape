@@ -2,39 +2,56 @@ import { FC, useState, ChangeEvent,useEffect } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
 import { useAuth } from '@context/AuthContext'
-import { Form, Input, DatePicker, Upload, Switch  } from 'antd'
+import { Form, Input, message as Message } from 'antd'
 import s from './Profile.module.css'
 
 const Profile: FC = () => {
   const { accessToken } = useAuth();
   const [isLoading, setIsLoading] = useState(false)
   const [ready, setReady] = useState(false)
-  const [profile, setProfile] = useState({})
+  const [profile, setProfile] = useState<any>({})
+  const [shop, setShop] = useState<any>({})
   const headerApi = { 
     headers: { 'Authorization': `Bearer ${accessToken}` } 
   }
   const siteName = process.env.NEXT_PUBLIC_SITE
   const onFinish = async (values: any) => {
-    setIsLoading(true)
-    const { data: { status, error } } = await axios.post('customer-contact', {
-            ...values, 
-
-        })
-    setIsLoading(false)
-  };
+    try{
+        setIsLoading(true)
+        const { data: { status, user, message } } = await axios.put('/users/profile', {
+                ...values, 
+            }, headerApi)
+          if(status === 404){
+            Message.error(message);
+          }
+          if(user){
+            setProfile(user)
+          }
+        setIsLoading(false)
+      }catch(err){
+        console.log(err)
+      }
+  }
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+    // console.log('Failed:', errorInfo);
   };
 
   useEffect(() => {
     (async () => {
       setReady(false)
-      let { data: { user} } = await axios.get('/users/profile', headerApi)
-      if(user){
-        setProfile(user)
+      try{
+        let { data: { user, shop} } = await axios.get('/users/profile', headerApi)
+
+        if(user){
+          setProfile(user)
+          setShop(shop)
+        }
+        setReady(true)
+      }catch(err){
+        console.log(err)
       }
-      setReady(true)
+
     })()
   
   }, [])
@@ -44,60 +61,71 @@ const Profile: FC = () => {
 
           <div className={s.formBox}>
           <h1 className={s.h1}>Hồ Sơ Của Tôi</h1>
-          <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
-          { ready && <Form name="basic" initialValues={{ ...profile }}
+          <p className="text-gray-600 mb-5">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+          { ready && <Form name="basic" initialValues={{ ...profile, shopName: shop.shopName }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}    >
-                <div className="mt-8 md:grid md:grid-cols-6 md:gap-6">
+            onFinishFailed={onFinishFailed} >
+                <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
                   <div className={s.labelColumn}>
                     Tên đăng nhập
                   </div>
-                  <div className="md:col-span-5 self-center">
+                  <div className="md:col-span-8 self-center">
                     <Form.Item name="username"
                         rules={[
                           { required: true, message: 'Vui lòng thêm tên đăng nhập!' },
-                          { min: 10, message: 'Yêu cầu dài hơn 10 ký tự.' },
+                          { min: 5, message: 'Yêu cầu dài hơn 5 ký tự.' },
                           ]} >
                       <Input placeholder='Tên đăng nhập' className={s.input}  />
                     </Form.Item>
                   </div>
                   </div>
-                  <div className="mt-8 md:grid md:grid-cols-6 md:gap-6">
+                  <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
                   <div className={s.labelColumn}>Họ tên</div>
-                  <div className="md:col-span-5">
+                  <div className="md:col-span-8">
                     <Form.Item name="name"
                         rules={[
                           { required: true, message: 'Vui lòng thêm tên của bạn.' },
-                          { min: 10, message: 'Yêu cầu dài hơn 10 ký tự.' },
+                          { min: 5, message: 'Yêu cầu dài hơn 5 ký tự.' },
                           ]} >
                       <Input placeholder='Họ tên của bạn' className={s.input}  />
                     </Form.Item>
                   </div>
                   </div>
-                  <div className="mt-8 md:grid md:grid-cols-6 md:gap-6">
-                    <div  className={s.labelColumn}>Tên shop</div>
-                    <div className="md:col-span-5">
+                  <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
+                    <div  className={s.labelColumn}>Tên shop<br/></div>
+                    <div className="md:col-span-8">
                       <Form.Item name="shopName"
                           rules={[
-                            { required: true, message: 'Vui lòng thêm tên shop.' },
-                            { min: 10, message: 'Yêu cầu dài hơn 10 ký tự.' },
+                            { required: true, message: 'Vui lòng thêm tên shop của bạn.' },
+                            { min: 5, message: 'Yêu cầu dài hơn 5 ký tự.' },
                             ]} >
                         <Input placeholder='Tên shop của bạn' className={s.input}  />
-                      </Form.Item>
+                      </Form.Item> (không khoảng trắng)
                   </div>
                   </div>
-                  <div className="mt-8 md:grid md:grid-cols-6 md:gap-6">
+                  <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
                     <div  className={s.labelColumn}>Số điện thoại</div>
-                    <div className="md:col-span-5 pt-2">
-                      222222
+                    <div className="md:col-span-8 pt-2">
+                   {profile.phone !== null && <span className="mr-2">{profile.phone}</span> }
+                      <button className={s.btnLink}>{profile.phone === null ? 'Thêm': 'Thay đổi'}</button>
                     </div>
                   </div>
-                  <div className="mt-8 md:grid md:grid-cols-6 md:gap-6">
+                  <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
                     <div  className={s.labelColumn}>Địa chỉ email</div>
-                    <div className="md:col-span-5 pt-2">
-                      222222
+                    <div className="md:col-span-8 pt-2">
+                      <span className="mr-2">{profile.email} </span>  <button className={s.btnLink}>Thay đổi</button>
+                      
+                    </div>
+
+                 
+                  </div>
+                  <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
+                    <div  className={s.labelColumn}></div>
+                    <div className="md:col-span-8 pt-2">
+                      <button className={s.button} type="submit" >Lưu</button>
                     </div>
                   </div>
+
             </Form> }
           </div>
 
