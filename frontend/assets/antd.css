@@ -60,3 +60,6 @@
   padding: 8px 10px;
   border-radius: 4px;
 }
+.ant-form-item{
+  margin: 0;
+}

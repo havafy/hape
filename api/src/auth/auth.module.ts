@@ -10,6 +10,8 @@ import { JwtModule } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./strategies/jwt.strategy";
+import { SearchModule } from '../search/search.module';
+import { ShopService } from '../shop/shop.service';
 import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
@@ -22,8 +24,13 @@ import { ConfigModule } from '@nestjs/config';
         expiresIn: process.env.EXPIRES_IN_JWT,
       },
     }),
+    SearchModule
   ],
-  providers: [LoginService, RegisterService, RecaptchaService, UsersService, JwtStrategy],
+  providers: [LoginService, 
+    RegisterService, RecaptchaService, 
+    UsersService, JwtStrategy,
+    ShopService
+  ],
   controllers: [LoginController, RegisterController],
 })
 export class AuthModule {}

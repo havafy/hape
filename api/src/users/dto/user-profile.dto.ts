@@ -4,20 +4,19 @@ export class UserProfileDto {
   @IsString()
   @MaxLength(20)
   @MinLength(2)
-  name: string;
+  name?: string;
 
   @IsString()
   @MaxLength(12)
   @MinLength(3)
-  username: string;
-
+  username?: string;
 
   @MaxLength(14)
   @MinLength(8)
-  phone: string;
+  phone?: string;
 
   @IsEmail()
   @MinLength(5)
   @MaxLength(20)
-  email: string;
+  email?: string;
 }

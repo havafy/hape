@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
-import { query } from 'express';
 
 @Injectable()
 export class SearchService {

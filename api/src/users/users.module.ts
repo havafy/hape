@@ -9,11 +9,12 @@ import { ProductsService } from '../products/products.service';
 import { FilesService } from '../files/files.service';
 import { AddressService } from '../address/address.service';
 import { AddressModule } from '../address/address.module';
-
+import { ShopModule } from '../shop/shop.module';
+import { ShopService } from '../shop/shop.service';
 @Module({
     imports: [
         TypeOrmModule.forFeature([Users]),
-        SearchModule, AddressModule
+        SearchModule, AddressModule, ShopModule
     ],
     controllers: [UsersController],
     providers: [
@@ -21,7 +22,8 @@ import { AddressModule } from '../address/address.module';
         CartService, 
         ProductsService, 
         FilesService,
-        AddressService
+        AddressService,
+        ShopService
     ]
 })
 export class UsersModule {}

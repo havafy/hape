@@ -1,12 +1,12 @@
 .h1{
-    @apply text-2xl font-bold mb-10 uppercase text-gray-700
+    @apply text-2xl font-bold uppercase text-gray-700
 }
-.label {
-    font-size: 0.8rem!important;
-    @apply block uppercase text-xs font-bold mb-2 ml-1 text-gray-700
-  }
+
 .input {
-    @apply px-3 py-2 bg-white rounded text-sm  focus:outline-none focus:ring w-full ease-linear transition-all duration-150
+    max-width: 300px;
+    @apply px-3 py-2 bg-white rounded text-sm 
+     focus:outline-none focus:ring ease-linear 
+     transition-all duration-150
 }   
 
 .button{
@@ -15,8 +15,11 @@
   @apply flex hover:text-white tracking-wide items-center justify-center text-white text-sm font-bold uppercase px-7 py-3 shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150
  
 }
+.labelColumn{
+    @apply md:col-span-1 pt-2 text-right text-gray-600
+}
 .formBox{
-    @apply shadow sm:pr-16  px-12 py-5 my-10 bg-white
+    @apply shadow sm:pr-16  px-12 pt-10 pb-20 bg-white
 }
 .checkbox{
     margin-top: 6px;
