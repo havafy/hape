@@ -17,9 +17,9 @@ const getSlug = (path: string) => {
           .replace(/’/g, '')
     return cleanTextUtils.strip.nonASCII(path)
  }
-export const hideEmail = function(text) {
+export const hideEmail = function(text: any) {
   return text.replace(/(.{2})(.*)(?=@)/,
-    function(gp1, gp2, gp3) { 
+    function(gp1: any, gp2: any, gp3:any) { 
       for(let i = 0; i < gp3.length; i++) { 
         gp2+= "*"; 
       } return gp2; 
