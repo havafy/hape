@@ -5,6 +5,8 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import { QuantityBox } from '@components/common'
 import {RiDeleteBin7Line} from 'react-icons/ri'
+import {AiOutlineShop} from 'react-icons/ai'
+
 import { useAuth } from '@context/AuthContext'
 import { getProductUrl, currencyFormat } from '@lib/product'
 import cart from 'pages/cart'
@@ -76,7 +78,10 @@ const CartPage: FC<Props> = ({}) => {
                   {cartGroup?.carts?.map((cart: any, index: number) => {
                       return(
                         <div className={s.cartByShop} key={index}>
-                          <div className={s.shopTitle}>{cart.shopID}</div>
+                          <div className={s.shopTitle}>
+                            <Link href={'/shop/'+cart.shop.shopName}>
+                              <a><AiOutlineShop />{cart.shop.shopName}</a>
+                              </Link></div>
                           <div className={s.itemBox}>
                           {cart.items.map((item: any, key: string) => {
                             return(
@@ -120,7 +125,7 @@ const CartPage: FC<Props> = ({}) => {
                           </div>
       
                           <div className={s.cartFooter}>
-                            <span>
+                            <span className="self-center">
                               Tổng số tiền ({cart.quantityTotal} sản phẩm):
                               </span>
                             <span className={s.grandTotalCart}>{currencyFormat(cart.grandTotal)}</span>

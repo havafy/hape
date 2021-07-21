@@ -7,14 +7,17 @@ import { FilesService } from "../files/files.service";
 import { ProductsService } from "../products/products.service";
 import { AddressService } from '../address/address.service';
 import { AddressModule } from '../address/address.module';
+import { ShopModule } from '../shop/shop.module';
+import { ShopService } from "../shop/shop.service";
 @Module({
-    imports: [SearchModule, AddressModule],
+    imports: [SearchModule, AddressModule, ShopModule],
     providers: [
         CartService, 
         CheckoutService, 
         FilesService, 
         ProductsService,
-        AddressService
+        AddressService,
+        ShopService
     ],
     controllers: [CheckoutController],
 })

@@ -185,7 +185,7 @@ return (<>
               </Form.Item>
               </div>
             </div>
-            <div className="">
+            <div className="mt-5">
             <div className="mb-2">Tỉnh thành/Quận Huyện/Phường:</div>
             <div className="flex">
             <TreeSelect className="mr-3"

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import cn from 'classnames'
 import { QuantityBox } from '@components/common'
 import { CgSpinner } from 'react-icons/cg'
+import {AiOutlineShop} from 'react-icons/ai'
 
 import {FaLocationArrow, FaRegEdit} from 'react-icons/fa'
 import { RiAddFill } from 'react-icons/ri'
@@ -45,6 +46,14 @@ const CheckoutPage: FC<Props> = ({}) => {
         params: { collect: 'address,payments,shippings' }
       })
       setCartGroup(data)
+      if(data.addresses.length ===0){
+        setVisible(true)
+        setChangeAddress(true)
+      }
+      if(data.addresses.length ===1){
+        setSelectedAddress(data.addresses[0].id)
+        setChangeAddress(false)
+      }
       updateAction({event: 'CART_SUMMARY_UPDATE', payload: data })
       return data
     }catch(err){
@@ -322,7 +331,7 @@ const CartShopBox: FC<{cart: any; index: number}> = ({cart, index}) => {
 
 
   return (  <div className={s.cartByShop} key={index}>
-    <div className={s.shopTitle}>{cart.shopID}</div>
+    <div className={s.shopTitle}><AiOutlineShop />{cart.shop.shopName}</div>
     <div className={s.itemBox}>
 
     {cart.items.map((item: any, key: string) => {

@@ -144,6 +144,10 @@
     margin: 0 1px 0 0;
 
 }
+.shopTitle svg{
+    fill: #777;
+    @apply inline-block w-5 h-5 mr-2 
+}
 .textInput{
     border: 1px solid #e4e2e2;
     width: 250px;

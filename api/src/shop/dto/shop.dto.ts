@@ -27,9 +27,17 @@ export class ShopDto {
   shopName: string;
 
   @IsOptional()
+  @IsNumber()
+  followerTotal: number; // total of followers
+
+  @IsOptional()
+  @IsNumber()
+  sales: number; // total of items which ordered by customer
+
+  @IsOptional()
   @MaxLength(200)
   @MinLength(5)
-  shopIcon?: string;
+  shopIcon: string;
 
   @IsOptional()
   @MaxLength(200)

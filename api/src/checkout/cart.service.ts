@@ -3,6 +3,7 @@ import { url } from 'inspector';
 import { SearchService } from '../search/search.service';
 import { ProductsService } from "../products/products.service";
 import { AddressService } from '../address/address.service';
+import { ShopService } from '../shop/shop.service';
 import { AddToCartDto  } from './dto/add-to-cart.dto';
 import { CartDto  } from './dto/cart.dto';
 const ES_INDEX_CART = 'carts'
@@ -11,7 +12,8 @@ const ES_INDEX_ORDER = 'orders'
 export class CartService {
     constructor(readonly esService: SearchService,
         readonly productsService: ProductsService,
-        readonly addressService: AddressService) {}
+        readonly addressService: AddressService,
+        readonly shopService: ShopService) {}
 
         async addToCart(userID: string, addToCartDto: AddToCartDto) {
             try {
@@ -69,10 +71,13 @@ export class CartService {
                     if(count > 1){
                         console.log('[ALERT] CART count over 1', userID)
                     }
+                    const cart = hits[0]._source
+                    const shop = await this.shopService.getShopSummary(shopID)
                     return {
-                            id: hits[0]._id,
-                            ...hits[0]._source, 
-                        }
+                        id: hits[0]._id,
+                        ...cart, 
+                        shop
+                    }
                 }
             }catch (err){
                 console.log(err)

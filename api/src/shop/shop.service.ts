@@ -8,13 +8,13 @@ const ES_INDEX_SHOP = 'shops'
 export class ShopService {
     constructor(readonly esService: SearchService) {}
     
-    async get(id: string = '') {
-
-        if(!id ){
-            return {}
+    async getShopSummary(shopID: string) {
+        const shop = await this.getByUserID(shopID)
+        return {
+            shopName: shop.shopName,
+            sales: 0,
+            shopIcon: ''
         }
-        
-        return  {}
     
     }
     async updateByUser(shop: {userID: string, shopName: string}){
@@ -52,35 +52,7 @@ export class ShopService {
         return false
     
     }
-    
-    async getCartByUser(userID: string, shopID: string) {
-          
-        try{
-              let must = [{match: { userID }}, {match: { shopID }}]
-              const { body: { 
-                  hits: { 
-                      total, 
-                      hits 
-                  } } } = await this.esService.findByMultiFields({
-                      index: ES_INDEX_SHOP, must })
-              const count = total.value
 
-              //IF existing: let update product to this cart
-              if(count){
-                  if(count > 1){
-                      console.log('[ALERT] CART count over 1', userID)
-                  }
-                  return {
-                          id: hits[0]._id,
-                          ...hits[0]._source, 
-                      }
-              }
-          }catch (err){
-              console.log(err)
-          }
-          return false
-
-      }
     async remove(userID: number, id: string) {
         try {
             const checking = await this.esService.findById(ES_INDEX_SHOP, id )

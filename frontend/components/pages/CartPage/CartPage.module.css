@@ -24,6 +24,10 @@
     border-bottom: 1px solid #f2f2f2;
     @apply  py-3 px-7 
 }
+.shopTitle svg{
+    fill: #777;
+    @apply inline-block w-5 h-5 mr-2 
+}
 .thumb{
     width: 75px;
 }
@@ -77,7 +81,7 @@
 }
 .cartFooter{
     @apply text-right text-gray-500
-    px-5 py-5
+    px-5 py-5 self-center
 }
 .grandTotalCart{
     color: var(--main-color)!important;
