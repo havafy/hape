@@ -2,41 +2,67 @@ import { FC, useState, ChangeEvent,useEffect } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
 import { useAuth } from '@context/AuthContext'
-import { Form, Input, message as Message } from 'antd'
+import { message as Message } from 'antd'
 import s from './Profile.module.css'
+import getSlug, {hideText, hideEmail, phoneFormat} from '@lib/get-slug'
 
 const Profile: FC = () => {
   const { accessToken } = useAuth();
   const [isLoading, setIsLoading] = useState(false)
   const [ready, setReady] = useState(false)
-  const [profile, setProfile] = useState<any>({})
-  const [shop, setShop] = useState<any>({})
+  const [name, setName] = useState<string>('')
+  const [username, setUsername] = useState<string>('')
+  const [shopName, setShopName] = useState<string>('')
+  const [phone, setPhone] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
+  const [changeEmail, setChangeEmail] = useState<boolean>(false)
+  const [changePhone, setChangePhone] = useState<boolean>(false)
   const headerApi = { 
     headers: { 'Authorization': `Bearer ${accessToken}` } 
   }
   const siteName = process.env.NEXT_PUBLIC_SITE
-  const onFinish = async (values: any) => {
+  const submitForm = async () => {
     try{
         setIsLoading(true)
-        const { data: { status, user, message } } = await axios.put('/users/profile', {
-                ...values, 
+        const { data: { statusCode, user, message, shop } } = await axios.put('/users/profile', {
+                username,
+                name,
+                shopName,
+                phone,
+                email
             }, headerApi)
-          if(status === 404){
+          if(statusCode !== 200){
             Message.error(message);
+          }else{
+            if(user){
+              setName(user.name)
+              setUsername(user.username)
+              setPhone(user.phone)
+              setEmail(user.email)
+            }
+            if(shop){
+              setShopName(shop.shopName)
+            }
+            setChangeEmail(false)
+            setChangePhone(false)
+            Message.success("Cập nhật thành công.");
           }
-          if(user){
-            setProfile(user)
-          }
+
         setIsLoading(false)
       }catch(err){
-        console.log(err)
+        console.log(err.response)
+        Message.error(err.response.data.message);
+      
       }
   }
 
-  const onFinishFailed = (errorInfo: any) => {
-    // console.log('Failed:', errorInfo);
-  };
 
+  const userNameHandleChange = (event: any) => {
+    setUsername(getSlug(event.target.value))
+  }
+  const shopNameHandleChange = (event: any) => {
+    setShopName(getSlug(event.target.value))
+  }
   useEffect(() => {
     (async () => {
       setReady(false)
@@ -44,8 +70,13 @@ const Profile: FC = () => {
         let { data: { user, shop} } = await axios.get('/users/profile', headerApi)
 
         if(user){
-          setProfile(user)
-          setShop(shop)
+            setName(user.name)
+            setUsername(user.username)
+            setPhone(user.phone)
+            setEmail(user.email)
+        }
+        if(shop){
+            setShopName(shop.shopName)
         }
         setReady(true)
       }catch(err){
@@ -62,59 +93,70 @@ const Profile: FC = () => {
           <div className={s.formBox}>
           <h1 className={s.h1}>Hồ Sơ Của Tôi</h1>
           <p className="text-gray-600 mb-5">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
-          { ready && <Form name="basic" initialValues={{ ...profile, shopName: shop.shopName }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed} >
+                  <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
+                    <div className={s.labelColumn}>Họ tên</div>
+                    <div className="md:col-span-8">
+                        <input  value={name}
+                        onChange={(event) => {
+                            setName(event.target.value)
+                          }}
+                        placeholder='Họ tên của bạn' className={s.input}  />
+          
+                    </div>
+                  </div>
                 <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
                   <div className={s.labelColumn}>
                     Tên đăng nhập
                   </div>
                   <div className="md:col-span-8 self-center">
-                    <Form.Item name="username"
-                        rules={[
-                          { required: true, message: 'Vui lòng thêm tên đăng nhập!' },
-                          { min: 5, message: 'Yêu cầu dài hơn 5 ký tự.' },
-                          ]} >
-                      <Input placeholder='Tên đăng nhập' className={s.input}  />
-                    </Form.Item>
+
+                      <input value={username} 
+                        onChange={userNameHandleChange}
+                        placeholder='Tên đăng nhập' className={s.input}  />
+              <span className="text-gray-500 text-xs">(không ký tự đặt biệt)</span>
                   </div>
                   </div>
-                  <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
-                  <div className={s.labelColumn}>Họ tên</div>
-                  <div className="md:col-span-8">
-                    <Form.Item name="name"
-                        rules={[
-                          { required: true, message: 'Vui lòng thêm tên của bạn.' },
-                          { min: 5, message: 'Yêu cầu dài hơn 5 ký tự.' },
-                          ]} >
-                      <Input placeholder='Họ tên của bạn' className={s.input}  />
-                    </Form.Item>
-                  </div>
-                  </div>
+
                   <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
                     <div  className={s.labelColumn}>Tên shop<br/></div>
                     <div className="md:col-span-8">
-                      <Form.Item name="shopName"
-                          rules={[
-                            { required: true, message: 'Vui lòng thêm tên shop của bạn.' },
-                            { min: 5, message: 'Yêu cầu dài hơn 5 ký tự.' },
-                            ]} >
-                        <Input placeholder='Tên shop của bạn' className={s.input}  />
-                      </Form.Item> (không khoảng trắng)
+
+                        <input value={shopName} 
+                        onChange={shopNameHandleChange}
+                        placeholder='Tên shop của bạn' className={s.input}  />
+                      <span className="text-gray-500 text-xs">(không ký tự đặt biệt)</span>
                   </div>
                   </div>
                   <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
                     <div  className={s.labelColumn}>Số điện thoại</div>
-                    <div className="md:col-span-8 pt-2">
-                   {profile.phone !== null && <span className="mr-2">{profile.phone}</span> }
-                      <button className={s.btnLink}>{profile.phone === null ? 'Thêm': 'Thay đổi'}</button>
+                    <div className="md:col-span-8">
+                   {(!changePhone) && 
+                   <div className="mt-2">
+                     <span className="mr-2">{phone !== null && hideText(phone)}</span>
+                     <button onClick={e=>setChangePhone(true)} 
+                       className={s.btnLink}>{phone === null ? 'Thêm': 'Thay đổi'}</button>
+                     </div> }
+
+      
+
+                    {changePhone === true && <input value={phone} 
+                        onChange={e=>{setPhone(phoneFormat(e.target.value))}}
+                        placeholder='Số điện thoại mới' className={s.input}  />}
                     </div>
                   </div>
                   <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
                     <div  className={s.labelColumn}>Địa chỉ email</div>
-                    <div className="md:col-span-8 pt-2">
-                      <span className="mr-2">{profile.email} </span>  <button className={s.btnLink}>Thay đổi</button>
-                      
+                    <div className="md:col-span-8">
+                    
+                    {!changeEmail &&  <div className="mt-2"> 
+                      <span className="mr-2">{hideEmail(email)}</span>  
+                      <button onClick={e=>setChangeEmail(true)} className={s.btnLink}>Thay đổi</button>
+                      </div> }
+                   
+                    {changeEmail === true && <input value={email} 
+                        onChange={e=>{setEmail(e.target.value)}}
+                        placeholder='Địa chỉ email mới' className={s.input}  />}
+                   
                     </div>
 
                  
@@ -122,11 +164,11 @@ const Profile: FC = () => {
                   <div className="mt-8 md:grid md:grid-cols-12 md:gap-6">
                     <div  className={s.labelColumn}></div>
                     <div className="md:col-span-8 pt-2">
-                      <button className={s.button} type="submit" >Lưu</button>
+                      <button onClick={submitForm}
+                       className={s.button} >Lưu</button>
                     </div>
                   </div>
 
-            </Form> }
           </div>
 
         </div>

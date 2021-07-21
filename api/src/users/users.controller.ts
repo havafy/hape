@@ -38,7 +38,7 @@ export class UsersController {
       user: user,
       carts,
       shop,
-      status: 200,
+      statusCode: 200,
     });
   }
 
@@ -56,7 +56,7 @@ export class UsersController {
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: "Error: User not updated!",
-        status: 400,
+        statusCode: 400,
       });
     }
   }

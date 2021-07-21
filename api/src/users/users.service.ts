@@ -8,6 +8,8 @@ import { ShopService } from '../shop/shop.service';
 import { UserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { UserProfileDto } from './dto/user-profile.dto';
+import * as cleanTextUtils from 'clean-text-utils';
+
 const ES_INDEX_USER = 'users'
 
 @Injectable()
@@ -175,8 +177,9 @@ export class UsersService {
   public async updateProfileUser(id: number, userProfileDto: UserProfileDto){
     try {
       const user = await this.userRepository.findOne({id});
-      console.log('userProfileDto', userProfileDto)
+
       user.name = userProfileDto.name;
+      const userID = id.toString()
       if(userProfileDto.email !== user.email){
         const email = userProfileDto.email;
         const existing = await this.userRepository.findOne({
@@ -186,13 +189,13 @@ export class UsersService {
         if(existing ){
           return {
             message: "Email is existing.",
-            status: 404
+            statusCode: 404
           }
         }
         user.email = email
       }
       if(userProfileDto.username !== user.username){
-        const username = userProfileDto.username;
+        const username = this.getSlug(userProfileDto.username);
         const existing = await this.userRepository.findOne({
           username,
             id:Not(id)
@@ -200,21 +203,34 @@ export class UsersService {
         if(existing ){
           return {
             message: "Username is existing.",
-            status: 404
+            statusCode: 404
           }
         }
         user.username = userProfileDto.username;
       }
    
-    
+      if(userProfileDto.phone !== user.phone){
+        const phone = this.getSlug(userProfileDto.phone);
+        const existing = await this.userRepository.findOne({
+          phone,
+            id:Not(id)
+        })
+        if(existing ){
+          return {
+            message: "Phone is existing.",
+            statusCode: 404
+          }
+        }
+        user.phone = userProfileDto.phone;
+      }
       if(userProfileDto.shopName){
-        const shopName = userProfileDto.shopName
-        const userID = id.toString()
+        const shopName = this.getSlug(userProfileDto.shopName)
+
         const existing = await this.shopService.checkShopName(userID, shopName)
         if(existing){
           return {
             message: "Shop name is existing.",
-            status: 404
+            statusCode: 404
           }
         }
         await this.shopService.updateByUser({userID, shopName})
@@ -223,15 +239,35 @@ export class UsersService {
       const userUpdated =  await this.userRepository.save(user);
  
       await this.updateOnES(userUpdated)
+      const shop = await this.shopService.getByUserID(userID)
       return {
         user: userUpdated,
-        status: 200
+        shop,
+        statusCode: 200
       }
 
     } catch (err) {
       console.log(err)
       throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }
+  }
+
+ public getSlug (path: string){
+    if(path === undefined) return
+    path = path.replace(/^\/|\/$/g, '')
+          .trim()
+          .replace(/[&\/\\#”“!@$`’;,+()$~%.'':*^?<>{}]/g, '')
+          .replace(/ /g, '').replace(/_/g, '')
+          .replace(/-/g, '')
+          .replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a')
+          .replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e')
+          .replace(/ì|í|ị|ỉ|ĩ/g, 'i')
+          .replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o')
+          .replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u')
+          .replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y')
+          .replace(/đ/g, 'd')
+          .replace(/’/g, '')
+      return cleanTextUtils.strip.nonASCII(path)
   }
 
 }

@@ -19,6 +19,7 @@
     "body-scroll-lock": "^3.1.5",
     "bowser": "^2.11.0",
     "classnames": "^2.3.1",
+    "clean-text-utils": "^1.1.17",
     "cookie": "^0.4.1",
     "dot-object": "^2.1.4",
     "email-validator": "^2.0.4",
