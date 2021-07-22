@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import IProduct from '@interfaces/product'
 import { getProductUrl, currencyFormat } from '@lib/product'
 import { BiCart } from 'react-icons/bi'
+import { message as Message } from 'antd'
 import { IoIosArrowForward } from 'react-icons/io'
 import { GiReturnArrow } from 'react-icons/gi'
 
@@ -53,14 +54,25 @@ const ProductPage: FC<Props> = ({pid}) => {
         setLoading(false)
     })()
   }
-  const addToCart = async () => {
+  const addToCart = async (goto: string = '') => {
     let {data } = await axios.post('/cart' , { 
             productID,
             quantity,
             action: 'addToCart'
             }, headerApi)
-    
-    updateAction({event: 'CART_SUMMARY_UPDATE', payload: data })
+    if(data.statusCode === 500){
+      Message.error("Đây là sản phẩm trong shop của bạn.");
+    }else{
+      updateAction({event: 'CART_SUMMARY_UPDATE', payload: data })
+      if(goto!==''){
+        router.push('/checkout')
+      }
+    }
+
+ 
+  }
+  const buyNow = async () => {
+    await addToCart('checkout')
  
   }
   const changeQuantity = useCallback((number: number) => {
@@ -105,10 +117,13 @@ const ProductPage: FC<Props> = ({pid}) => {
                       <div className={s.addToCartBox}>
                             <div className="my-5">
                               <span className={s.actionLabel}>Số Lượng: </span>
-                              <QuantityBox productID={product.id} defaultQty={1} onChange={changeQuantity} />
+                              <QuantityBox 
+                              productID={product.id} defaultQty={1} onChange={changeQuantity} />
                             </div>
                 
-                            <button className={s.addNowButton}>Mua Ngay</button>
+                            <button 
+                            onClick={buyNow}
+                            className={s.addNowButton}>Mua Ngay</button>
                             <button onClick={addToCart} className={s.addToCartButton}><BiCart />Thêm Giỏ Hàng</button>
                   
                         </div>

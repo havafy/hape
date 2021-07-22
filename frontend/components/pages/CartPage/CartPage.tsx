@@ -79,9 +79,10 @@ const CartPage: FC<Props> = ({}) => {
                       return(
                         <div className={s.cartByShop} key={index}>
                           <div className={s.shopTitle}>
-                            <Link href={'/shop/'+cart.shop.shopName}>
+                           {cart.shop && <Link href={'/shop/'+cart.shop.shopName}>
                               <a><AiOutlineShop />{cart.shop.shopName}</a>
-                              </Link></div>
+                              </Link> }
+                              </div>
                           <div className={s.itemBox}>
                           {cart.items.map((item: any, key: string) => {
                             return(

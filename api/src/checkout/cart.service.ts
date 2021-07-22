@@ -33,7 +33,7 @@ export class CartService {
                 }
                 const shopID = product.userID
                 if(userID === shopID){
-                    return {status: 500}
+                    return {statusCode: 500}
                 }
                  // check any cart with this shopID and this user
                 const cart = await this.getCartByUser(userID, shopID)
@@ -42,17 +42,19 @@ export class CartService {
                 if(cart){
                     return await this.update(cart, addToCartDto, userID)
         
-                }else{  // IF not: let create a new cart with this shopID and this user
+                }
+                // IF not: let create a new cart with this shopID and this user
+                if(!cart && quantity > 0) { 
                     return await this.create({ productID, quantity , userID, shopID })
                 }
               
             }catch (err){
-                return {
-                    cart: null,
-                    status: false,
-                }
+ 
             }
-            
+            return {
+                cart: null,
+                statusCode: 404,
+            }
         }
         async getCartByUser(userID: string, shopID: string) {
           
@@ -105,17 +107,20 @@ export class CartService {
                 // IF product is available from cart
                 if(found){
                     if(action === 'addToCart'){
-                        // increase quantity to this product
-                        cart.items[i].quantity += quantity
+                        if(quantity > 0){
+                            // increase quantity to this product
+                            cart.items[i].quantity += quantity
+                        }
                     }
   
                     if(action === 'setQuantity'){
                        if(quantity > 0){
                            // force to set quantity
                             cart.items[i].quantity = quantity 
-                       }else{
-                           // IF quantity is <= 0, let remove this item from cart
-                            delete cart.items[i]
+                       }
+                       if(quantity === 0){
+                            // IF quantity is <= 0, let remove this item from cart
+                            cart.items.splice(i,1)
                        }
                     }
                 }else{ // IF product not existing on cart
@@ -124,13 +129,15 @@ export class CartService {
                         cart.items.push({productID, quantity})
                     }
                 }
-               // return {cart, addToCartDto}
+
+
                 //IF items empty, let remove this cart
-                if(!cart.items.length || !cart.items[0]){
+                if(cart.items.length === 0){
+                    console.log('---', cart)
                     await this.esService.delete(ES_INDEX_CART, cart.id )
-                    return {status: true, cart: null}
+                }else{
+                    await this.rebuildCart(cart)
                 }
-                await this.rebuildCart(cart)
 
                 //wait for ES running index
                //  await new Promise(f => setTimeout(f, 700));

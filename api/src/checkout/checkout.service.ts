@@ -64,14 +64,14 @@ export class CheckoutService {
                  if(order){
                     orders.push(order)
                     payments.push({
-                        payment: '', 
-                        accountNumber: '',
-                        accountName: ''
+                        payment: 'MOMO_TRANSFER', 
+                        accountNumber: '4444',
+                        accountName: 'Nguyen van a'
                     })
                  }
         
             }
-            return {orders, payments}
+            return {orders, payments, statusCode: 200}
         }catch(err){
             console.log(err)
         }
@@ -81,7 +81,6 @@ export class CheckoutService {
     async createOrderByCart({cart, userID}) {
 
         const cartData = await this.cartService.getCartByUser(userID, cart.shopID)
-        console.log({cart, userID, cartData})
         //Not found any cart of this user and shop
         if(!cartData){
             return

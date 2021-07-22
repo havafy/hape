@@ -90,6 +90,14 @@
      transition-all duration-150
  
 }
+.buttonBase{
+    color: #fff!important;
+    background: var(--main-color)!important;
+
+    @apply tracking-wide items-center text-white inline-block px-10 py-2
+    shadow hover:shadow-lg outline-none 
+     transition-all duration-150
+}
 .button svg{
      @apply inline-block w-5 h-5 mr-1
 }

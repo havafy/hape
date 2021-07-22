@@ -11,7 +11,7 @@ export class ShopService {
     async getShopSummary(shopID: string) {
         const shop = await this.getByUserID(shopID)
         return {
-            shopName: shop.shopName,
+            shopName: shop ? shop.shopName : '',
             sales: 0,
             shopIcon: ''
         }

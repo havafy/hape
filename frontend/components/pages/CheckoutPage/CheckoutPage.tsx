@@ -25,8 +25,9 @@ const CheckoutPage: FC<Props> = ({}) => {
   const {accessToken, updateAction} = useAuth();
   const [ visible, setVisible] = useState(false)
   const [loading, setLoading] = useState<boolean>(false);
-  const [thanksPage, setThanksPage] = useState<any>();
+  const [createdOrders, setCreatedOrders] = useState<any[]>([]);
   const [changeAddress, setChangeAddress] = useState<boolean>(false);
+  const [paymentInfo, setPaymentInfo] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string>('');
   const [cartGroup, setCartGroup] = useState<{carts: any[], grandTotal: number, addresses: any[]}>({
     carts: [],
@@ -95,13 +96,13 @@ const CheckoutPage: FC<Props> = ({}) => {
             payment: "COD"
           }
       })
-      let {data} = await axios.post('/checkout',
+      let { data } = await axios.post('/checkout',
                 {addressID: selectedAddress, carts}, 
                 headerApi)
       await pullCart()
-      console.log('setThanksPage:', data)
-      if(data?.orders?.length){
-        setThanksPage(data)
+      if(data.statusCode === 200){
+        setCreatedOrders(data.orders)
+        setPaymentInfo(data.payments)
       }
   
     }catch(err){
@@ -171,9 +172,9 @@ const CheckoutPage: FC<Props> = ({}) => {
                   <div className="md:col-span-2 text-center">Số Lượng </div>
                   <div className="md:col-span-1">Tổng</div>
                 </div>
-              {cartGroup?.carts?.map((cart: any, index: number) => {
-                  return(
-                    <CartShopBox cart={cart} index={index}/>
+              {cartGroup?.carts?.map((cart: any, key: any) => {
+                  return(<div key={key}>
+                    <CartShopBox cart={cart} /> </div>
                     )
                 })}
             <div className={s.footer}>
@@ -212,9 +213,9 @@ const CheckoutPage: FC<Props> = ({}) => {
               </div>
               }
 
-      {thanksPage?.orders?.length && <ThanksPage data={thanksPage} />}
+      {createdOrders.length > 0 && <ThanksPage paymentInfo={paymentInfo} />}
 
-      {!thanksPage && cartGroup.grandTotal === 0 && <CartIsEmpty />}
+      {createdOrders.length ===0 && cartGroup.carts.length === 0 && <CartIsEmpty />}
           
           </div>
  
@@ -224,20 +225,30 @@ const CheckoutPage: FC<Props> = ({}) => {
     </>
   )
 }
-const ThanksPage: FC<{data: any }> = ({data}) =>{
-
+const ThanksPage: FC<{paymentInfo: any[] }> = ({paymentInfo}) =>{
+console.log('paymentInfo:', paymentInfo)
   return (<div className={s.addressBox}>
 
-    <h1 className="text-base mt-5 mb-8">Cảm ơn bạn đã đặt hàng!</h1>
+    <h1 className="text-xl font-semibold mt-5 mb-8">Cảm ơn bạn đã đặt hàng!</h1>
 
-    <Link href="/user/orders"><a>
-    <button className={s.button}>Quản lý đơn hàng </button>
-    </a></Link>
-    {data.payments?.map((payment: any) => {
+
+     {paymentInfo.map((payment: any, key: any) => {
+       /*
+       shopName: "2222"
+       order
+       accountName: "1111"
+accountNumber: "1111"
+payment: "222"*/
       return (
-        <div>{payment}</div>
+        <div key={key}>{payment.accountName}</div>
       )
     })}
+
+    <div className="my-10">
+      <Link href="/user/orders"><a>
+      <button className={s.buttonBase}>Quản lý đơn hàng </button>
+      </a></Link>
+    </div> 
   </div>)
 }
 const CartIsEmpty = () =>{
@@ -327,16 +338,20 @@ const SelectAddressForm: FC<{
 }
 
 
-const CartShopBox: FC<{cart: any; index: number}> = ({cart, index}) => {
+const CartShopBox: FC<{cart: any;}> = ({cart}) => {
 
 
-  return (  <div className={s.cartByShop} key={index}>
-    <div className={s.shopTitle}><AiOutlineShop />{cart.shop.shopName}</div>
+  return (  <div className={s.cartByShop}>
+    <div className={s.shopTitle}>
+    {cart.shop && <>
+      <AiOutlineShop />{cart.shop.shopName}
+      </> }
+      </div>
     <div className={s.itemBox}>
 
-    {cart.items.map((item: any, key: string) => {
+    {cart.items.map((item: any, keyIndex: any) => {
       return(
-        <div className={s.item} key={key}>
+        <div className={s.item} key={keyIndex}>
             <div className="md:col-span-8 flex">
               <span className="mr-5">
                  <img src={item.thumb} className={s.thumb} />
