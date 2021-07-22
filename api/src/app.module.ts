@@ -10,6 +10,7 @@ import { AddressModule } from "./address/address.module";
 import { ProductsModule } from "./products/products.module"
 import { CheckoutModule } from "./checkout/checkout.module";
 import { ShopModule } from "./shop/shop.module";
+import { OrdersModule } from "./orders/orders.module";
 import { PagesModule } from "./pages/pages.module"
 import { FilesModule } from "./files/files.module"
 import { ForgotPasswordModule } from "./forgot-password/forgot-password.module";
@@ -28,6 +29,7 @@ import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handleba
     FilesModule,
     SearchModule, 
     CheckoutModule,
+    OrdersModule,
     ProductsModule,
     ShopModule,
     AddressModule,

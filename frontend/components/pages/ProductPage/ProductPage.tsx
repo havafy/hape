@@ -124,7 +124,7 @@ const ProductPage: FC<Props> = ({pid}) => {
                             <button 
                             onClick={buyNow}
                             className={s.addNowButton}>Mua Ngay</button>
-                            <button onClick={addToCart} className={s.addToCartButton}><BiCart />Thêm Giỏ Hàng</button>
+                            <button onClick={e=>addToCart('')} className={s.addToCartButton}><BiCart />Thêm Giỏ Hàng</button>
                   
                         </div>
 

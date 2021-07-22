@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 interface Props {
   pid: string;
 }
-const PAGE_SIZE = 1
+const PAGE_SIZE = 30
 const CategoryPage: FC<Props> = ({pid}) => {
   const router = useRouter()
   let { page } = router.query
@@ -42,10 +42,10 @@ const CategoryPage: FC<Props> = ({pid}) => {
     <main className="mt-24">
       <div className={s.root}>
       <div className="md:grid md:grid-cols-12 md:gap-6">
-        <div className="md:col-span-2">
+        {/* <div className="md:col-span-2">
             <Sidebar />
-          </div>
-          <div className="md:col-span-10"> 
+          </div> */}
+          <div className="md:col-span-12"> 
           <h1 className={s.pageTitle}>{getName(pid)}</h1>
             { !loading && Array.isArray(products) && <div>
      
