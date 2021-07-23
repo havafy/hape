@@ -53,20 +53,24 @@ const ChangePassword: FC<any> = () => {
       }
   }
   const onNewPasswordChange = (event: any) =>{
+      setNewPassword(event.target.value)
       isPasswordValid(event.target.value)
       
     }
   const isPasswordValid = (password: string) =>{
+    let valid = false
     if(password.length < 7 || password.length  > 16){
-      setAlert('Mật khẩu phải dài từ 8-16 kí tự, bao gồm 1 chữ viết hoa và 1 chữ viết thường')
-      return false
+      valid = true
     }
     if (password == password.toLowerCase()){
-      setAlert('Mật khẩu phải có ký tự in hoa.')
-      return false
+      valid = true
     }
-    setNewPassword(password)
-    setAlert('')
+    if(valid){
+      setAlert('Mật khẩu phải dài từ 8-16 kí tự, bao gồm 1 chữ viết hoa và 1 chữ viết thường')
+    }else{
+      setAlert('')
+    }
+
   }
   
   return (
