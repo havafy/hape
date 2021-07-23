@@ -10,13 +10,23 @@ const ES_INDEX_ADDRESS = 'addresses'
 export class AddressService {
     constructor(readonly esService: SearchService) {}
     
-    async get(id: string = '') {
+    async getSummary(id: string ) {
 
-        if(!id ){
-            return {}
+        try {
+            const checking = await this.esService.findById(ES_INDEX_ADDRESS, id )
+            if(checking.found){
+                return {
+                    ...checking._source, 
+                    regionFull: await this.getFullNameRegion(checking._source)
+                }
+       
+            }
+
+        }catch (err) {
+          
         }
-        
-        return  {}
+        return {
+        }
     
     }
     async getByUserID(userID: string,  size: number, from: number) {

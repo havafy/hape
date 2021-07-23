@@ -3,6 +3,7 @@ import { SearchService } from '../search/search.service'
 import { CartService } from '../checkout/cart.service';
 import { ProductsService } from "../products/products.service"
 import { ShopService } from "../shop/shop.service"
+import { AddressService } from "../address/address.service"
 import { OrderDto  } from './dto/orders.dto'
 import { nanoid } from 'nanoid'
 export const PAYMENT_METHODS = [
@@ -25,7 +26,9 @@ export class OrdersService {
     constructor(readonly esService: SearchService,
         readonly productsService: ProductsService,
         readonly shopService: ShopService,
-        readonly cartService: CartService
+        readonly cartService: CartService,
+        readonly addressService: AddressService,
+        
         ) {}
     async getByUserID(userID: string, size: number, from: number){
         const { body: { 
@@ -79,7 +82,7 @@ export class OrdersService {
         return nanoid(20).toUpperCase()
     }
    
-    async createOrderByCart({cart, userID}) {
+    async createOrderByCart({cart, userID, addressID}) {
 
         const cartData = await this.cartService.getCartByUser(userID, cart.shopID)
         //Not found any cart of this user and shop
@@ -93,12 +96,14 @@ export class OrdersService {
         try{
             const orderNumber = await this.getOrderUniqueNumber()
             const cartID = cartData.id
+            const address = await this.addressService.getSummary(addressID)
 
             // sync cart to order
             delete cartData.id //clean up
             let order = {
                 ...cartData,
                 orderNumber,
+                address,
                 shipping: cart.shipping,
                 payment: cart.payment,
                 paymentStatus: 'WAITING',
@@ -129,5 +134,27 @@ export class OrdersService {
         return null
 
     }
+    async getOrder(id:string, userID: string) {
+        
+        try {
+            const check = await this.esService.findById(ES_INDEX_ORDER, id )
+            if(check.found){
+                if(check._source.userID !== userID ){
+                    return { statusCode: 500 }
+                }
+                const shop = await this.shopService.getShopSummary(check._source.shopID)
+                return {
+                    order: { ...check._source, id: check._id, shop}
+                }
+            }
 
+
+        }catch (err) {
+        
+        }
+        return {
+            statusCode: 404,
+            message: "This order is not found.",
+        }
+    }
 }

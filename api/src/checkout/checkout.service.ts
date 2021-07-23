@@ -27,7 +27,7 @@ export class CheckoutService {
                     return {message: 'Do not support this shipping: ' + cart.shipping}
                 }
                 const order = await this.ordersService.createOrderByCart({
-                    cart, userID
+                    cart, userID, addressID: checkoutDto.addressID
                  })
                  if(order){
                     orders.push(order)
