@@ -18,6 +18,8 @@ export { default as AddressBook } from './User/AddressBook'
 export { default as ShopProductForm } from './User/ShopProductForm'
 export { default as ShopProducts } from './User/ShopProducts'
 export { default as ShopOrders } from './User/ShopOrders'
+export { default as ShopOrderDetail } from './User/ShopOrderDetail'
+
 export { default as ShopSettings } from './User/ShopSettings'
 
 export { default as Profile } from './User/Profile'

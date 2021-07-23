@@ -1,53 +1,63 @@
-.h1{
+.pageTitle{
     @apply text-2xl font-bold mb-10 uppercase text-gray-700
 }
-.label {
-    font-size: 0.8rem!important;
-    @apply block uppercase text-xs font-bold mb-2 ml-1 text-gray-700
-  }
-.input {
-    @apply px-3 py-2 bg-white rounded text-sm  focus:outline-none focus:ring w-full ease-linear transition-all duration-150
-}   
-
+.ordersBox{
+    @apply shadow py-5 px-5 mb-5 bg-white
+}
 .button{
     color: #fff!important;
     background: var(--main-color)!important;
-  @apply flex hover:text-white tracking-wide items-center justify-center text-white text-sm font-bold uppercase px-7 py-3 shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150
+  @apply flex  items-center
+   justify-center text-white text-sm font-bold uppercase
+    px-7 py-3 shadow hover:shadow-lg
+     mb-3 ease-linear transition-all duration-150
  
 }
-.formBox{
-    @apply shadow sm:pr-16  px-12 py-5 my-10 bg-white
+.addButtonSvg{
+    margin: -2px 2px 0 0;
+    width: 20px!important;
+    height: 20px!important;
+    @apply inline 
 }
-.checkbox{
-    margin-top: 6px;
-    min-width: 16px;
-    @apply h-5 w-5 text-gray-600 lg:col-span-1
-}
-.checkCard:hover{
-    background-color: #ffd5b8ad;
-}
-.checkCard{
-    @apply bg-white rounded shadow-md px-5 py-5 my-2 flex  cursor-pointer
-}
-.checkCard label{
 
-    @apply font-semibold
+.productName {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    display: block;
+  }
+
+.grandTotalWrap{
+    @apply  text-right self-center text-gray-700
 }
-@media only screen and (max-width: 640px){
-    .checkCard label{
-        max-width: none;
-    }
+.grandTotalText{
+ @apply flex
 }
-.infoBox h3{
-    @apply mt-5 text-xl mb-1
-}
-.infoBox label{
-    @apply block uppercase font-bold my-2
-}
-.infoBox p{
-    @apply text-base mb-16
-}
-.infoBox a{
-    @apply text-base text-indigo-500 font-bold
+.grandTotal{
     
+    color: var(--main-color);
+    @apply inline-block text-xl font-bold ml-2 self-center
+}
+.orderItem{
+    border-top: 1px solid #f2f2f2;
+    @apply grid grid-cols-12 py-5
+}
+.orderFooter{
+    border-top: 1px dashed #dacfba;
+    @apply grid grid-cols-12 pt-5
+}
+.shopTitle{
+
+}
+.shopTitle a{
+    @apply font-bold  text-gray-700
+}
+.shopTitle svg{
+    fill: #777;
+    @apply inline-block w-5 h-5 mr-2 
+}
+.orderNumber{
+  
+    @apply uppercase  text-gray-600
 }

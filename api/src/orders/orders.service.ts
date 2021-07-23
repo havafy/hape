@@ -4,7 +4,7 @@ import { CartService } from '../checkout/cart.service';
 import { ProductsService } from "../products/products.service"
 import { ShopService } from "../shop/shop.service"
 import { AddressService } from "../address/address.service"
-import { OrderDto  } from './dto/orders.dto'
+import { OrderUpdateDto  } from './dto/order-update.dto';
 import { nanoid } from 'nanoid'
 export const PAYMENT_METHODS = [
     'COD','ZALO_TRANSFER', 'MOMO_TRANSFER', 'BANK_TRANSFER',
@@ -56,12 +56,39 @@ export class OrdersService {
             orders
         }
     }
+    async getByShopID(shopID: string, size: number, from: number){
+        const { body: { 
+            hits: { 
+                total, 
+                hits 
+            } } } = await this.esService.findBySingleField(
+                ES_INDEX_ORDER, { shopID }, size, from, [{"createdAt": "desc"}])
+        const count = total.value
+        let orders = []
+        if(count){
+            for(let item of hits){
+                const shop = await this.shopService.getShopSummary(item._source.shopID)
+                orders.push({
+                    id: item._id,
+                    ...item._source,
+                    shop
+                 })
+            }
+        }
+        return {
+            count,
+            size,
+            from,
+            orders
+        }
+    }
+    
     async getOrderUniqueNumber (){
   
         try{
             let i = 0
             while(true){
-                let orderNumber =  nanoid(10).toUpperCase()
+                let orderNumber =  nanoid(8).toUpperCase()
                 const { body: { 
                     hits: { 
                         total, 
@@ -157,4 +184,64 @@ export class OrdersService {
             message: "This order is not found.",
         }
     }
+    async getOrderByShop(id:string, userID: string) {
+        
+        try {
+            const check = await this.esService.findById(ES_INDEX_ORDER, id )
+            if(check.found){
+                if(check._source.shopID !== userID ){
+                    return { statusCode: 500 }
+                }
+                const shop = await this.shopService.getShopSummary(check._source.shopID)
+                return {
+                    order: { ...check._source, id: check._id, shop}
+                }
+            }
+
+        }catch (err) {
+        
+        }
+        return {
+            statusCode: 404,
+            message: "This order is not found.",
+        }
+    }
+    async updateOrderByShop(id:string, userID: string, orderUpdateDto: OrderUpdateDto) {
+        
+        try {
+            const check = await this.esService.findById(ES_INDEX_ORDER, id )
+            if(check.found){
+                if(check._source.shopID !== userID ){
+                    return { statusCode: 500 }
+                }
+                //checking is correct Payment and Shipping
+                if(!STATUS.includes(orderUpdateDto.status)){
+                    return {statusCode: 500}
+                }
+                if(!PAYMENT_STATUS.includes(orderUpdateDto.paymentStatus)){
+                    return {statusCode: 500}
+                }
+                const now = new Date()
+                orderUpdateDto['updatedAt'] = now.toISOString()
+    
+                await this.esService.update(ES_INDEX_ORDER, id , orderUpdateDto)
+                const order = await this.esService.findById(ES_INDEX_ORDER, id )
+                const shop = await this.shopService.getShopSummary(check._source.shopID)
+                return {
+                    statusCode: 200,
+                    order: { ...order._source, id, shop}
+                }
+            }
+
+        }catch (err) {
+            console.log('err',err)
+        }
+        return {
+            statusCode: 404,
+            message: "This order is not found.",
+        }
+    }
+
+
+    
 }

@@ -429,6 +429,6 @@ body.layout{
 .order-page .label-SHIPPING{
   background: #c8e0ff;
 }
-.order-page .label-SHIPPING-FAIL{
+.order-page .label-SHIPPING_FAIL{
   background: #ffa6a6;
 }

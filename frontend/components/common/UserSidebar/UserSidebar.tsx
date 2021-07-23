@@ -41,7 +41,7 @@ const UserSidebar: FC<Props> = ({pid}) => (
         <div className="list-menu">
             <MenuItem subMenu="shop-products" title='Sản phẩm' pid={pid}><RiDatabase2Line /></MenuItem>
             <MenuItem subMenu="shop-orders" title='Đơn hàng' pid={pid} ><FaMoneyCheck /></MenuItem>
-            <MenuItem subMenu="shop-settings" title='Cấu hình' pid={pid} ><RiSettings5Line /></MenuItem>
+            {/* <MenuItem subMenu="shop-settings" title='Cấu hình' pid={pid} ><RiSettings5Line /></MenuItem> */}
          </div>
     </div>
     <div className='menu-box'>

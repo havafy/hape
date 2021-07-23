@@ -26,13 +26,13 @@ export class ChangePasswordController {
 
       return res.status(HttpStatus.OK).json({
         message: 'Request Change Password Successfully!',
-        status: 200,
+        statusCode: 200,
       });
     } catch (err) {
       console.log(err)
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: 'Error: Change password failed!',
-        status: 400,
+        statusCode: 400,
       });
     }
   }

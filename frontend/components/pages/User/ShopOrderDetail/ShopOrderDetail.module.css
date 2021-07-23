@@ -1,0 +1,111 @@
+.h1{
+    @apply text-2xl font-bold mb-10 uppercase text-gray-700
+}
+.orderBox{
+    @apply shadow py-5 px-5 mb-5 bg-white
+}
+.button{
+    color: #fff!important;
+    background: var(--main-color)!important;
+  @apply inline-block  text-xs items-center
+   justify-center text-white text-sm font-bold uppercase
+    px-4 py-2 shadow hover:shadow-lg
+ ease-linear transition-all duration-150
+ 
+}
+
+.gotoBackWrap{
+    padding: 5px 0 0 0;
+    @apply inline-block
+
+}
+.gotoBack{
+    color: #555;
+    @apply font-bold text-sm flex
+}
+.gotoBack svg{
+    width: 22px;
+    height: 23px;
+    margin: 0px 3px 0 0;
+
+}
+
+.addButtonSvg{
+    margin: -2px 2px 0 0;
+    width: 20px!important;
+    height: 20px!important;
+    @apply inline 
+}
+.summaryBox{
+    border-bottom: 1px dashed #c7c7c7; 
+
+    @apply pb-5  text-gray-600
+ 
+}
+.productName {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    display: block;
+  }
+
+.grandTotalWrap{
+    @apply  text-right self-center text-gray-700
+}
+.grandTotalText{
+ @apply flex
+}
+.grandTotal{
+    
+    color: var(--main-color);
+    @apply inline-block text-xl font-bold mt-3 ml-2 self-center
+}
+.orderItem{
+    border-top: 1px solid #f2f2f2;
+    @apply grid grid-cols-12 py-5
+}
+.orderFooter{
+    border-top: 1px dashed #dacfba;
+    @apply grid grid-cols-12 pt-5
+}
+.fieldRow{
+    @apply my-2 flex
+}
+.fieldRowLarge{
+    @apply my-4 flex
+}
+.value{
+    min-width: 230px;
+    @apply ml-5
+    
+}
+.infoBox{
+    border-top: 1px dashed #dcdcdc;
+    @apply pt-5 pb-10 mt-5 grid grid-cols-12 
+}
+.infoBox h2{
+    @apply font-semibold text-gray-500 text-base uppercase mb-5
+}
+.label{
+    min-width: 150px;
+    @apply text-gray-500 text-right inline-block
+}
+.paymentBox{
+    border-left: 1px solid #dcdcdc;
+    @apply col-span-7 pl-10
+}
+.shopTitle{
+
+}
+.shopTitle a{
+    @apply font-bold  text-gray-700
+}
+.shopTitle svg{
+    fill: #777;
+    @apply inline-block w-5 h-5 mr-2 
+}
+.orderNumber{
+  
+    @apply uppercase flex items-center text-gray-600
+}

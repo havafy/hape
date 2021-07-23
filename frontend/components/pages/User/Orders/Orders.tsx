@@ -68,12 +68,12 @@ return (
                         {order.items && order.items.map((item:any)=> { 
                           return(<div className={s.orderItem}>
                               <div className="col-span-2">
-                              <Link href={'/user/orderDetail?id=' + order.id }>
+                              <Link href={'/user/order-detail?id=' + order.id }>
                                 <a><img className="h-28" src={item.thumb} /> </a> 
                                 </Link>
                               </div>
                                 <div className="col-span-8">
-                                <Link href={'/user/orderDetail?id=' + order.id }><a>
+                                <Link href={'/user/order-detail?id=' + order.id }><a>
                                   <div>{item.name}</div>
                                   <div>x{item.quantity}</div>
                                   </a> 
