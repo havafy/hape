@@ -84,7 +84,7 @@ const ProductPage: FC<Props> = ({pid}) => {
             <div className={s.boxWrap}>
                   <div className="mb-3">
                   <div className={s.categoryMenu}>
-                          <Link href={'/category/'+ product.category}>
+                          <Link href={'/c/'+ product.category}>
                             <a>{getName(product.category)}</a>
                             </Link> 
                             <IoIosArrowForward />

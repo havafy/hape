@@ -12,6 +12,7 @@ export { default as Demo } from './Services/Demo'
 export { default as Error } from './Error'
 
 export { default as Orders } from './User/Orders'
+export { default as OrderDetail } from './User/OrderDetail'
 export { default as AddressBook } from './User/AddressBook'
 
 export { default as ShopProductForm } from './User/ShopProductForm'
@@ -25,4 +26,5 @@ export { default as CategoryPage } from './CategoryPage'
 export { default as ProductPage } from './ProductPage'
 export { default as CartPage } from './CartPage'
 export { default as CheckoutPage } from './CheckoutPage'
+
 

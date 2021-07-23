@@ -15,14 +15,14 @@
     @apply md:grid md:grid-cols-12 md:gap-6 
 }
 .cartByShop{
-    @apply bg-white shadow
+    @apply bg-white shadow mt-5
 }
 .itemBox{
     @apply py-3 px-7
 }
 .shopTitle{
     border-bottom: 1px solid #f2f2f2;
-    @apply  py-3 px-7 
+    @apply py-3 px-7 font-bold
 }
 .shopTitle svg{
     fill: #777;

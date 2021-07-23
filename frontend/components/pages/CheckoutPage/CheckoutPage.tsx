@@ -103,6 +103,7 @@ const CheckoutPage: FC<Props> = ({}) => {
       if(data.statusCode === 200){
         setCreatedOrders(data.orders)
         setPaymentInfo(data.payments)
+        window.scrollTo(0, 0)
       }
   
     }catch(err){

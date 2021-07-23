@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
-import s from './Orders.module.css'
+import s from './OrderDetail.module.css'
 import { RiDeleteBin6Line, RiAddFill } from 'react-icons/ri'
 import { useAuth } from '@context/AuthContext'
 import {getName} from '@config/category'
@@ -10,7 +10,7 @@ import { getProductUrl, currencyFormat } from '@lib/product'
 import { renderPaymentLabel, renderStatusLabel} from '@lib/orders'
 
 const PAGE_SIZE = 30
-const Orders: FC = () => {
+const OrderDetail: FC = () => {
   const { user, accessToken } = useAuth();
   const [current, setCurrent]= useState<number>(1)
   const [ordersTotal, setOrdersTotal] = useState(0)
@@ -106,4 +106,4 @@ return (
   )
 }
 
-export default Orders
+export default OrderDetail

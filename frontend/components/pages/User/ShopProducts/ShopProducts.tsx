@@ -68,9 +68,10 @@ const rowSelection = {
 const hasSelected = selectedRowKeys.length > 0;
 return (
         <div className="">
-          <h1 className={s.h1}>Danh sách sản phẩm</h1>
+
             <div className={s.formBox}>
             <div>
+              <h1 className={s.h1}>Danh sách sản phẩm</h1>
               <div className="mb-3 grid grid-cols-2">
                   <div className="col-span-1">
                     <Button type="primary" onClick={deleteProducts} disabled={!hasSelected} loading={loading}>

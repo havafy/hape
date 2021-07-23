@@ -33,7 +33,7 @@ const CategoryPage: FC<Props> = ({pid}) => {
   const onPageNumberChange = (pageRq: number) => {
 
     router.push({
-          pathname: '/category/'+ pid,
+          pathname: '/c/'+ pid,
           query: { page: pageRq},
         })
   };

@@ -25,6 +25,12 @@ export class OrderDto {
   @IsNumber()
   subtotal: number;
 
+  @MaxLength(10)
+  paymentStatus: string; // waiting, completed, fail
+
+  @MaxLength(10)
+  status: string; //   'COMPLETED','PENDING', 'PROCESSING','SHIPPING', 'SHIPPING_FAIL', 'CANCELLED'
+
   @IsOptional()
   @IsNumber()
   @Min(1)

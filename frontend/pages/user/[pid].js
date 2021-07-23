@@ -2,7 +2,7 @@ import { Layout, UserSidebar} from '@components/common'
 import { 
   Orders, AddressBook, 
   ShopProductForm, ShopProducts, ShopOrders, ShopSettings,
-  Profile, ChangePassword
+  Profile, ChangePassword, OrderDetail
 } from '@components/pages'
 import { Error } from '@components/pages'
 import { useAuth } from '@context/AuthContext'
@@ -23,6 +23,8 @@ export default function Page() {
           </div>
           <div className="mt-5 md:col-span-10 ml-10">
                 {pid === 'orders' &&  <Orders /> }
+                {pid === 'orderDetail' &&  <OrderDetail /> }
+                
                 {pid === 'address-book' &&  <AddressBook /> }
 
                 {pid === 'shop-products' &&  <ShopProducts /> }

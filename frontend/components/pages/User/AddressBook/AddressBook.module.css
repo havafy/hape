@@ -1,8 +1,8 @@
 .h1{
-    @apply text-2xl font-bold mb-10 uppercase text-gray-700
+    @apply text-xl font-bold uppercase text-gray-700
 }
 .formBox{
-    @apply shadow px-6 py-5 my-5 bg-white
+    @apply shadow px-6 py-5 bg-white
 }
 .button{
     color: #fff!important;

@@ -66,12 +66,11 @@ const setThisIsDefault = async (address: any) => {
 
 return (<>
         <div className="">
-          <h1 className={s.h1}>Địa Chỉ Của Tôi</h1>
             <div className={s.formBox}>
             <div>
-              <div className="mb-3 grid grid-cols-2">
+              <div className="grid grid-cols-2">
                   <div className="col-span-1">
-       
+                  <h1 className={s.h1}>Địa Chỉ Của Tôi</h1>
                   </div>
                     <div className="col-span-1 text-right">
               

@@ -74,11 +74,10 @@ export class CartService {
                         console.log('[ALERT] CART count over 1', userID)
                     }
                     const cart = hits[0]._source
-                    const shop = await this.shopService.getShopSummary(shopID)
+
                     return {
                         id: hits[0]._id,
-                        ...cart, 
-                        shop
+                        ...cart
                     }
                 }
             }catch (err){
@@ -275,11 +274,14 @@ export class CartService {
         let quantityTotal = 0
         let grandTotal = 0
         let carts = []
+
         if(count){
             for(let cart of hits){
+                const shop = await this.shopService.getShopSummary(cart._source.shopID)
                 carts.push({
                     id: cart._id,
                     ...cart._source,
+                    shop,
                     payments,
                     shippings
                   

@@ -30,7 +30,7 @@
     @apply md:col-span-3 pt-2 text-right text-gray-600
 }
 .formBox{
-    @apply shadow sm:pr-16  px-12 pt-10 pb-20 bg-white
+    @apply shadow sm:pr-16  px-12 pt-5 pb-20 bg-white
 }
 .checkbox{
     margin-top: 6px;

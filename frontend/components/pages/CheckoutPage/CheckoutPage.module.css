@@ -21,7 +21,7 @@
     @apply md:grid md:grid-cols-12 md:gap-6 
 }
 .cartByShop{
-    @apply bg-white shadow
+    @apply bg-white shadow mt-5
 }
 .itemBox{
     @apply py-3 px-7

@@ -9,13 +9,20 @@ export class ShopService {
     constructor(readonly esService: SearchService) {}
     
     async getShopSummary(shopID: string) {
-        const shop = await this.getByUserID(shopID)
-        return {
-            shopName: shop ? shop.shopName : '',
-            sales: 0,
-            shopIcon: ''
+        try { 
+            const shop = await this.getByUserID(shopID)
+            if(shop !== null){
+                return {
+                    id: shop.id,
+                    shopName: shop.shopName ? shop.shopName : '',
+                    sales: 0,
+                    shopIcon: ''
+                }
+            }
+
+        }catch (err){
+            console.log(err)
         }
-    
     }
     async updateByUser(shop: {userID: string, shopName: string}){
         try {

@@ -13,7 +13,7 @@ const CategoryMenu: React.FC = () =>{
             {categoryTree.map(((category, key)=>(
 
                 <div className={s.menuItem} key={key}>
-                    <Link href={'/category/' + category.value} >
+                    <Link href={'/c/' + category.value} >
                         <a>{category.title}</a>
                    </Link>
                 </div>

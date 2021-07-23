@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { SearchService } from '../search/search.service'
 import { CartService } from '../checkout/cart.service';
 import { ProductsService } from "../products/products.service"
+import { ShopService } from "../shop/shop.service"
 import { OrderDto  } from './dto/orders.dto'
 import { nanoid } from 'nanoid'
 export const PAYMENT_METHODS = [
@@ -12,15 +13,45 @@ export const PAYMENT_METHODS = [
 export const SHIPPING_METHODS = [
     'UPS','BY_SHOP', 'VNPOST', 'GHN', 'GHTK', 'NINJAVAN'
 ]
+export const STATUS = [
+    'COMPLETED','PENDING', 'PROCESSING','SHIPPING', 'SHIPPING_FAIL', 'CANCELLED'
+]
+export const PAYMENT_STATUS = [
+    'COMPLETED','WAITING', 'FAIL'
+]
 const ES_INDEX_ORDER = 'orders'
 @Injectable()
 export class OrdersService {
     constructor(readonly esService: SearchService,
         readonly productsService: ProductsService,
+        readonly shopService: ShopService,
         readonly cartService: CartService
         ) {}
-    async getByUserID(userID: string){
-        return {userID}
+    async getByUserID(userID: string, size: number, from: number){
+        const { body: { 
+            hits: { 
+                total, 
+                hits 
+            } } } = await this.esService.findBySingleField(
+                ES_INDEX_ORDER, { userID }, size, from, [{"createdAt": "desc"}])
+        const count = total.value
+        let orders = []
+        if(count){
+            for(let item of hits){
+                const shop = await this.shopService.getShopSummary(item._source.shopID)
+                orders.push({
+                    id: item._id,
+                    ...item._source,
+                    shop
+                 })
+            }
+        }
+        return {
+            count,
+            size,
+            from,
+            orders
+        }
     }
     async getOrderUniqueNumber (){
   
@@ -70,6 +101,8 @@ export class OrdersService {
                 orderNumber,
                 shipping: cart.shipping,
                 payment: cart.payment,
+                paymentStatus: 'WAITING',
+                status: 'PROCESSING',
                 createdAt,
                 updatedAt
             }
