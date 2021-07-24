@@ -30,8 +30,8 @@ const ShopProductForm: FC = () => {
   const [product, setProduct] = useState({})
   const [status, setStatus] = useState(true)
   const [tags, setTags] = useState<string[]>([])
-  const [category, setCategory] = useState()
-    
+  const [category, setCategory] = useState<string>('')
+  const [categoryResults, setCategoryResults] = useState<any[]>([])
   const [fileList, setFileList] = useState<any>([]);
   const [expiryDate, setExpiryDate] = useState<string>()
   const [discountDate, setDiscountDate] = useState<string[]>(['', ''])
@@ -153,6 +153,17 @@ const ShopProductForm: FC = () => {
   const onExpiryDateChange = (date: any, dateString: string) => {
     setExpiryDate(dateString);
   }
+  const typingCategoryInput = async (event: any) =>{
+    const keyword = event.target.value
+    if(keyword!==''){
+      let { data: {categories} } = await axios.get('/categories?keyword=' + keyword, headerApi)
+      setCategoryResults(categories)
+      setCategory(keyword)
+    }else{
+      setCategoryResults([])
+    }
+    
+  }
   
   return (
     <>
@@ -214,6 +225,14 @@ const ShopProductForm: FC = () => {
                   </div>
               </div>
               <div className="mt-8 md:grid md:grid-cols-3 md:gap-6">
+              <div className="md:col-span-1">
+                  <label className={s.label}>Giá sản phẩm(₫)</label>
+                    <Form.Item name="price"   
+                    rules={[
+                      { required: true, message: 'Vui lòng nhập giá.', }]}>
+                    <InputNumber min={1000} max={90000000} placeholder='Giá sản phẩm' className={s.input}  />
+                    </Form.Item>
+                    </div>
                 <div className="md:col-span-1">
                  <label className={s.label}>Mã sản phẩm(SKU)</label>
                   <Form.Item name="sku"
@@ -230,31 +249,25 @@ const ShopProductForm: FC = () => {
                     <InputNumber min={1} max={1000} placeholder='Số lượng sản phẩm(nếu có)' className={s.input}  />
                   </Form.Item>
                 </div>
-                <div className="md:col-span-1">
-                <label className={s.label}>Danh mục</label>
-       
-                  <TreeSelect
-                    showSearch
-                      style={{ width: '100%' }}
-                      value={category}
-                      dropdownStyle={{ maxHeight: 500, overflow: 'auto' }}
-                      treeData={categoryTree}
-                      placeholder="Chọn danh mục"
-                      treeDefaultExpandAll
-                      onChange={(value: any) => setCategory(value)}
-                    /> 
-                    </div>
+      
+                </div>
+                <div className="mt-8 relative">
+                  <label className={s.label}>Danh mục</label>
+                  <input type="text" 
+                    onChange={typingCategoryInput} className={s.input}
+                  />
+                  {categoryResults.length > 0 && <div className={s.dropdownBox}>
+                    {categoryResults.map((category: any)=>{
+                      return (<div className={s.dropdownItem}>
+                       
+                       {category.parentName.reverse().join(' / ')} / {category.display_name}
+                        </div>)
+                    })}  
+                  </div>}
                 </div>
               <div className="mt-8 md:grid md:grid-cols-3 md:gap-6">
-                <div className="md:col-span-1">
-                  <label className={s.label}>Giá sản phẩm(₫)</label>
-                   <Form.Item name="price"   
-                   rules={[
-                     { required: true, message: 'Vui lòng nhập giá.', }]}>
-                   <InputNumber min={1000} max={90000000} placeholder='Giá sản phẩm' className={s.input}  />
-                  </Form.Item>
-                </div>
-                <div className="md:col-span-1">
+
+                {/* <div className="md:col-span-1">
                   <label className={s.label}>Giá khuyến mãi(₫)</label>
                    <Form.Item name="priceDiscount" >
                     <InputNumber min={1000} max={90000000} placeholder='Giá sản phẩm' type="number" className={s.input}  />
@@ -274,7 +287,7 @@ const ShopProductForm: FC = () => {
                       </ConfigProvider>
                     </div>
                 
-                </div>
+                </div> */}
               </div>
 
               <div className="relative w-full mb-3">

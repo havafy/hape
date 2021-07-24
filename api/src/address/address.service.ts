@@ -295,7 +295,7 @@ export class AddressService {
              }
         }
         
-         await this.esService.createByBulk(ES_INDEX_REGION, records )
+         await this.esService.createByBulk(ES_INDEX_REGION, records ,'')
      }
 
 }

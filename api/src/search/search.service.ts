@@ -30,24 +30,28 @@ export class SearchService {
         }
         return false;
     }
-    async createByBulk(index: string, body: any){
-        
-        return await this.esService.bulk({ index, refresh: 'wait_for', body })
+    async createByBulk(index: string, body: any, refresh: string =  'wait_for'){
+        const insert = { index, body }
+         // waiting for indexing before return
+        if(refresh !== ''){
+            insert['refresh'] = refresh
+        }
+        return await this.esService.bulk(insert)
     }
 
-    async update(index: string,  id: string, body: any){
+    async update(index: string,  id: string, body: any, refresh: string =  'wait_for'){
         delete body.id
 
         try{
-            return await this.esService.update({
+            const insert = {
                 index, type: '_doc', id,
-                refresh: 'wait_for', // waiting for indexing before return
-                body: {
-                    doc: {
-                    ...body 
-                    }
-                }
-            })
+                body: { doc: { ...body} }
+            }
+             // waiting for indexing before return
+            if(refresh !== ''){
+                insert['refresh'] = refresh
+            }
+            return await this.esService.update(insert)
            
         }catch(err){
             console.log(err)
@@ -67,10 +71,9 @@ export class SearchService {
         return true
     }
     async findBySingleField(index: string, queryMatch: any, size = 30, from = 0, sort = []) {
-        const reqParams = {
-            index,
-            body: { size,  from,
-                query: {  match: { ...queryMatch }   }  }
+        const reqParams = {index, body: { size,  from }}
+        if(queryMatch){
+            reqParams.body['query'] = {  match: { ...queryMatch }   }
         }
         if(sort.length){
             reqParams.body['sort'] = sort
@@ -78,7 +81,7 @@ export class SearchService {
         const res = await this.esService.search(reqParams)
         return res
     }
-    async findByMultiFields({index, must, must_not = null, size = 30, from = 0, sort = []}) {
+    async findByMultiFields({index, must, must_not = null, size = 30, from = 0, sort = [],  _source = null}) {
         const reqParams = {
             index,
             body: {
@@ -92,6 +95,9 @@ export class SearchService {
         }
         if(must_not){
             reqParams.body.query.bool['must_not'] = must_not
+        }
+        if(Array.isArray(_source)){
+            reqParams.body['_source'] = _source
         }
         const res = await this.esService.search(reqParams)
         return res
@@ -112,27 +118,18 @@ export class SearchService {
         return res
     }
     
-    async search(search: string) {
-        let results = [];
-        const { body } = await this.esService.search({
-            index: 'test',
-            body: {
-                size: 12,
-                query: {
-                    match: {
-                        'title.complete': {
-                            query: search,
-                        },
+    async search(index: string, body: any) {
+        /*
+        body: {
+            size: 12,
+            query: {
+                match: {
+                    'title.complete': {
+                        query: search,
                     },
                 },
-            },
-        });
-        const hits = body.hits.hits;
-        hits.map(item => {
-            results.push(item._source);
-        });
-
-        return { results, total: body.hits.total.value };
+            } }*/
+        return await this.esService.search({index, body});
     }
 
 }

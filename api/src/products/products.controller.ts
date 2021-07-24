@@ -1,12 +1,15 @@
 import { Controller, Get,Put, Body, Res, Post, UseGuards, Param, Delete } from '@nestjs/common';
 import { ProductsService } from './products.service';
+import { CategoriesService } from './categories.service';
 import { ProductDto } from './dto/product.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ProductGetDto  } from './dto/product-get.dto';
 @UseGuards(AuthGuard('jwt'))  
 @Controller()
 export class ProductsController {
-    constructor(public readonly productService: ProductsService) {}
+    constructor(public readonly productService: ProductsService,
+        public readonly categoriesService: CategoriesService
+        ) {}
  
     @Post('/api/products')
     async create(@Res() res,  @Body() productDto: ProductDto): Promise<any> {
@@ -50,4 +53,16 @@ export class ProductsController {
         const data = await this.productService.remove(userID, id)
         return res.json(data)
     }
+    @Get('/api/categories')
+    async categoryGet(@Res() res): Promise<any> {
+        let { keyword = '' } = res.req.query
+
+        return res.json(await this.categoriesService.search(keyword))
+    }
+    @Get('/api/categories/reIndex')
+    async categoryReindex(@Res() res): Promise<any> {
+        return res.json(await this.categoriesService.reIndex())
+    }
+
+
 }

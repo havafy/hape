@@ -157,9 +157,7 @@ export class ProductsService {
             status: false,
         }
     }
-    async search(search: string = '') {
-        return await this.esService.search(search);
-    }
+
     async getRawProduct(id: string) {
         try {
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
@@ -223,7 +221,10 @@ export class ProductsService {
         }
     }
     async createIndex(){
-        this.esService.createIndex(ES_INDEX_NAME, this.indicateBody())
+        const existing = await this.esService.checkIndexExisting(ES_INDEX_NAME)
+        if(!existing){
+            this.esService.createIndex(ES_INDEX_NAME, this.indicateBody())
+        }
     }
     indicateBody() {
         return {
