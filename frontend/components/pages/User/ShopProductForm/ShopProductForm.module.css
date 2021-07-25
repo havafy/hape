@@ -62,6 +62,10 @@
 .categoryParent {
  @apply text-gray-600
 }
+.categoryInput:hover {
+    border: 1px solid #888;
+    transition: border-color .3s ease;
+}
 .categoryInput svg{
     color: #888;
     @apply flex w-5 h-5 

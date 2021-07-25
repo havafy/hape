@@ -22,3 +22,6 @@
     min-width: 16px;
     @apply h-5 w-5 text-gray-600 lg:col-span-1
 }
+.line{
+    @apply w-full text-gray-600 text-center my-5
+}

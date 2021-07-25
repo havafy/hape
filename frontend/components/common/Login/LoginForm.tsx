@@ -5,6 +5,7 @@ import cn from 'classnames'
 import axios from 'axios'
 import s from './LoginForm.module.css'
 import { Form, Input, Button, Modal } from 'antd'
+import { RegisterForm } from '@components/common'
 import { useAuth } from '@context/AuthContext';
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
@@ -140,20 +141,23 @@ const LoginForm = () => {
                   </div>
             </div>
 
-        <div className="my-5 text-center text-gray-800"> -- hoặc đăng nhập với -- </div>
+        <div className={s.line}>hoặc</div>
       <Form name="basic" initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}>
         <TextInput name="email" title="Email" type="text"  required />
         <TextInput name="password" title="Mật khẩu" type="password"  required />
-        <div className="relative w-full mt-10 justify-center">
+        <div className="relative w-full mt-10 justify-center grid grid-cols-2">
+        <div className="col-span-2">
             <button type="submit" disabled={isLoading} className={s.button} >
-            { !isLoading ? 'Đăng ký' : 'Xử lý...' }
-            </button>
+            { !isLoading ? 'Đăng nhập' : 'Xử lý...' }
+            </button>             <RegisterForm  />
+            </div>
+  
         </div>
 
         </Form>
-          
+
       </Modal>
       </>
   )

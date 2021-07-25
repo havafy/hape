@@ -150,7 +150,7 @@ const RegisterForm = () => {
   }
   return (
     <>
-      <button onClick={showModal} className="button arrow">Đăng ký</button>
+      <button onClick={showModal} className="ml-5 font-bold">Đăng ký tài khoản</button>
 
       <Modal title="Đăng ký thành viên" className="auth-form-modal"
       visible={visible} onOk={handleOk} confirmLoading={false} onCancel={handleCancel} footer={null} >

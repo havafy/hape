@@ -13,10 +13,11 @@ const UserNav: FC<Props> = ({ className }) => {
   return (
     <nav className={cn(s.root, className)}>
       <div className={s.mainContainer}>
-      <CartBox />
+     
       {typeof window !== 'undefined' && (
           <AuthMenu />
         )}
+         <CartBox />
       </div>
     </nav>
   )

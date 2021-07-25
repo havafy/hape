@@ -178,13 +178,21 @@ const ShopProductForm: FC = () => {
   const pickupCategory = (category: any) =>{
     console.log('pickupCategory', category)
     setCategoryID(category.id)
-    setCategory(getFullCategoryName(category))
+    setCategory(getFullCategoryName(category, false))
     setCategoryResults([])
   } 
-  const getFullCategoryName = (category: any) =>{
+  const getFullCategoryName = (category: any, reverse = true) =>{
+    console.log(category)
     let name = category.display_name
-    if(category.parentName.length > 0)
-      name = category.parentName.reverse().join(' / ') + ' / ' + name 
+    if(category.parentName.length > 0){
+      if(reverse){
+        name = category.parentName.reverse().join(' / ') + ' / ' + name 
+      }else{
+        name = category.parentName.join(' / ') + ' / ' + name 
+      }
+
+    }
+    
     return name
   }
   const cleanCategoryInput = () =>{

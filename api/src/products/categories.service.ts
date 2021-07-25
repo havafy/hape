@@ -15,12 +15,24 @@ export class CategoriesService {
             const body = {
                 size,
                 from,
-                query: {
-                    query_string: {
-                       fields: ["display_name","parentName.*"],
-                       query: '*' + keyword + '*',
-                       analyze_wildcard: true
-                    }
+                query: {   
+                    bool: {
+                        must: [
+                          {
+                            query_string: {
+                                fields: [ "display_name","parentName.*"],
+                                query: '*' + keyword + '*',
+                                analyze_wildcard: true
+                             }
+                          },
+                          {
+                            match: {
+                                has_children: false 
+                            }
+                          }
+                        ]
+                      }
+                    
                 },
                 _source: ['display_name', 'id', 'parentName']
             }      
