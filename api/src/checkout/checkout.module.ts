@@ -11,6 +11,7 @@ import { ShopModule } from '../shop/shop.module';
 import { ShopService } from "../shop/shop.service";
 import { OrdersModule } from "../orders/orders.module";
 import { OrdersService } from '../orders/orders.service';
+import { CategoriesService } from '../products/categories.service';
 @Module({
     imports: [SearchModule, AddressModule, ShopModule, OrdersModule],
     providers: [
@@ -20,7 +21,8 @@ import { OrdersService } from '../orders/orders.service';
         ProductsService,
         AddressService,
         ShopService,
-       OrdersService
+        OrdersService,
+        CategoriesService
     ],
     controllers: [CheckoutController],
 })

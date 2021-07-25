@@ -127,7 +127,7 @@ export class CategoriesService {
                 let parentIDCheck = parent_id
                 let k = 0
                 while(k < 5){
-                    let parent: any = await this.getByParent(parentIDCheck)
+                    let parent: any = await this.get(parentIDCheck)
                     if(parent === null) break
                     parents.push(parent.id)
                     parentName.push(parent.display_name)
@@ -138,19 +138,19 @@ export class CategoriesService {
             }
             return { parents, parentName }
         }
-        async getByParent(parent_id: any){
+        async get(id: any){
             const { body: { 
                 hits: { 
                     total, 
                     hits 
-                } } } = await this.esService.findBySingleField(ES_INDEX_CATEGORY, {id: parent_id}, 2, 0)
+                } } } = await this.esService.findBySingleField(ES_INDEX_CATEGORY, {id}, 2, 0)
             const count = total.value
 
             if(count){
                 delete hits[0]._source['children']
                 return {...hits[0]._source}
             }else{
-                console.log('[Alert] duplicate parent_id', parent_id)
+                console.log('[Alert] duplicate id', id)
             }
             return null
         }

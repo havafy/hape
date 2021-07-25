@@ -6,9 +6,15 @@ import { PagesController } from './pages.controller';
 import { SearchModule } from '../search/search.module';
 import { FilesService } from "../files/files.service";
 import { ProductsService } from "../products/products.service";
+import { CategoriesService } from '../products/categories.service';
 @Module({
     imports: [SearchModule],
-    providers: [HomePageService, ProductPageService, CategoryPageService, FilesService, ProductsService],
+    providers: [
+        HomePageService, 
+        ProductPageService, 
+        CategoryPageService, FilesService, 
+        CategoriesService, ProductsService
+    ],
     controllers: [PagesController],
 })
 export class PagesModule {}

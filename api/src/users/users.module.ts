@@ -11,6 +11,7 @@ import { AddressService } from '../address/address.service';
 import { AddressModule } from '../address/address.module';
 import { ShopModule } from '../shop/shop.module';
 import { ShopService } from '../shop/shop.service';
+import { CategoriesService } from '../products/categories.service';
 @Module({
     imports: [
         TypeOrmModule.forFeature([Users]),
@@ -23,7 +24,8 @@ import { ShopService } from '../shop/shop.service';
         ProductsService, 
         FilesService,
         AddressService,
-        ShopService
+        ShopService,
+        CategoriesService
     ]
 })
 export class UsersModule {}

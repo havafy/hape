@@ -1,25 +1,25 @@
-import { FC, useState, ChangeEvent, Component, useEffect } from 'react'
+import { FC, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import axios from 'axios'
 import { 
   Form, Input, DatePicker, 
-  Upload, Switch, TreeSelect, 
+  Upload, Switch, 
   ConfigProvider, InputNumber,
   Popconfirm, message, Select, Tabs
   } from 'antd'
   const { TabPane } = Tabs
-
+import cn from 'classnames'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { AiOutlineSave } from 'react-icons/ai'
-import { RiDeleteBin6Line } from 'react-icons/ri'
+import { RiDeleteBin6Line, RiSearchLine, RiCloseFill} from 'react-icons/ri'
 
 import moment from 'moment'
 import locale from 'antd/lib/locale/vi_VN';
-const { RangePicker } = DatePicker;
+// const { RangePicker } = DatePicker;
 import { useAuth } from '@context/AuthContext'
-import { default as categoryTree } from '@config/category'
 import s from './ShopProductForm.module.css'
+import category from '@config/category'
 
 
 const ShopProductForm: FC = () => {
@@ -31,6 +31,7 @@ const ShopProductForm: FC = () => {
   const [status, setStatus] = useState(true)
   const [tags, setTags] = useState<string[]>([])
   const [category, setCategory] = useState<string>('')
+  const [categoryID, setCategoryID] = useState<number>(0)
   const [categoryResults, setCategoryResults] = useState<any[]>([])
   const [fileList, setFileList] = useState<any>([]);
   const [expiryDate, setExpiryDate] = useState<string>()
@@ -61,9 +62,10 @@ const ShopProductForm: FC = () => {
     }.bind(this), 1200)
 
   }
-  const updateProduct =  (product: any) => {
+  const updateProduct = (product: any) => {
     setProduct(product)
-    setCategory(product.category)
+    setCategoryID(product.category)
+    setCategory(getFullCategoryName(product.categoryRaw))
     setDiscountDate([product.discountBegin, product.discountEnd])
     // set images to review
     setFileList(product.images.map((url: string, key:string)=> {
@@ -78,7 +80,7 @@ const ShopProductForm: FC = () => {
     setExpiryDate(product.expiryDate)
   }
   const onFinish = async (values: any) => {
-    setIsLoading(true)
+
     setFormMessage([])
     const authConfig = { 
       headers: { 'Authorization': `Bearer ${accessToken}` } 
@@ -90,13 +92,18 @@ const ShopProductForm: FC = () => {
       }
       return item.response.url 
     })
+    if(categoryID ===0 ){
+      message.error('Vui lòng chọn danh mục.')
+      return
+    }
+    setIsLoading(true)
     try{
         const discountBegin = discountDate[0] !== '' ? discountDate[0] : null
         const discountEnd= discountDate[1] !== '' ? discountDate[1] : null
         const postData = {
           ...values, 
           status,
-          category,
+          category: categoryID,
           discountBegin,
           discountEnd,
           images,
@@ -153,18 +160,39 @@ const ShopProductForm: FC = () => {
   const onExpiryDateChange = (date: any, dateString: string) => {
     setExpiryDate(dateString);
   }
-  const typingCategoryInput = async (event: any) =>{
+  const typingCategoryInput = (event: any) =>{
     const keyword = event.target.value
+    setCategory(keyword)
+    collectCategorySearch(keyword)
+    
+  }
+  const collectCategorySearch = async (keyword: string) =>{
     if(keyword!==''){
       let { data: {categories} } = await axios.get('/categories?keyword=' + keyword, headerApi)
       setCategoryResults(categories)
-      setCategory(keyword)
-    }else{
+     }
+    if(keyword ===''){
       setCategoryResults([])
     }
-    
   }
-  
+  const pickupCategory = (category: any) =>{
+    console.log('pickupCategory', category)
+    setCategoryID(category.id)
+    setCategory(getFullCategoryName(category))
+    setCategoryResults([])
+  } 
+  const getFullCategoryName = (category: any) =>{
+    let name = category.display_name
+    if(category.parentName.length > 0)
+      name = category.parentName.reverse().join(' / ') + ' / ' + name 
+    return name
+  }
+  const cleanCategoryInput = () =>{
+    setCategory('')
+    setCategoryID(0)
+  }
+
+
   return (
     <>
     {ready && <Form name="product-form" initialValues={product}
@@ -253,14 +281,24 @@ const ShopProductForm: FC = () => {
                 </div>
                 <div className="mt-8 relative">
                   <label className={s.label}>Danh mục</label>
-                  <input type="text" 
-                    onChange={typingCategoryInput} className={s.input}
-                  />
+                  <div className={s.categoryInput}>
+                    <RiSearchLine />
+                    <input type="text" value={category}
+                      onChange={typingCategoryInput} 
+                    /> 
+
+                    <RiCloseFill 
+                    className={cn(s.categoryClose, category === '' ? 'invisible' : '')} 
+                    onClick={e=>cleanCategoryInput()}/>
+                  </div>
                   {categoryResults.length > 0 && <div className={s.dropdownBox}>
                     {categoryResults.map((category: any)=>{
-                      return (<div className={s.dropdownItem}>
+                      return (<div 
+                        onClick={e=>pickupCategory(category)}
+                      className={s.dropdownItem}>
                        
-                       {category.parentName.reverse().join(' / ')} / {category.display_name}
+                       <span className={s.categoryParent}>{category.parentName.length > 0 &&
+                       category.parentName.reverse().join(' / ') + ' / '}</span> {category.display_name}
                         </div>)
                     })}  
                   </div>}

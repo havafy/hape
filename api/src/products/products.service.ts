@@ -3,12 +3,13 @@ import { url } from 'inspector';
 import { SearchService } from '../search/search.service';
 import { FilesService } from "../files/files.service";
 import { ProductDto } from './dto/product.dto';
-
+import { CategoriesService } from './categories.service';
 const ES_INDEX_NAME = 'products'
 const CDN = 'https://'+process.env.AWS_CLOUDFRONT+'/';
 @Injectable()
 export class ProductsService {
     constructor(readonly esService: SearchService,
+        readonly categoriesService: CategoriesService,
         readonly filesService: FilesService) {}
     
     async getByUserID(userID: number,  size: number, from: number) {
@@ -161,10 +162,11 @@ export class ProductsService {
     async getRawProduct(id: string) {
         try {
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
+            const categoryRaw = await this.categoriesService.get(_source.category)
             return {
                 found: true,
                 product: {
-                    ..._source
+                    ..._source, categoryRaw
                 }
             }
         }catch (err) {

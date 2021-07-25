@@ -10,6 +10,7 @@ import { AddressModule } from '../address/address.module';
 import { ShopModule } from '../shop/shop.module';
 import { CheckoutModule } from '../checkout/checkout.module';
 import { ShopService } from "../shop/shop.service";
+import { CategoriesService } from '../products/categories.service';
 @Module({
     imports: [SearchModule, AddressModule, ShopModule],
     providers: [
@@ -18,7 +19,8 @@ import { ShopService } from "../shop/shop.service";
         FilesService, 
         ProductsService,
         AddressService,
-        ShopService
+        ShopService,
+        CategoriesService
     ],
     controllers: [OrdersController],
 })
