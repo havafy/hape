@@ -55,17 +55,26 @@ const ProductPage: FC<Props> = ({pid}) => {
     })()
   }
   const addToCart = async (goto: string = '') => {
-    let {data } = await axios.post('/cart' , { 
+    try{
+      let {data } = await axios.post('/cart' , { 
             productID,
             quantity,
             action: 'addToCart'
-            }, headerApi)
-    if(data.statusCode === 500){
-      Message.error("Đây là sản phẩm trong shop của bạn.");
-    }else{
-      updateAction({event: 'CART_SUMMARY_UPDATE', payload: data })
-      if(goto!==''){
-        router.push('/checkout')
+              }, headerApi)
+      if(data.statusCode === 500){
+        Message.error("Đây là sản phẩm trong shop của bạn.");
+      }else{
+        updateAction({event: 'CART_SUMMARY_UPDATE', payload: data })
+        if(goto!==''){
+          router.push('/checkout')
+        }
+      }
+
+    }catch(err){
+      if(err?.response?.data){
+        if(err.response.data.statusCode == 401){
+          updateAction({event: 'LOGIN_OPEN', payload: {} })
+        }
       }
     }
 

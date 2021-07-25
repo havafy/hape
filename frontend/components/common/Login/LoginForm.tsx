@@ -1,4 +1,4 @@
-import React, { FC , useState } from 'react'
+import React, { FC , useState ,useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import cn from 'classnames'
@@ -27,12 +27,18 @@ const TextInput: FC<Props> = ({ title, name, required = false, type = 'text' }) 
 )
 
 const LoginForm = () => {
-  const { login } = useAuth();
+  const { accessToken, login, action: { event, payload }} = useAuth();
   const [visible, setVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false)
   const showModal = () => {
     setVisible(true);
   }
+  useEffect(() => {
+
+    if(event ==='LOGIN_OPEN'){
+      setVisible(true)
+    }
+  },[event])
 
   const handleOk = () => {
     setTimeout(() => {

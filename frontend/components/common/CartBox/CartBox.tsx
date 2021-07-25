@@ -11,7 +11,7 @@ const CartBox: FC<{}> = () => {
       <>
    <Link href={'/cart'}><a> 
                 <span className={s.root}><RiShoppingCartLine fill="none" />
-                    {payload.quantityTotal > 0 ? <label>{payload.quantityTotal}</label> : <></> }
+                    {event ==='CART_SUMMARY_UPDATE'  && payload.quantityTotal > 0 ? <label>{payload.quantityTotal}</label> : <></> }
                 </span>
             </a></Link>
         </>
