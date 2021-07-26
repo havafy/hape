@@ -25,7 +25,7 @@ const LoggedBox = () => {
             <div>
                 <span className="circle-avatar" style={{'backgroundImage': `url(${user.avatar})`}}></span> 
             <div className="user-menu-dropdown">
-                <i className="header-popover-arrow" style={{'transform': `translate(0px, 0px)`, 'right': `55px`}}></i>
+                <i className="header-popover-arrow" style={{'transform': `translate(0px, 0px)`, 'right': `75px`}}></i>
                 <ul>
 
                 <li className="menu-item">

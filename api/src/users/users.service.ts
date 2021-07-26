@@ -49,7 +49,6 @@ export class UsersService {
         const now = new Date();
         const createdAt = now.toISOString()
         const userID = user.id
-        delete user.id
         const record: any = [
             { index: { _index: ES_INDEX_USER } },  {
             ...user,
@@ -94,10 +93,9 @@ export class UsersService {
   }
 
   public async findOne(where: object): Promise<Users> {
-    const user = await this.userRepository.findOne({
+    return await this.userRepository.findOne({
       where
     })
-    return user;
   }
   public async findById(userId: number): Promise<Users> {
     const user = await this.userRepository.findOne({
@@ -129,6 +127,7 @@ export class UsersService {
   public async create(userDto: any): Promise<IUsers> {
     try {
       const user = await this.userRepository.save(userDto);
+    
       await this.createOnES(user)
       return user
     } catch (err) {
@@ -194,21 +193,7 @@ export class UsersService {
         }
         user.email = email
       }
-      if(userProfileDto.username !== user.username){
-        const username = this.getSlug(userProfileDto.username);
-        const existing = await this.userRepository.findOne({
-          username,
-            id:Not(id)
-        })
-        if(existing ){
-          return {
-            message: "Username is existing.",
-            statusCode: 404
-          }
-        }
-        user.username = userProfileDto.username;
-      }
-   
+         
       if(userProfileDto.phone !== user.phone){
         const phone = this.getSlug(userProfileDto.phone);
         const existing = await this.userRepository.findOne({
@@ -223,6 +208,21 @@ export class UsersService {
         }
         user.phone = userProfileDto.phone;
       }
+      if(userProfileDto.username !== user.username){
+        const username = this.getSlug(userProfileDto.username);
+        const existing = await this.userRepository.findOne({
+          username,
+            id:Not(id)
+        })
+        if(existing ){
+          return {
+            message: "Username is existing.",
+            statusCode: 404
+          }
+        }
+        user.username = userProfileDto.username;
+      }
+
       if(userProfileDto.shopName){
         const shopName = this.getSlug(userProfileDto.shopName)
 

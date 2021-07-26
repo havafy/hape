@@ -1,5 +1,7 @@
 .root {
   height: 47px !important;
+  backdrop-filter: blur(20px);
+  background-color: rgba(255, 255, 255, 0.8);
   @apply fixed w-full shadow top-0 z-40 transition-all duration-150;
 
 }

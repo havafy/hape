@@ -20,11 +20,18 @@ export class RegisterService {
     return false
   }
   public async register(registerUserDto: RegisterUserDto): Promise<IUsers> {
-    registerUserDto.password = bcrypt.hashSync(registerUserDto.password, 8);
+    try{
+      const email = registerUserDto.email.split('@')
+      const username = await this.usersService.getUniqueUserName(email[0]);
+      registerUserDto.password = bcrypt.hashSync(registerUserDto.password, 8);
 
-    this.sendMailRegisterUser(registerUserDto);
+      this.sendMailRegisterUser(registerUserDto);
 
-    return this.usersService.create(registerUserDto);
+      return await this.usersService.create({...registerUserDto, username, name: email[0]});
+    }catch (err) {
+      console.log('register:', err)
+    }
+
   }
 
   private sendMailRegisterUser(user): void {

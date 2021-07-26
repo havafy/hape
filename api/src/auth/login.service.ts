@@ -59,7 +59,6 @@ export class LoginService {
       }
 
       const payload: JwtPayload = {
-        username: userData.username,
         id: userData.id,
       };
 
@@ -75,8 +74,7 @@ export class LoginService {
   }
   public getAccessToken(payload: JwtPayload) {
     return this.jwtService.sign({
-      username: payload.username,
-      id: payload.id,
+      id: payload.id
     });
   }
   public async validateUserByJwt(payload: JwtPayload) {
@@ -91,7 +89,6 @@ export class LoginService {
 
   protected createJwtPayload(user) {
     const data: JwtPayload = {
-      username: user.username,
       id: user.id,
     };
 
@@ -157,7 +154,6 @@ export class LoginService {
 
         // return  user and accessToken
         const payload: JwtPayload = {
-          username: user.username,
           id: user.id,
         };
 
@@ -238,7 +234,6 @@ export class LoginService {
 
         // return  user and accessToken
         const payload: JwtPayload = {
-          username: user.username,
           id: user.id,
         };
 

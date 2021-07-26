@@ -1,10 +1,6 @@
 import { MaxLength, MinLength, IsNotEmpty, IsEmail, IsString, IsNumber, IsOptional } from "class-validator";
 
 export class UserDto {
-  @IsString()
-  @MaxLength(12)
-  @MinLength(3)
-  readonly username: string;
 
   @IsString()
   @MaxLength(14)

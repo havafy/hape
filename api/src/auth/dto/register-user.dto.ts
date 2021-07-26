@@ -3,11 +3,6 @@ import { MaxLength, MinLength, IsNotEmpty, IsEmail, IsString, IsOptional } from 
 export class RegisterUserDto {
   readonly id: number;
 
-  @IsString()
-  @MaxLength(12)
-  @MinLength(3)
-  readonly username: string;
-
   @IsEmail()
   @MaxLength(50)
   @MinLength(5)
@@ -17,8 +12,8 @@ export class RegisterUserDto {
   @MinLength(5)
   readonly token: string;
 
-  @MaxLength(14)
-  @MinLength(8)
+  @MaxLength(16)
+  @MinLength(13)
   @IsNotEmpty()
   phone: string;
 

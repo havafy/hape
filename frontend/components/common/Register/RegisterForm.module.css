@@ -3,8 +3,12 @@
 }
 .label {
     font-size: 0.8rem!important;
-    @apply block text-xs font-bold mb-2 
+    @apply block text-xs font-bold mb-2 text-gray-700
   }
+  .alert{
+    color: var(--main-color);
+    @apply text-xs pt-1
+}
 .input {
     width: 100%;
     border-radius: 2px;

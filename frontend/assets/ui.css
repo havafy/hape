@@ -157,24 +157,30 @@ span.highlight {
  }
   
 .user-logged-box:hover .user-menu-dropdown{
-    opacity: 1;
+    @apply opacity-100 block
   }
   
 .user-menu-dropdown{
     position: absolute;
     transition: opacity 0.2s ease;
     opacity: 0;
+    display: none;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.8);
     right: 0;
     min-width: 240px;
     text-align: left;
     -webkit-box-shadow: -1px 1px 20px 0px rgba(0,0,0,0.39); 
     box-shadow: -1px 1px 20px 0px rgba(0,0,0,0.39);
-    @apply bg-white rounded
+    @apply rounded
 }
 .user-menu-dropdown .menu-item a{
     
     border-bottom: 1px solid #f2f2f2;
     @apply px-6 py-3 cursor-pointer block
+}
+.user-menu-dropdown .menu-item a:last-child{
+    border-bottom: none;
 }
 .user-menu-dropdown .menu-item svg{
     fill: #999;
@@ -190,8 +196,8 @@ span.highlight {
     fill: var(--main-color);
 }
 .user-menu-dropdown .menu-item:hover a{
-    background: #f2f2f2;
-
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.85);
 }
 .header-popover-arrow{
     display: block;

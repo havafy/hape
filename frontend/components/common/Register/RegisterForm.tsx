@@ -2,10 +2,12 @@ import React, { FC , useState, useEffect } from 'react'
 import cn from 'classnames'
 import axios from 'axios'
 import s from './RegisterForm.module.css'
-import { Form, Input, message, Modal } from 'antd'
+import { message, Modal } from 'antd'
 import { useAuth } from '@context/AuthContext';
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
+import getSlug, {hideText, hideEmail, phoneFormat} from '@lib/get-slug'
+
 interface Props {
   title?: string;
   name: string;
@@ -20,6 +22,10 @@ const RegisterForm = () => {
   const [step1, setStep1] = useState(false)
   const [emailExisting, setEmailExisting] = useState(false)
   const [email, setEmail] = useState<string>('')
+  const [phone, setPhone] = useState<string>('')
+  const [alert, setAlert] = useState<any>(null)
+  const [phoneAlert, setPhoneAlert] = useState<any>(null)
+  const [password, setPassword] = useState<string>('')
   const [emailMessage, setEmailMessage] = useState<string>('')
   const [formMessage, setFormMessage] = useState([''])
   const [isLoading, setIsLoading] = useState(false)
@@ -41,11 +47,45 @@ const RegisterForm = () => {
 
     }, 400);
   };
+  const onPasswordChange = (event: any) =>{
+    setPassword(event.target.value)
+    isPasswordValid(event.target.value)
+    
+  }
+  const isPasswordValid = (password: string) =>{
+    let valid = false
+    if(password.length < 7 || password.length  > 16){
+      valid = true
+    }
+    if (password == password.toLowerCase()){
+      valid = true
+    }
+    if(valid){
+      setAlert('Mật khẩu phải dài từ 8-16 kí tự, bao gồm 1 chữ viết hoa và 1 chữ viết thường')
+    }else{
+      setAlert('')
+    }
 
+  }
+  const onPhoneChange = (event: any) =>{
+    const phoneChange = phoneFormat(event.target.value)
+    setPhone(phoneChange)
+    let valid = false
+    if(phoneChange.length < 13 || phoneChange.length  > 15){
+      valid = true
+    }
+    
+    if(valid){
+      setPhoneAlert('Số điện thoại chưa hợp lệ.')
+    }else{
+      setPhoneAlert('')
+    }
+    
+  }
   const handleCancel = () => {
     setVisible(false);
   }
-  const onFinish = async (values: any) => {
+  const onFinish = async () => {
 
     // let disabled the submit button
     setIsLoading(true)
@@ -53,18 +93,18 @@ const RegisterForm = () => {
     const { grecaptcha } = window as any;
     grecaptcha.ready(async () => {
       const token = await grecaptcha.execute(reCapKey, { action: "submit" });
-      await submitRegistration(values, token)
+      await submitRegistration(token)
     });
   }
-  const submitRegistration = async (values: any , reqToken: any) => {
+  const submitRegistration = async (reqToken: any) => {
     if(reqToken !== null){
       try {
         if(emailExisting){
-         await submitLogin(values.password)
+          await submitLogin(password)
         }else{
           //send register data to API
           const { data } = await axios.post('auth/register', {
-            ...values,
+            phone, password,
             token: reqToken,
             email,
             })
@@ -76,7 +116,7 @@ const RegisterForm = () => {
       } catch (err){
         const { data } = err.response
         console.log('err', data)
-        setFormMessage(data.message)
+        message.error(data.message[0])
         
       }
     }  
@@ -97,13 +137,32 @@ const RegisterForm = () => {
         }
     
   }
+  const submitForm = async () => {
+    try{
+      if(password === ''){
+        message.error('Vui lòng nhập mật khẩu');
+        return
+      }
+      if(!existingEmail && (alert !== ''  || alert === null)){
+        message.error('Mật khẩu phải an toàn hơn');
+        return
+      }
+  
+        setIsLoading(true)
+        await onFinish()
+        setIsLoading(false)
+        
+      }catch(err){
+        console.log(err.response)
+        message.error(err.response.data.message);
+        message.error('Có sự cố, không đổi được mật khẩu.');
+      }
+  }
   function validateEmail(email: string) {
         var re = /\S+@\S+\.\S+/;
         return re.test(email);
   }
-  const onFinishFailed = (errorInfo: any) => {
-    console.log(errorInfo)
-  }
+
   const handleEmailChange = (event: any) => {
     setEmail(event.target.value)
   }
@@ -189,24 +248,27 @@ const RegisterForm = () => {
     </div>
     <div className={cn(s.step2, {"hidden": !step1})}> 
   
-        <Form name="register-user"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}>
-              <div className={s.formMessage}>
-                    {Array.isArray(formMessage) && formMessage.map((item: string, i:any) => {     
-                          return (<div key={i}>{item}</div>) 
-                        })}
-                </div>
             <div className="mb-6">
             <span className="font-semibold">
               {emailExisting ? 'Đăng nhập' : 'Đăng ký'} với:
               </span>  {email}  </div>
-            <TextInput name="password" title="Mật khẩu" type="password"  required />
-            {!emailExisting && <TextInput name="username" title="Tên đăng nhập" type="text"  required/> }
-            {!emailExisting &&  <TextInput name="phone" title="Số điện thoại"type="number" required /> }
+              <div className="relative w-full mb-6">
+                        <label className={s.label}>Mật khẩu</label> 
+              <input className={s.input} value={password}
+                      onChange={onPasswordChange}
+                      name="password" title="Mật khẩu" type="password"   />
+                      {!emailExisting && <div className={s.alert}>{alert}</div> }
+              </div>
+            {!emailExisting &&  <div className="relative w-full mb-6">
+                        <label className={s.label}>Số điện thoại</label> 
+                      <input value={phone}
+                        onChange={onPhoneChange}
+                        className={s.input} name="phone" title="Số điện thoại" /> 
+                           {phoneAlert && <div className={s.alert}>{phoneAlert}</div> }
+                        </div> }
             <div className="grid grid-cols-2  mt-10 ">
                 <div className="col-span-1">
-                <button type="submit" disabled={isLoading} className={s.button} >
+                <button type="submit" onClick={submitForm} disabled={isLoading} className={s.button} >
                   { isLoading ?'Gởi đi...' : (emailExisting ? 'Đăng nhập' : 'Đăng ký')  }
                 </button>
                 </div>
@@ -214,8 +276,6 @@ const RegisterForm = () => {
                   <span className="font-bold cursor-pointer" onClick={() => setStep1(false)}>Quay lại </span>
                   </div>
               </div>
-                   
-          </Form>
       </div>
 
           <div className="my-5 text-center text-gray-400"> - hoặc - </div>
@@ -245,13 +305,4 @@ const RegisterForm = () => {
   )
 }
 
-const TextInput: FC<Props> = ({ title, name, required = false, type = 'text' }) => (
-  <div className="relative w-full mb-6">
-    <label className={s.label}>{title}</label>
-    <Form.Item name={name}
-        rules={[{ required, message: 'Vui lòng nhập ' + title?.toLowerCase() + '!' }]} >
-       <Input placeholder={title} className={s.input} type={type} />
-     </Form.Item>
-</div>
-)
 export default RegisterForm

@@ -26,8 +26,19 @@ export const hideEmail = function(text: any) {
     });
 };
 export const phoneFormat = function(phone:string) {
+
+  //remove space
+  phone = phone.replace(' ','')
+
+  // remove pre number if have
   const pre = '(+84)'
-  return pre + phone.replace(pre,'').replace(/\D/g,'')
+  phone = phone.replace(pre,'')
+
+  //remove 0 on begin if it have
+  if(phone.charAt(0) === '0'){
+    phone = phone.substring(1)
+  } 
+  return pre + phone.replace(/\D/g,'')
 };
     
 export const hideText = function(text: string) {
