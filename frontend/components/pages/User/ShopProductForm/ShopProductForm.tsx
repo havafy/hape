@@ -301,13 +301,16 @@ const ShopProductForm: FC = () => {
                   </div>
                   {categoryResults.length > 0 && <div className={s.dropdownBox}>
                     {categoryResults.map((category: any)=>{
-                      return (<div 
-                        onClick={e=>pickupCategory(category)}
-                      className={s.dropdownItem}>
-                       
-                       <span className={s.categoryParent}>{category.parentName.length > 0 &&
-                       category.parentName.reverse().join(' / ') + ' / '}</span> {category.display_name}
-                        </div>)
+                      if(category.parentName){
+                        return (<div 
+                          onClick={e=>pickupCategory(category)}
+                        className={s.dropdownItem}>
+                         
+                         <span className={s.categoryParent}>{category.parentName.length > 0 &&
+                         category.parentName.reverse().join(' / ') + ' / '}</span> {category.display_name}
+                          </div>)
+                      }
+
                     })}  
                   </div>}
                 </div>
