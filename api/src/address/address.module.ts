@@ -14,6 +14,7 @@ export class AddressModule implements OnModuleInit {
     constructor(private addressService: AddressService) {}
     onModuleInit() {
         // import the data about province/city/ward 
-        this.addressService.createData().then();
+        this.addressService.createRegionIndex().then();
+        this.addressService.createAddressIndex().then();
     }
 }

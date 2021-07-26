@@ -24,4 +24,9 @@ import { CategoriesService } from '../products/categories.service';
     ],
     controllers: [OrdersController],
 })
-export class OrdersModule {}
+export class OrdersModule {
+    constructor(private ordersService: OrdersService) {}
+    onModuleInit() {
+        this.ordersService.createIndex().then();
+    }
+}

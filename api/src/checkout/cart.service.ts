@@ -307,5 +307,12 @@ export class CartService {
         }
         return response
     }
-    
+    async createIndex(){
+        const existing = await this.esService.checkIndexExisting(ES_INDEX_CART)
+        if(!existing){
+            this.esService.createIndex(ES_INDEX_CART, { mappings: { 
+                properties: {  name: { type: 'text'  }  }  
+            } })
+        }
+    }
 }

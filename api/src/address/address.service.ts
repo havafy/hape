@@ -246,7 +246,15 @@ export class AddressService {
             regions
         }
     }
-    async createData(){
+    async createAddressIndex(){
+        const existing = await this.esService.checkIndexExisting(ES_INDEX_ADDRESS)
+        if(!existing){
+            this.esService.createIndex(ES_INDEX_ADDRESS, { mappings: { 
+                properties: {  name: { type: 'text'  }  }  
+            } })
+        }
+    }
+    async createRegionIndex(){
 
         const existing = await this.esService.checkIndexExisting(ES_INDEX_REGION)
         if(!existing){

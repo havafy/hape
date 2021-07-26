@@ -26,4 +26,9 @@ import { CategoriesService } from '../products/categories.service';
     ],
     controllers: [CheckoutController],
 })
-export class CheckoutModule {}
+export class CheckoutModule {
+    constructor(private cartService: CartService) {}
+    onModuleInit() {
+        this.cartService.createIndex().then();
+    }
+}

@@ -242,6 +242,13 @@ export class OrdersService {
         }
     }
 
-
+    async createIndex(){
+        const existing = await this.esService.checkIndexExisting(ES_INDEX_ORDER)
+        if(!existing){
+            this.esService.createIndex(ES_INDEX_ORDER, { mappings: { 
+                properties: {  name: { type: 'text'  }  }  
+            } })
+        }
+    }
     
 }

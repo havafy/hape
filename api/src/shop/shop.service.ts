@@ -174,20 +174,20 @@ export class ShopService {
       return null
   }
   async createIndex(){
-    this.esService.createIndex(ES_INDEX_SHOP, this.indicateBody())
-    }
-    indicateBody() {
-        return {
-                mappings: {
-                    properties: {
-                        id:{ type: 'long'},
-                        shopName: {
-                            type: 'text'
+    const existing = await this.esService.checkIndexExisting(ES_INDEX_SHOP)
+    if(!existing){
+        this.esService.createIndex(ES_INDEX_SHOP, {
+                    mappings: {
+                        properties: {
+                            id:{ type: 'long'},
+                            shopName: {
+                                type: 'text'
+                            }
                         }
                     }
-                }
-            }
-      }
+                })
+    }
+  }
 
   
 }
