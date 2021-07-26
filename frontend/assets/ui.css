@@ -139,8 +139,8 @@ span.highlight {
 /* ---------- User Nav ------------ */
 
 .circle-avatar {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     display: inline-block;
     border-radius: 50%;
     border: 1px solid #eee;
@@ -152,21 +152,24 @@ span.highlight {
 }
 
 .user-logged-box{
-    margin: 0px 0 0 10px;
-    @apply text-sm
+    margin: 4px 30px 0 0;
+    @apply text-sm cursor-pointer
  }
   
 .user-logged-box:hover .user-menu-dropdown{
-    display: block;
+    opacity: 1;
   }
   
 .user-menu-dropdown{
     position: absolute;
-    display: none;
+    transition: opacity 0.2s ease;
+    opacity: 0;
     right: 0;
     min-width: 240px;
     text-align: left;
-    @apply shadow-lg bg-white rounded
+    -webkit-box-shadow: -1px 1px 20px 0px rgba(0,0,0,0.39); 
+    box-shadow: -1px 1px 20px 0px rgba(0,0,0,0.39);
+    @apply bg-white rounded
 }
 .user-menu-dropdown .menu-item a{
     
@@ -175,8 +178,8 @@ span.highlight {
 }
 .user-menu-dropdown .menu-item svg{
     fill: #999;
-    width: 22px;
-    height: 22px;
+    width: 19px;
+    height: 19px;
     margin: -2px 10px 0 0 ;
     display: inline-block;
 }

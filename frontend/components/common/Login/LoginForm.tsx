@@ -27,18 +27,13 @@ const TextInput: FC<Props> = ({ title, name, required = false, type = 'text' }) 
 )
 
 const LoginForm = () => {
-  const { accessToken, login, action: { event, payload }} = useAuth();
+  const { login } = useAuth();
   const [visible, setVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false)
   const showModal = () => {
     setVisible(true);
   }
-  useEffect(() => {
 
-    if(event ==='LOGIN_OPEN'){
-      setVisible(true)
-    }
-  },[event])
 
   const handleOk = () => {
     setTimeout(() => {
@@ -157,7 +152,9 @@ const LoginForm = () => {
         <div className="col-span-2">
             <button type="submit" disabled={isLoading} className={s.button} >
             { !isLoading ? 'Đăng nhập' : 'Xử lý...' }
-            </button>             <RegisterForm  />
+            </button>
+                  <button className="ml-5 font-bold">Đăng ký tài khoản</button>
+            <RegisterForm  />
             </div>
   
         </div>

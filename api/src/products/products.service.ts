@@ -162,6 +162,7 @@ export class ProductsService {
     async getRawProduct(id: string) {
         try {
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
+            console.log(_source)
             const categoryRaw = await this.categoriesService.get(_source.category)
             return {
                 found: true,
@@ -170,6 +171,7 @@ export class ProductsService {
                 }
             }
         }catch (err) {
+            console.log(err)
             return {
                 found: false,
             }

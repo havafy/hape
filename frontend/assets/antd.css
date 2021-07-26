@@ -13,7 +13,10 @@
     overflow-y:visible !important;
   } */
 
+.ant-modal-body {
+    padding: 10px 24px;
 
+  }
 .ant-cascader-input.ant-input {
 
     padding-right: 24px!important;

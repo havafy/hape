@@ -2,7 +2,7 @@ import React, { FC , useState, useEffect } from 'react'
 import cn from 'classnames'
 import axios from 'axios'
 import s from './RegisterForm.module.css'
-import { Form, Input, Button, Modal } from 'antd'
+import { Form, Input, message, Modal } from 'antd'
 import { useAuth } from '@context/AuthContext';
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
@@ -15,13 +15,22 @@ interface Props {
 
 const RegisterForm = () => {
   
-  const { login } = useAuth();
+  const { login, action: { event }, updateAction } = useAuth();
   const [visible, setVisible] = useState(false);
   const [step1, setStep1] = useState(false)
+  const [emailExisting, setEmailExisting] = useState(false)
   const [email, setEmail] = useState<string>('')
   const [emailMessage, setEmailMessage] = useState<string>('')
   const [formMessage, setFormMessage] = useState([''])
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    if(event ==='LOGIN_OPEN'){
+      setVisible(true)
+      updateAction({event: '', payload: {}})
+    }
+  },[event])
+
   const showModal = () => {
     setVisible(true);
   };
@@ -50,16 +59,20 @@ const RegisterForm = () => {
   const submitRegistration = async (values: any , reqToken: any) => {
     if(reqToken !== null){
       try {
-        //send register data to API
-        const { data } = await axios.post('auth/register', {
-          ...values,
-          token: reqToken,
-          email,
-          })
-          if(data?.accessToken){
-            login(data.accessToken, data.user)
-            setVisible(false);
-          }
+        if(emailExisting){
+         await submitLogin(values.password)
+        }else{
+          //send register data to API
+          const { data } = await axios.post('auth/register', {
+            ...values,
+            token: reqToken,
+            email,
+            })
+            if(data?.accessToken){
+              login(data.accessToken, data.user)
+              setVisible(false);
+            }
+        }
       } catch (err){
         const { data } = err.response
         console.log('err', data)
@@ -69,6 +82,20 @@ const RegisterForm = () => {
     }  
     setIsLoading(false)
 
+  }
+  const submitLogin = async (password: string) =>{
+    try {
+        //send register data to API
+        const { data } = await axios.post('auth/login', { email, password })
+            if(data?.accessToken){
+            login(data.accessToken, data.user)
+            }else{
+              message.error('Sai thông tin đăng nhập')
+            }
+        } catch (err){
+          message.error('Không đăng nhập được.')
+        }
+    
   }
   function validateEmail(email: string) {
         var re = /\S+@\S+\.\S+/;
@@ -95,12 +122,8 @@ const RegisterForm = () => {
       setEmailMessage('Vui lòng nhập đúng email!')
       return
     }
-    const existing = await existingEmail(email)
-    if(existing){
-      setEmailMessage('Email này đã tồn tại.')
-      return
-    }
-      
+    const status = await existingEmail(email)
+    setEmailExisting(status)
     setStep1(true)
     
   }
@@ -150,12 +173,13 @@ const RegisterForm = () => {
   }
   return (
     <>
-      <button onClick={showModal} className="ml-5 font-bold">Đăng ký tài khoản</button>
+      <button onClick={showModal} className={s.signUpButton}>Đăng nhập</button>
 
-      <Modal title="Đăng ký thành viên" className="auth-form-modal"
+      <Modal title="Đăng ký & đăng nhập" className="auth-form-modal"
       visible={visible} onOk={handleOk} confirmLoading={false} onCancel={handleCancel} footer={null} >
   <div className={cn(s.step1,{"hidden": step1})}>
-        <div className="relative w-full mb-6">
+    <p className="text-gray-700">Đăng nhập hoặc đăng ký với email của bạn.</p>
+        <div className="relative w-full my-6">
            <label className={s.label}>Địa chỉ email</label> 
             <input onChange={handleEmailChange} name="email"
              placeholder="Địa chỉ email" className={s.input} type="email" />
@@ -164,6 +188,7 @@ const RegisterForm = () => {
       <button type="submit" onClick={completedStep1} className={s.button}>Tiếp tục</button>
     </div>
     <div className={cn(s.step2, {"hidden": !step1})}> 
+  
         <Form name="register-user"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}>
@@ -172,21 +197,24 @@ const RegisterForm = () => {
                           return (<div key={i}>{item}</div>) 
                         })}
                 </div>
-            <TextInput name="username" title="Tên đăng nhập" type="text"  required />
-            <TextInput name="phone" title="Số điện thoại"type="number" required />
+            <div className="mb-6">
+            <span className="font-semibold">
+              {emailExisting ? 'Đăng nhập' : 'Đăng ký'} với:
+              </span>  {email}  </div>
             <TextInput name="password" title="Mật khẩu" type="password"  required />
-          
+            {!emailExisting && <TextInput name="username" title="Tên đăng nhập" type="text"  required/> }
+            {!emailExisting &&  <TextInput name="phone" title="Số điện thoại"type="number" required /> }
             <div className="grid grid-cols-2  mt-10 ">
                 <div className="col-span-1">
                 <button type="submit" disabled={isLoading} className={s.button} >
-                  { isLoading ?'Loading...' :  'Đăng ký'  }
+                  { isLoading ?'Gởi đi...' : (emailExisting ? 'Đăng nhập' : 'Đăng ký')  }
                 </button>
                 </div>
                 <div className="col-span-1 pt-3 text-right">
                   <span className="font-bold cursor-pointer" onClick={() => setStep1(false)}>Quay lại </span>
                   </div>
               </div>
-    
+                   
           </Form>
       </div>
 

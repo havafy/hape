@@ -30,7 +30,7 @@ export class SearchService {
         }
         return false;
     }
-    async createByBulk(index: string, body: any, refresh: string =  'wait_for'){
+    async createByBulk(index: string, body: any, refresh = 'wait_for'){
         const insert = { index, body }
          // waiting for indexing before return
         if(refresh !== ''){

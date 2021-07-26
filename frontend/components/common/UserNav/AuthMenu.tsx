@@ -1,5 +1,5 @@
 import s from './UserNav.module.css'
-import { LoginForm } from '@components/common'
+import { RegisterForm } from '@components/common'
 import { useAuth } from '@context/AuthContext'
 import LoggedBox from  './LoggedBox'
 const AuthMenu = () => {
@@ -9,7 +9,7 @@ const AuthMenu = () => {
       {
         accessToken !== '' ? <LoggedBox/>
          :  <div>
-          <LoginForm />
+          <RegisterForm />
    
           </div>
       }
