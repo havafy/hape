@@ -269,5 +269,12 @@ export class UsersService {
           .replace(/’/g, '')
       return cleanTextUtils.strip.nonASCII(path)
   }
-
+  async createIndex(){
+    const existing = await this.esService.checkIndexExisting(ES_INDEX_USER)
+    if(!existing){
+        this.esService.createIndex(ES_INDEX_USER, { mappings: { 
+            properties: {  name: { type: 'text'  }, createdAt: { type: 'date' },  }  
+        } })
+    }
+}
 }

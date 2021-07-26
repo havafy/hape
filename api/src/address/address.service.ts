@@ -250,7 +250,7 @@ export class AddressService {
         const existing = await this.esService.checkIndexExisting(ES_INDEX_ADDRESS)
         if(!existing){
             this.esService.createIndex(ES_INDEX_ADDRESS, { mappings: { 
-                properties: {  name: { type: 'text'  }  }  
+                properties: {  name: { type: 'text'  }, createdAt: { type: 'date' },  }  
             } })
         }
     }

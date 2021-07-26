@@ -311,7 +311,7 @@ export class CartService {
         const existing = await this.esService.checkIndexExisting(ES_INDEX_CART)
         if(!existing){
             this.esService.createIndex(ES_INDEX_CART, { mappings: { 
-                properties: {  name: { type: 'text'  }  }  
+                properties: {  name: { type: 'text'  }, createdAt: { type: 'date' },  }  
             } })
         }
     }

@@ -180,9 +180,8 @@ export class ShopService {
                     mappings: {
                         properties: {
                             id:{ type: 'long'},
-                            shopName: {
-                                type: 'text'
-                            }
+                            shopName: { type: 'text' }, 
+                            createdAt: { type: 'date' },
                         }
                     }
                 })
