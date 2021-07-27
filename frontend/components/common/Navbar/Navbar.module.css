@@ -1,6 +1,6 @@
 .root {
   height: 47px !important;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(10px);
   background-color: rgba(255, 255, 255, 0.8);
   @apply fixed w-full shadow top-0 z-40 transition-all duration-150;
 
@@ -8,7 +8,8 @@
 
 .link, .link_last{
   font-size: 13px;
-  @apply inline-flex items-center text-gray-900 px-1 leading-6 font-semibold transition ease-in-out duration-75 cursor-pointer;
+  @apply inline-flex items-center text-gray-900 px-1 leading-6 
+  font-semibold transition ease-in-out duration-75 cursor-pointer;
 
 }
 

@@ -35,10 +35,7 @@ const LoggedBox = () => {
                     <Link href='/user/orders'><a><RiShoppingBag2Line />Đơn mua hàng</a></Link>
                 </li>
      
-        
-                <li className="menu-item">
-                    <Link href='/user/shop-settings'><a><RiSettings5Line />Cửa hàng</a></Link>
-                </li>
+    
                 <li className="menu-item">
                     <Link href='/user/shop-products'><a><RiDatabase2Line />Sản phẩm</a></Link>
                 </li>

@@ -166,7 +166,7 @@ span.highlight {
     opacity: 0;
     display: none;
     backdrop-filter: blur(10px);
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.96);
     right: 0;
     min-width: 240px;
     text-align: left;

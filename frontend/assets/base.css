@@ -267,15 +267,8 @@ body.layout{
   padding-left: 1rem;
   padding-right: 1rem;
 }
-.iconSocial svg{
-  width: 30px;
-  height: 30px;
-  color: #808184;
-}
-.iconSocial a:hover svg{
-  color: #fff;
- @apply scale-110
-}
+
+
 .shadow-magical{
   background: rgba(255, 255, 255, 0.9);
 

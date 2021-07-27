@@ -1,21 +1,54 @@
 
 .footer{
-  background: #333;
+  border-top: 1px solid #f1f1f1;
+  @apply bg-white mt-10
 }
 .copyright{
-  background: #292929;
-  @apply py-4 text-gray-400 flex flex-col md:flex-row justify-center items-center space-y-4
+  border-top: 1px solid #f1f1f1;
+  font-size: 0.8rem;
+  @apply py-4 flex flex-col text-gray-500 text-center
+  md:flex-row justify-center 
+  items-center space-y-4
+}
+.iconSocial{
+  @apply flex 
+}
+.iconSocial a{
+  @apply flex mr-5
+}
+.iconSocial svg{
+  fill: #444;
+  @apply h-6 w-6 flex
+}
+.iconSocial a:hover svg{
+  fill: var(--main-color);
+  transition: fill .4s ease;
+}
+.partnerIcons{
+  @apply mb-5 mr-10 
+}
+.partnerIcons img{
+   max-height: 22px;
+  @apply mr-8 mb-5 inline-block
 }
 .footer button{
- color: #fff!important;
 }
 .menu{
   font-size: 0.8rem;
-  font-weight: 700;
-  color: #9B9DA1;
-  @apply uppercase font-bold py-2 md:py-0 md:pb-4
+
+  @apply py-2 md:py-0 md:pb-4
 
 }
+
+.menu a{
+  color: #555;
+}
 .menu a:hover{
-  color: #fff;
+  color: var(--main-color);
+}
+
+.title{
+  font-size: 0.8rem;
+  @apply uppercase  font-bold tracking-wide mb-4 text-gray-600
+
 }

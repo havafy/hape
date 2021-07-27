@@ -61,38 +61,42 @@ const Navbar: FC<Props> = ({darkMode, hideHeader}) => (
             </a>
           </Link>
           </div>
-          <div className="col-span-5">
+          <div className="col-span-6">
             <ul className="navMenu mt-3 ml-10 space-x-5 block">
-            <li className="dropdown">
+                {/*<li className="dropdown">
                   <span className={s.link}><BurgerIcon /></span>
                 <div className="submenu">
-                <i className="header-popover-arrow" style={{'transform': `translate(0px, 0px)`, 'right': `15px`}}></i>
+             <i className="header-popover-arrow" style={{'transform': `translate(0px, 0px)`, 'right': `15px`}}></i>
                   <CategoryMenu />
                 </div>
-              </li>
+              </li> */}
                 
               <li>
-                <Link href="/page/cua-hang-yeu-thich">
-                  <a className={s.link}>Cửa hàng</a>
+                <Link href="/c/cua-hang-yeu-thich">
+                  <a className={s.link}>Hữu Cơ</a>
                 </Link>
               </li>
               <li>
-                <Link href="/page/khuyen-mai">
-                  <a className={s.link}>Khuyến Mãi</a>
+                <Link href="/c/khuyen-mai">
+                  <a className={s.link}>Đồ khô & hộp</a>
                 </Link>
               </li>
 
               <li>
                 <Link href="/page/bestseller">
-                  <a className={s.link}>Bán Chạy</a>
+                  <a className={s.link}>Bánh Kẹo & Uống</a>
                 </Link>
               </li>
               <li>
-                <Link href="/page/don-kho">
-                  <a className={s.link}>Dọn kho</a>
+                <Link href="/c/don-kho">
+                  <a className={s.link}>Nguyên liệu & gia vị</a>
                 </Link>
               </li>
-
+              <li>
+                <Link href="/c/don-kho">
+                  <a className={s.link}>Đông Lạnh</a>
+                </Link>
+              </li>
             </ul>
           </div>
         
@@ -101,7 +105,7 @@ const Navbar: FC<Props> = ({darkMode, hideHeader}) => (
           </div>
 
    
-          <div className="col-span-3">
+          <div className="col-span-2">
             <div className="sm:flex hidden justify-end flex-1 space-x-8 ">
               <UserNav />
             </div>

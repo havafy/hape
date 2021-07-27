@@ -28,4 +28,12 @@ import { CategoriesService } from '../products/categories.service';
         CategoriesService
     ]
 })
-export class UsersModule {}
+export class UsersModule {
+    constructor(
+        private usersService: UsersService
+        ) {}
+    onModuleInit() {
+        this.usersService.createIndex().then();
+    }
+
+}

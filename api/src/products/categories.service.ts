@@ -102,10 +102,10 @@ export class CategoriesService {
         }
         async reIndex(){
             try{
-                let size = 100
+                let size = 50
                 let from = 0
                 let indexTotal = 0
-                while(from < 30){
+                while(from < 300){
                     const { body: { 
                         hits: { 
                             total, 
@@ -116,14 +116,18 @@ export class CategoriesService {
                     if(count === 0) break
                   
                     for(let category of hits){
-                        const { parents, parentName } = await this.createIndexByParentID(category._source.parent_id)
-                 
+                        const { 
+                            parents, 
+                            parentName 
+                        } = await this.createIndexByParentID(category._source.parent_id)
+                        console.log('---->', category._id,    parents, 
+                        parentName)
                         await this.esService.update(ES_INDEX_CATEGORY, category._id ,{
                             parents, parentName
                         }, '')
-                        indexTotal++
+                        
                     }
-                   
+                    indexTotal += count
                     console.log('from:' + from)
                     from++
                 }
