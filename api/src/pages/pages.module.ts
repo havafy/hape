@@ -8,6 +8,7 @@ import { FilesService } from "../files/files.service";
 import { ProductsService } from "../products/products.service";
 import { StaticPageService } from './page-static.service';
 import { CategoriesService } from '../products/categories.service';
+
 @Module({
     imports: [SearchModule],
     providers: [
@@ -19,4 +20,10 @@ import { CategoriesService } from '../products/categories.service';
     ],
     controllers: [PagesController],
 })
-export class PagesModule {}
+export class PagesModule {
+    constructor(private staticPageService: StaticPageService) {}
+    onModuleInit() {
+        // import the data about province/city/ward 
+        this.staticPageService.createIndex().then();
+    }
+}
