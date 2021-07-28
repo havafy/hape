@@ -1,11 +1,12 @@
 import { MaxLength, MinLength , IsOptional} from 'class-validator';
 
-export class StaticPageDto {
-
+export class StaticPageUpdateDto {
+    @IsOptional()
     @MaxLength(200)
     @MinLength(3)
-    title: string;
 
+    title: string;
+    @IsOptional()
     @MaxLength(200)
     @MinLength(3)
     slug: string;
@@ -20,7 +21,7 @@ export class StaticPageDto {
     @MinLength(3)
     seo_description: string;
 
-
+    @IsOptional()
     @MaxLength(1000)
     @MinLength(3)
     content: string;
