@@ -4,22 +4,27 @@ import s from './About.module.css'
 import Head from 'next/head'
 
 const About: FC = () => {
+
   return (
     <main className="">
       <Head>
-        <title>About Hape - As a full service eCommerce agency.</title>
+        <title>About Havafy - As a full service eCommerce agency.</title>
       </Head>
       <div className={s.headBox}>
+        <h1 className="">
+          <span className="highlight leading-5">Hi. We’re Havafy,</span><br />
+          <span className="highlight leading-5">As a full service eCommerce agency.</span></h1>
 
       </div>
       <div className="px-5 mx-auto max-w-7xl">
-        <div className={s.headTitle}>
-         Giới Thiệu Hape
-        </div>
-        <p className={s.introText}>
-       Hape tự hào là cung cấp giải pháp thương mại điện tử cho doanh nghiệp trên nền tảng web và ứng dụng di động.
-        <br /> Chúng tôi luôn tập trung áp dụng những công nghệ tiên tiến nhất, kiểm định chất lượng cao, tập trung phát triển các dịch vụ bảo mật, nhằm cung ứng cho doanh nghiệp các giải pháp toàn diện, chất lượng ưu việt, đem đến trải nghiệm tốt cho người dùng với chi phí hợp lí nhất.
 
+
+        <div className={s.headTitle}>
+          The extended team that is part of your team
+        </div>
+        <p className={s.introText}>Nearly every organization will need to become a tech company in order to compete tomorrow. Yes, even yours. At Havafy, we are on a mission to help companies develop competitiveness and agility using the software.
+           <br /><br />
+           Havafy helps companies become innovation leaders by <strong>delivering software teams</strong> on demand. Our teams help you decide the right architecture and processes to follow and oversee the successful delivery of your software projects.
            </p>
       </div>
       <div className="md:grid md:grid-cols-2 md:gap-6">
@@ -27,24 +32,21 @@ const About: FC = () => {
           <img src="/pages/about/why_us.jpeg" className="container" />
         </div>
         <div className="md:col-span-1 pl-10 lg:pl-20 mt-20 ">
-          <h3 className="text-4xl">Chất lượng sản phẩm là cốt lõi</h3>
-          <p className="text-xl text-gray-600 my-10 w-9/12">
-          Khi mua hàng online tại Hape, bạn hoàn toàn yên tâm về chất lượng sản phẩm, mẩu mã và giá cả. Nếu mua hàng trực tuyến một sản phẩm bất kỳ, bạn sẽ được tích lũy điểm thưởng để có thể mua hàng online với mức giá rẻ hơn ở những lần sau.
-          <br/><br/> Chưa hết Bạn sẽ thường xuyên nhận được coupon giảm giá, quà tặng hàng tháng cũng như cập nhật các thông tin xu hướng mới nhất về thời trang, làm đẹp, giải trí…khi mua sắm trực tuyến tại Hape.
-  </p>
+          <h3 className="text-4xl">We help you<br />see around corners.</h3>
+          <p className="text-xl text-gray-600 my-10 w-9/12">Don’t feel like you’re on an island making decisions in the dark. There’s a lot of things factoring into what makes or breaks an eCommerce website.
+              <br /><br />
+              With over a decade of experience, let us help you dodge landmines that could cost your business valuable time and money. Don’t be someone’s guinea pig. You deserve better.
+                </p>
         </div>
       </div>
       <div className="mt-20 lg:mt-52 md:grid md:grid-cols-2 md:gap-6">
         <div className="md:col-span-1 ">
           <div className=" flex justify-end">
             <div className="lg:w-9/12 mx-10 lg:mx-0">
-              <h3 className="text-4xl">Chất lượng hơn số lượng</h3>
-              <p className="text-xl text-gray-600 my-10">
-              Chúng tôi dốc toàn lực nhằm phục vụ khách hàng để chiếm được lòng tin và sự hài lòng với dịch vụ của chúng tôi. Sự hài lòng của khách hàng là động lực to lớn để chúng tôi phát triển thêm những dịch vụ hậu mãi đi kèm khác biệt, tạo giá trị lợi ích xứng đáng so với chi phí của khách hàng bỏ ra.
-              <br/><br/>
-Quý khách có thể tìm hiểu thêm thông tin về quy trình mua hàng, cách thức hoạt động của dịch vụ của chúng tôi hoặc gọi số hotline để yêu cầu tư vấn trực tiếp.
-
-
+              <h3 className="text-4xl">We help you<br />see around corners.</h3>
+              <p className="text-xl text-gray-600 my-10">Don’t feel like you’re on an island making decisions in the dark. There’s a lot of things factoring into what makes or breaks an eCommerce website.
+              <br /><br />
+              With over a decade of experience, let us help you dodge landmines that could cost your business valuable time and money. Don’t be someone’s guinea pig. You deserve better.
                 </p>
             </div>
           </div>
@@ -55,7 +57,7 @@ Quý khách có thể tìm hiểu thêm thông tin về quy trình mua hàng, c�
         </div>
       </div>
 
-      <div className="bg-gray-100 lg:mt-20 py-24 hidden">
+      <div className="bg-gray-100 lg:mt-20 py-24">
         <div className="mx-auto max-w-7xl">
           <div className="text-3xl font-bold m-auto max-w-2xl text-center text-gray-800">
             Each of our values is aligned with what will guide us to achieve our mission
@@ -66,7 +68,7 @@ Quý khách có thể tìm hiểu thêm thông tin về quy trình mua hàng, c�
               <p className="text-base text-gray-600">We are purpose-driven people,
               dedicated to serving something beyond ourselves.
               Having mission as a value also allows us
-              to continually ground ourselves in why we’re building Hape.
+              to continually ground ourselves in why we’re building Havafy.
             </p>
             </div>
             <div className="md:col-span-1 px-12 py-10 bg-white shadow-md">

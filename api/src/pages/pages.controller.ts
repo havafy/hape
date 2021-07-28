@@ -2,6 +2,7 @@ import { Controller, Get,Put, Body, Res, Post, Param, Delete } from '@nestjs/com
 import { HomePageService } from './page-home.service';
 import { CategoryPageService } from './page-category.service';
 import { ProductPageService } from './page-product.service';
+import { StaticPageService } from './page-static.service';
 import { PageGetDto  } from './dto/page-get.dto';
 import { get } from 'https';
 @Controller()
@@ -9,6 +10,7 @@ export class PagesController {
     constructor(public readonly homePageService: HomePageService,
         public readonly categoryPageService: CategoryPageService,
         public readonly productPageService: ProductPageService,
+        public readonly staticPageService: StaticPageService,
         ) {}
 
     @Get('/api/pages/:id')
@@ -16,8 +18,9 @@ export class PagesController {
         const id = params.id
         if(id === 'home'){
             return res.json(await this.homePageService.getContent())
+        }else{
+            return res.json(await this.staticPageService.get(id))
         }
-        return res.json({})
     }
     @Get('/api/pages/category/:id')
     async category(@Res() res, @Param() params: PageGetDto): Promise<any> {

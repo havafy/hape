@@ -17,20 +17,20 @@ const Footer: FC = () => (
       <div className="col-span-3 ">
       <h3 className={s.title}>Chăm sóc khách hàng</h3>
       <ul className="flex flex-initial flex-col md:flex-1">
-        <li className={s.menu}> <Link href="/"><a>Thanh Toán</a></Link></li>
-        <li className={s.menu}> <Link href="/"><a>Vận Chuyển</a></Link></li>
-        <li className={s.menu}> <Link href="/"><a>Trả Hàng & Hoàn Tiền</a></Link></li>
-        <li className={s.menu}> <Link href="/"><a>Chính Sách Bảo Hành</a></Link></li>
+        <li className={s.menu}> <Link href="/page/thanh-toan"><a>Thanh Toán</a></Link></li>
+        <li className={s.menu}> <Link href="/page/van-chuyen"><a>Vận Chuyển</a></Link></li>
+        <li className={s.menu}> <Link href="/page/tra-hang-hoan-tien"><a>Trả Hàng & Hoàn Tiền</a></Link></li>
+        <li className={s.menu}> <Link href="/page/chinh-sach-bao-hanh"><a>Chính Sách Bảo Hành</a></Link></li>
           </ul>
         </div>
         <div className="col-span-3 ">
       <h3 className={s.title}>Về Hape</h3>
       <ul className="flex flex-initial flex-col md:flex-1">
-        <li className={s.menu}> <Link href="/"><a>Giới thiệu Hape</a></Link></li>
+        <li className={s.menu}> <Link href="/page/about-us"><a>Giới thiệu Hape</a></Link></li>
      
-        <li className={s.menu}> <Link href="/"><a>Chính Sách Bảo Mật</a></Link></li>
-        <li className={s.menu}> <Link href="/"><a>Điều Khoản Hape</a></Link></li>
-        <li className={s.menu}> <Link href="/"><a>Tuyển Dụng</a></Link></li>
+        <li className={s.menu}> <Link href="/page/chinh-sach-bao-mat"><a>Chính sách bảo Mật</a></Link></li>
+        <li className={s.menu}> <Link href="/page/dieu-khoan"><a>Điều khoản sử dụng</a></Link></li>
+        <li className={s.menu}> <Link href="/page/tuyen-dung"><a>Tuyển Dụng</a></Link></li>
           </ul>
         </div>
         <div className="col-span-4">
@@ -69,7 +69,7 @@ const Footer: FC = () => (
               </a>
               <a
                 aria-label="Hape on Instagram"
-                href="https://www.instagram.com/hape_vn"
+                href="https://www.instagram.com/hape.vn/"
                 target="_blank"
                 className={s.menu}
               >
@@ -77,7 +77,7 @@ const Footer: FC = () => (
               </a>
               <a
                 aria-label="Hape on Youtube"
-                href="https://youtube.com/HapeVN"
+                href="https://www.youtube.com/channel/UCNqfpB0YbNUOP7ggI6tXgIA"
                 target="_blank"
                 className={s.menu}
               >

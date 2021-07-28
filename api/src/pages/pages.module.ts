@@ -6,6 +6,7 @@ import { PagesController } from './pages.controller';
 import { SearchModule } from '../search/search.module';
 import { FilesService } from "../files/files.service";
 import { ProductsService } from "../products/products.service";
+import { StaticPageService } from './page-static.service';
 import { CategoriesService } from '../products/categories.service';
 @Module({
     imports: [SearchModule],
@@ -13,7 +14,8 @@ import { CategoriesService } from '../products/categories.service';
         HomePageService, 
         ProductPageService, 
         CategoryPageService, FilesService, 
-        CategoriesService, ProductsService
+        CategoriesService, ProductsService,
+        StaticPageService
     ],
     controllers: [PagesController],
 })
