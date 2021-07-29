@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { S3 } from 'aws-sdk';
 const sharp = require('sharp')
+import axios from 'axios'
 import { nanoid } from 'nanoid'
+import { fromBuffer } from 'file-type'
 const WAITING_ROOM = '__WaitingRoom/'
+const MAX_WIDTH = 1024
+const MAX_HEIGHT = 1024
 @Injectable()
 export class FilesService {
   constructor(
@@ -48,12 +52,37 @@ export class FilesService {
     }
   
   }
+  async  getBase64(url:string) {
+    const res = await axios.get(url, { responseType: "arraybuffer" });
+    if(res.data && await this.isMediaFile(res.data)){
+      
+      return await sharp(res.data).resize(MAX_WIDTH, MAX_HEIGHT, {
+        fit: 'contain',
+        background: { r: 255, g: 255, b: 255, alpha: 1 } })
+        .toBuffer();
+    }
+    return
+  }
+  async isMediaFile(buffer){
+    const file = await fromBuffer(buffer)
+    if([
+      'image/png', 'image/jpeg', 'image/gif', 'video/mpeg', 'image/webp'
+    ].includes(file.mime)){
+      return true
+    }
+    return false
+  }
+  async getExtFile(buffer){
+    const file = await fromBuffer(buffer)
+    return file.ext
+  }
   async uploadPublicFile(dataBuffer: Buffer,fileName: string ) {
     
-    const uniqueName = nanoid(6) + '-' +fileName
+    const uniqueName = nanoid() + '.' + await this.getExtFile(dataBuffer)
     try {
-
-        const fileResize = await sharp(dataBuffer).resize(1024, 1024, {
+      if(await this.isMediaFile(dataBuffer)){
+      
+        const fileResize = await sharp(dataBuffer).resize(MAX_WIDTH, MAX_HEIGHT, {
                     fit: 'contain',
                     background: { r: 255, g: 255, b: 255, alpha: 1 } })
                     .toBuffer();
@@ -64,10 +93,10 @@ export class FilesService {
           Body: fileResize,
           Key,
           ACL:'public-read'
-        })
-          .promise();
+        }).promise();
     
         return uploadResult
+      }
         
     }catch (err) {
       console.log(err)
@@ -119,10 +148,23 @@ export class FilesService {
               }else{
                 updatedUrl.push(url)
               }
+          }else{
+            // if this is external URL, let download it to our S3
+            const dataBuffer = await this.getBase64(url)
+            const fileName =  nanoid() + '.' + await this.getExtFile(dataBuffer)
+            const Key = folder + '/' + (keyword !== '' ? keyword + '-' : '') + fileName
+            const uploadResult = await s3.upload({
+              Bucket: process.env.AWS_S3_BUCKET,
+              Body: dataBuffer,
+              Key,
+              ACL:'public-read'
+            }).promise();
+            updatedUrl.push(uploadResult.Location)
           }
 
           }catch(e){
             //file not existing
+            console.log('error', e)
           }
 
       }

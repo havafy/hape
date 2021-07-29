@@ -96,7 +96,7 @@ export class ProductsService {
                 updatedAt: createdAt,
                 createdAt
             }]
-
+            return record
             const {  body: {items} } = await this.esService.createByBulk(ES_INDEX_NAME, record);
             const productID = items[0].index._id
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, productID);
