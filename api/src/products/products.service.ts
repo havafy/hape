@@ -4,6 +4,7 @@ import { SearchService } from '../search/search.service';
 import { FilesService } from "../files/files.service";
 import { ProductDto } from './dto/product.dto';
 import { CategoriesService } from './categories.service';
+import axios from 'axios'
 const ES_INDEX_NAME = 'products'
 const CDN = 'https://'+process.env.AWS_CLOUDFRONT+'/';
 @Injectable()
@@ -176,6 +177,29 @@ export class ProductsService {
                 found: false,
             }
         }
+
+    }
+
+    async pullFromWoocommerce () {
+        try {
+
+        const { data } = await axios.get(
+            'https://www.havamall.com/wp-json/wc/v2/products?page=1&per_page=30&orderby=date&order=desc',
+            {
+                auth: {
+                    username: 'ck_17cffd73716807b8b1a4e83370ce8c918f264318',
+                    password: 'cs_476889cb37aad917d3710e4cf7df248e82889eef'
+                  }
+            }
+          )
+
+        return data
+    }catch (error) {
+        console.log(error)
+        return {
+            found: false,
+        }
+    }
 
     }
     async getFullyProduct(id: string) {

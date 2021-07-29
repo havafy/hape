@@ -25,6 +25,10 @@ export class PagesController {
             return res.json(await this.staticPageService.get(id))
         }
     }
+    @Get('/api/products/pull')
+    async pull(@Res() res): Promise<any> {
+        return res.json(await this.productPageService.pull())
+    }
     @UseGuards(AuthGuard('jwt'))  
     @Post('/api/pages')
     async createStaticPage(@Res() res,  @Body() staticPageDto: StaticPageDto): Promise<any> {

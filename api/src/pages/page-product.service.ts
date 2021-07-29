@@ -17,5 +17,9 @@ export class ProductPageService {
         return await this.productsService.getFullyProduct(id)
     
     }
+    
+    async pull() {
+        return await this.productsService.pullFromWoocommerce()
 
+    }
 }
