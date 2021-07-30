@@ -9,7 +9,7 @@ interface Props {
 }
 const PriceDiscountIncl: FC<Props> = ({product}) =>{
     return <div>
-    <span className={s.price}>{currencyFormat(product.priceDiscount)}</span>
+    <span className={s.price}>{currencyFormat(product.sale_price)}</span>
     <span className={s.priceOriginal}>{currencyFormat(product.price)}</span>
     </div>
 }
@@ -30,7 +30,7 @@ const ProductItem: FC<Props> = ({product}) =>{
             <Link href={getProductUrl(product)}><a>{product.name}</a></Link>
             </div>
 
-           { product.priceDiscount ? 
+           { product.sale_price ? 
            <PriceDiscountIncl product={product} /> : 
            <PriceOnly product={product}/>    }
    

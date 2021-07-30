@@ -50,43 +50,46 @@ export class ProductsService {
         return newFiles
     }
     async getByMultiFields({must, size = 12, from = 0, sort = [{"createdAt": "desc"}]}) {
-     
-        const { body: { 
-            hits: { 
-                total, 
-                hits 
-            } } } = await this.esService.findByMultiFields({index: ES_INDEX_NAME, must, size, from, sort})
-        const count = total.value
-        let products = []
-        if(count){
-            products = hits.map((item: any) => {
-                return{
-                    id: item._id,
-                    ...item._source, 
-                    images: this.applyCDN(item._source.images)
-                 }
-            })
-        }
-        return {
-            count,
-            size,
-            from,
-            products
+        try{
+                const { body: { 
+                    hits: { 
+                        total, 
+                        hits 
+                    } } } = await this.esService.findByMultiFields({index: ES_INDEX_NAME, must, size, from, sort})
+                const count = total.value
+                let products = []
+                if(count){
+                    products = hits.map((item: any) => {
+                        return{
+                            id: item._id,
+                            ...item._source, 
+                            images: this.applyCDN(item._source.images)
+                        }
+                    })
+                }
+                return {
+                    count,
+                    size,
+                    from,
+                    products
+                }
+        }catch (err){
+            console.log('getByMultiFields: ', err)
+
         }
     }
 
-    async create(userID: number, productDto: ProductDto) {
+    async create(userID: string, productDto: any) {
         try {
             const now = new Date();
             const createdAt = now.toISOString()
-            const existing = await this.esService.checkExisting(ES_INDEX_NAME, 'sku', productDto.sku)
-            if(existing){
+            const existing = await this.isSkuExisting(userID, productDto.sku)
+            if(existing !== false) {
                 return {
                     status: false,
                     message: "This SKU is existing."
                 }
             }
-
             //move file from Waiting to Production folder
             productDto.images = await this.filesService.formalizeS3Files(productDto.images)
 
@@ -97,7 +100,6 @@ export class ProductsService {
                 updatedAt: createdAt,
                 createdAt
             }]
-            return record
             const {  body: {items} } = await this.esService.createByBulk(ES_INDEX_NAME, record);
             const productID = items[0].index._id
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, productID);
@@ -106,6 +108,7 @@ export class ProductsService {
                 status: true,
             }
         }catch (err){
+            console.log('Create Product: ', err)
             return {
                 product: null,
                 status: false,
@@ -113,8 +116,26 @@ export class ProductsService {
         }
         
     }
+    async isSkuExisting(userID, sku: string){
+        try{   
+            if(sku === '') return true
+            let  must = [ 
+                {match: { sku }},
+                {match: { userID }}
+            ]
+            const { count,products } = await this.getByMultiFields({must})
+
+            if(count){
+                return products[0]
+            }
+
+        } catch (err) {
+            console.error('isSkuExisting:', err)
+        }
+        return false
+    }
  
-    async update(userID: number, productDto: ProductDto) {
+    async update(userID: string, productDto: any) {
         try{    
             const productID = productDto.id
             const checkProduct =  await this.esService.findById(ES_INDEX_NAME, productDto.id);
@@ -127,8 +148,8 @@ export class ProductsService {
             }
             // if change SKU, let check new SKU is existing or not
             if(productDto.sku !== product.sku){
-                const found = await this.esService.findBySingleField(ES_INDEX_NAME, { sku: productDto.sku })
-                if(found.body.hits.total.value >= 1  || !Array.isArray(found.body.hits.hits)){
+                const found = await this.isSkuExisting(userID, productDto.sku)
+                if(found !== false){
                     return {
                         status: false,
                         message: "This SKU is existing.",
@@ -180,24 +201,150 @@ export class ProductsService {
 
     }
 
-    async pullFromWoocommerce () {
+    async pullFromWoocommerce (userID: string) {
         try {
 
-        const { data } = await axios.get(
-            'https://www.havamall.com/wp-json/wc/v2/products?page=1&per_page=30&orderby=date&order=desc',
-            {
-                auth: {
-                    username: 'ck_17cffd73716807b8b1a4e83370ce8c918f264318',
-                    password: 'cs_476889cb37aad917d3710e4cf7df248e82889eef'
-                  }
+            const { data } = await axios.get(
+                'https://www.havamall.com/wp-json/wc/v2/products?page=1&per_page=2&orderby=date&order=desc',
+                {
+                    auth: {
+                        username: 'ck_17cffd73716807b8b1a4e83370ce8c918f264318',
+                        password: 'cs_476889cb37aad917d3710e4cf7df248e82889eef'
+                    }
+                }
+            )
+        let result = []
+        for(let product of data){
+            const sku = product.id
+            const found = await this.isSkuExisting(userID, sku)
+  
+            let images = []
+            if(product.images.length){
+                images = product.images.map((image: any) => {
+                    return image.src
+                })
             }
-          )
+            let tags = []
+            if(product.categories.length){
+                tags = product.categories.map((cat: any) => {
+                    return cat.slug
+                })
+            }
+            const postData = {
+                name: product.name,
+                price: product.price,
+                quantity: product.stock_quantity,
+                sku,
+                regular_price: product.regular_price,
+                sale_price:  product.sale_price,
+                status: true,
+                permalink: product.permalink,
+                description: product.description,
+                tags
+            }
+            if(found === false){
+                await this.create(userID, { 
+                    ...postData, images
+                })
+            }else{
+                // don't allow update image
+                await this.update(userID, {
+                    ...postData, id: found.id
+                    })
+            }
+            result.push(product.name)
+        }
 
-        return data
+/*
+        "id": 21080,
+        "name": "Sữa Đặc Có Đường LaRosée 500g Nắp Giựt Tiện Lợi",
+        "slug": "sua-dac-co-duong-larosee-500g-nap-giut-tien-loi",
+        "permalink": "https://www.havamall.com/shop/sua-dac-co-duong-larosee-500g-nap-giut-tien-loi/",
+        "date_created": "2021-07-29T11:29:31",
+        "date_created_gmt": "2021-07-29T04:29:31",
+        "date_modified": "2021-07-29T11:29:31",
+        "date_modified_gmt": "2021-07-29T04:29:31",
+        "type": "simple",
+        "status": "publish",
+        "featured": false,
+        "catalog_visibility": "visible",
+        "description": "",
+        "short_description": "",
+        "sku": "",
+        "price": "28000",
+        "regular_price": "35000",
+        "sale_price": "28000",
+        "date_on_sale_from": null,
+        "date_on_sale_from_gmt": null,
+        "date_on_sale_to": null,
+        "date_on_sale_to_gmt": null,
+        "price_html": "<del><span class=\"woocommerce-Price-amount amount\">35,000<span class=\"woocommerce-Price-currencySymbol\">&#8363;</span></span></del> <ins><span class=\"woocommerce-Price-amount amount\">28,000<span class=\"woocommerce-Price-currencySymbol\">&#8363;</span></span></ins>",
+        "on_sale": true,
+        "purchasable": true,
+        "total_sales": 0,
+
+        "tax_status": "taxable",
+        "tax_class": "",
+        "manage_stock": false,
+        "stock_quantity": null,
+        "in_stock": true,
+
+        "weight": "",
+        "dimensions": {
+            "length": "",
+            "width": "",
+            "height": ""
+        },
+        "shipping_required": true,
+        "shipping_taxable": true,
+        "shipping_class": "",
+        "shipping_class_id": 0,
+        "reviews_allowed": true,
+        "average_rating": "0.00",
+        "rating_count": 0,
+        "related_ids": [
+            4360,
+            6462,
+            4348,
+            6479,
+            4272
+        ],
+        "upsell_ids": [],
+        "cross_sell_ids": [],
+        "parent_id": 0,
+        "purchase_note": "",
+        "categories": [
+            {
+                "id": 36,
+                "name": "THỰC PHẨM",
+                "slug": "thuc-pham-tieu-dung"
+            },
+            {
+                "id": 135,
+                "name": "Sữa - Đồ uống",
+                "slug": "sua-do-uong"
+            },
+            {
+                "id": 143,
+                "name": "Thực phẩm đóng hộp",
+                "slug": "thuc-pham-dong-hop"
+            }
+        ],
+        "tags": [],
+        "images": [
+            {
+                "id": 21081,
+                "src": "https://www.havamall.com/wp-content/uploads/2021/07/dfrge.png",
+                "name": "dfrge",
+                "position": 0
+            }
+        ],
+*/
+        return result
     }catch (error) {
-        console.log(error)
+        console.log('pullFromWoocommerce: ', error)
         return {
-            found: false,
+            error
         }
     }
 
@@ -291,18 +438,37 @@ export class ProductsService {
                                 },
                             },
                         },
+                        // --- stock ----
                         quantity: { type: 'long' },
+                        manage_stock: { type: 'boolean' },
+                        in_stock: { type: 'boolean' },
+                        // --- price ------
                         price: { type: 'long' },
-                        priceDiscount: { type: 'long' },
+                        regular_price: { type: 'long' },
+                        sale_price: { type: 'long' },
+                        total_sales: { type: 'long' },
                         discountBegin: { type: 'date'},
                         discountEnd: { type: 'date'},
-                        url: { type: 'text' },
+                        permalink: { type: 'text' },
+                        short_description:  { type: 'text' },
                         description: { type: 'text' },
                         category: { type: 'text'},
-                        status: { type: 'boolean' },
+                 
                         images: { type: 'text' },
                         tags: { type: 'text' },
                         userID: { type: 'long' },
+                        //--- ------
+                        type:{ type: 'text' }, // "simple"
+                        status: { type: 'boolean' },//"publish"
+                        catalog_visibility: { type: 'text' }, // "visible"
+                        //---- review ------
+                        reviews_allowed: { type: 'boolean' },
+                        average_rating: { type: 'long' },
+                        rating_count: { type: 'long' },
+                        // ---- marketing ----
+                        related_ids: { type: 'text' },
+                        upsell_ids:{ type: 'text' },
+                        cross_sell_ids: { type: 'text' },
                         //------
                         weight: { type: 'short' },
                         length: { type: 'short' },

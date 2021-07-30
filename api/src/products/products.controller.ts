@@ -20,6 +20,12 @@ export class ProductsController {
             ...response
         })
     }
+    @Get('/api/products/pull')
+    async pull(@Res() res): Promise<any> {
+        const userID = res.req.user.id
+        
+        return res.json(await this.productService.pullFromWoocommerce(userID))
+    }
     @Put('/api/products')
     async update(@Res() res,  @Body() productDto: ProductDto): Promise<any> {
         const userID = res.req.user.id

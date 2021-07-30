@@ -18,8 +18,4 @@ export class ProductPageService {
     
     }
     
-    async pull() {
-        return await this.productsService.pullFromWoocommerce()
-
-    }
 }

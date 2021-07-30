@@ -119,7 +119,7 @@ const ProductPage: FC<Props> = ({pid}) => {
                 <div className="md:col-span-7">
                       <h1 className={s.pageTitle}>{product?.name}</h1>
                       <div className={s.priceBox}>
-                          { product.priceDiscount ? 
+                          { product.sale_price ? 
                             <PriceDiscountIncl product={product} /> : 
                             <PriceOnly product={product}/>    }
                       </div>
@@ -226,7 +226,7 @@ const PromoBox: FC<any> = ()=>{
 const PriceDiscountIncl: FC<ProductInfoProps> = ({product}) =>{
   return <div>
       <span className={s.priceOriginal}>{currencyFormat(product.price)}</span>
-  <span className={s.price}>{currencyFormat(product.priceDiscount)}</span>
+  <span className={s.price}>{currencyFormat(product.sale_price)}</span>
 
   </div>
 }

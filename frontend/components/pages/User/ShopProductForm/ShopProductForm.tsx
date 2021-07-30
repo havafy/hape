@@ -318,7 +318,7 @@ const ShopProductForm: FC = () => {
 
                 {/* <div className="md:col-span-1">
                   <label className={s.label}>Giá khuyến mãi(₫)</label>
-                   <Form.Item name="priceDiscount" >
+                   <Form.Item name="sale_price" >
                     <InputNumber min={1000} max={90000000} placeholder='Giá sản phẩm' type="number" className={s.input}  />
                   </Form.Item>
                 </div>

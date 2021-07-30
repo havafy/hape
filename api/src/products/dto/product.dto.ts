@@ -17,7 +17,7 @@ export class ProductDto {
   @MinLength(10)
   name: string;
 
-
+  @IsOptional()
   @MaxLength(70)
   @MinLength(5)
   sku: string;
@@ -51,7 +51,7 @@ export class ProductDto {
   @IsNumber()
   @Min(500)
   @Max(100000000)
-  priceDiscount: number;
+  sale_price: number;
 
   @IsOptional()
   @IsDate()

@@ -99,6 +99,7 @@ export class SearchService {
         if(Array.isArray(_source)){
             reqParams.body['_source'] = _source
         }
+        // console.log(JSON.stringify(reqParams))
         const res = await this.esService.search(reqParams)
         return res
     }
