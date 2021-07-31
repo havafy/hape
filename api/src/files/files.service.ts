@@ -12,7 +12,10 @@ export class FilesService {
   constructor(
   ) {}
 
+  async test(){
+    const url = 'https://www.havamall.com/wp-content/uploads/2021/07/d%C3%A8.png'
 
+  }
   // remove file by array
   async removeFromS3(  files: string[]) {
     const s3 = new S3();
@@ -54,7 +57,7 @@ export class FilesService {
   }
   async getBase64(url:string) {
     try{
-      const res = await axios.get(url, { responseType: "arraybuffer" });
+      const res = await axios.get(encodeURI(url), { responseType: "arraybuffer" });
       if(res.data && await this.isMediaFile(res.data)){
         
         return await sharp(res.data).resize(MAX_WIDTH, MAX_HEIGHT, {
