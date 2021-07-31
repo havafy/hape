@@ -100,7 +100,7 @@ export class CategoriesService {
                 console.log(err)
             }
         }
-        async reIndex(id: string){
+        async reIndex(id: string = ''){
             try{
                 if(id !== ''){
                     const category = await this.get(id)

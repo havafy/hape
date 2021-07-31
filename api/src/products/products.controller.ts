@@ -67,7 +67,8 @@ export class ProductsController {
     }
     @Get('/api/categories/reIndex')
     async categoryReindex(@Res() res): Promise<any> {
-        return res.json(await this.categoriesService.reIndex())
+        let {id = '' } = res.req.query
+        return res.json(await this.categoriesService.reIndex(id))
     }
 
 
