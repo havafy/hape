@@ -3,7 +3,7 @@ import Link from 'next/link'
 import s from './CategoryPage.module.css'
 import axios from 'axios'
 import { ProductItem } from '@components/common'
-import {getName} from '@config/category'
+import { NextSeo } from 'next-seo'
 import { Pagination } from 'antd';
 import { useRouter } from 'next/router'
 interface Props {
@@ -53,6 +53,7 @@ const CategoryPage: FC<Props> = ({pid}) => {
 
   return (
     <main className="mt-24 category-page">
+      <NextSeo title={category.display_name} description="" />
       <div className={s.root}>
       {products.length > 0 && <div className="md:grid md:grid-cols-12 md:gap-6">
         {/* <div className="md:col-span-2">

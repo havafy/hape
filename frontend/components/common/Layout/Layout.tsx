@@ -7,7 +7,8 @@ import Link from 'next/link'
 import Head from 'next/head'
 import { useUI } from '@components/ui/context'
 import { Navbar, Footer } from '@components/common'
-
+import { DefaultSeo } from 'next-seo'
+import config from '@config/seo.json'
 import { useAcceptCookies } from '@lib/hooks/useAcceptCookies'
 interface Props {
   hideHeader?: boolean;
@@ -32,6 +33,7 @@ const Layout: FC<Props> = ({
   return (
     <div id="App">
 
+      <DefaultSeo {...config} />
 
       <header>
       <Navbar hideHeader={hideHeader}  darkMode={darkMode} />

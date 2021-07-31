@@ -7,9 +7,6 @@ export default function Home() {
 
   return (
     <Layout>
-      <Head>
-        <title>Home page</title>
-      </Head>
         <HomeContent />
 
     </Layout>

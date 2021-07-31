@@ -29,7 +29,7 @@ export const renderCategoryBreadcrumb = (category: any) =>{
     return <>
     {category.parentName.map((name: string, key: number)=>{
         return <><Link href={getCategoryUrl({display_name: name, id: category.parents[key]})}>
-      <a>{name}</a>
+      <a key={key}>{name}</a>
       </Link>     <IoIosArrowForward /> </>})}
       <Link href={getCategoryUrl(category)}><a>{category.display_name}</a></Link> 
       <IoIosArrowForward /> 

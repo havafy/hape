@@ -1,26 +1,21 @@
 {
-    "title": "ACME Storefront | Powered by Next.js Commerce",
-    "titleTemplate": "%s - ACME Storefront",
-    "description": "Next.js Commerce - https://www.nextjs.org/commerce",
+    "title": "Hape | hàng tận mối giá tận gốc.",
+    "titleTemplate": "%s - Hape",
+    "description": "Hape tự hào đồng hành cùng khách hàng, hàng chất lượng và luôn giá có tốt nhất, miễn phí gian hàng trọn đời cho chủ shop.",
     "openGraph": {
-      "title": "ACME Storefront | Powered by Next.js Commerce",
-      "description": "Next.js Commerce - https://www.nextjs.org/commerce",
+      "title": "Hape | hàng tận mối giá tận gốc.",
+      "description": "Hape tự hào đồng hành cùng khách hàng, hàng chất lượng và luôn giá có tốt nhất, miễn phí gian hàng trọn đời cho chủ shop.",
       "type": "website",
-      "locale": "en_IE",
-      "url": "https://nextjs.org/commerce",
-      "site_name": "Next.js Commerce",
+      "locale": "vn_VI",
+      "url": "https://www.hape.vn",
+      "site_name": "Hape.vn",
       "images": [
         {
-          "url": "/card.png",
-          "width": 800,
-          "height": 600,
-          "alt": "Next.js Commerce"
+          "url": "/assets/logo_hape.png",
+          "width": 1000,
+          "height": 1000,
+          "alt": "Hape.vn"
         }
       ]
-    },
-    "twitter": {
-      "handle": "@nextjs",
-      "site": "@nextjs",
-      "cardType": "summary_large_image"
     }
 }

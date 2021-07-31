@@ -7,6 +7,8 @@ import {
 import { Error } from '@components/pages'
 import { useAuth } from '@context/AuthContext'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
+
 export default function Page() {
     const router = useRouter()
     const { accessToken } = useAuth();
@@ -16,6 +18,7 @@ export default function Page() {
      <Layout pid={pid}>
          { accessToken !== '' &&
        <div className="mt-28">
+       <NextSeo title="Quản lý tài khoản" description="" />
        <div className="mx-auto max-w-7xl">
         <div className="md:grid md:grid-cols-12">
           <div className="mt-5 md:col-span-2">

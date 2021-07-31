@@ -6,6 +6,7 @@ import { QuantityBox } from '@components/common'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import IProduct from '@interfaces/product'
+import { NextSeo } from 'next-seo'
 import { allowedTags, currencyFormat, getProductUrl, renderCategoryBreadcrumb} from '@lib/product'
 import { BiCart } from 'react-icons/bi'
 import { message as Message } from 'antd'
@@ -95,8 +96,13 @@ const ProductPage: FC<Props> = ({pid}) => {
     }, [])  
   return (
     <main className="mt-24">
+  
       { !loading &&   product &&       
             <div className={s.boxWrap}>
+                 <NextSeo
+                    title={product.name}
+                    description=""
+                    />
                   <div className="mb-3">
                   <div className={s.categoryMenu}>
                             {renderCategoryBreadcrumb(product.categoryRaw)}
