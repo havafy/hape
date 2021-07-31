@@ -95,7 +95,10 @@ export class ProductsService {
             //filter the un-control tag on description
             productDto.description = this.allowedTags(productDto.description)
             // collect category ID and his parents
-            const categories = await this.collectGroupCategory(productDto.category)
+            let categories = []
+            if(productDto.category){
+                categories = await this.collectGroupCategory(productDto.category)
+            }
             
             const record: any = [
                 { index: { _index: ES_INDEX_NAME } },  {
@@ -173,7 +176,10 @@ export class ProductsService {
             productDto.description = this.allowedTags(productDto.description)
 
             // collect category ID and his parents
-            const categories = await this.collectGroupCategory(productDto.category)
+            let categories = []
+            if(productDto.category){
+                categories = await this.collectGroupCategory(productDto.category)
+            }
             await this.esService.update(ES_INDEX_NAME, productID ,{...productDto, categories})
             const updatedProduct =  await this.esService.findById(ES_INDEX_NAME, productID);
             const categoryRaw = await this.categoriesService.get(productDto.category)
