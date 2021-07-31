@@ -107,25 +107,26 @@ export class CategoriesService {
                     return await this.reIndexById(category.parent_id, id)
                 }
                 let size = 50
-                let from = 0
+                let page = 0
                 let indexTotal = 0
-                while(from < 300){
+                while(page < 2){
                     const { body: { 
                         hits: { 
                             total, 
                             hits 
                         } } } = await this.esService.findBySingleField(
-                            ES_INDEX_CATEGORY, null, size, from,[{"name": "desc"}])
+                            ES_INDEX_CATEGORY, null, size, page * size,[{"id": "asc"}])
                     const count = total.value
                     if(count === 0) break
                   
                     for(let category of hits){
                        await this.reIndexById(category._source.parent_id, category._id)
-                        
+                  
+
                     }
                     indexTotal += count
-                    console.log('from:' + from)
-                    from++
+                    console.log('reIndex page:' + page)
+                    page++
                 }
                 return { indexTotal }
             }catch (err) {
@@ -137,7 +138,7 @@ export class CategoriesService {
                 parents, 
                 parentName 
             } = await this.createIndexByParentID(parent_id)
-            console.log('---->', categoryId,  parents,   parentName)
+           // console.log('---->', categoryId,  parents,   parentName)
             return await this.esService.update(ES_INDEX_CATEGORY, categoryId,{
                 parents, parentName
             }, '')
