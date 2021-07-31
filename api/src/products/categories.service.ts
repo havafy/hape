@@ -100,8 +100,12 @@ export class CategoriesService {
                 console.log(err)
             }
         }
-        async reIndex(){
+        async reIndex(id: string){
             try{
+                if(id !== ''){
+                    const category = await this.get(id)
+                    return await this.reIndexById(category.parent_id, id)
+                }
                 let size = 50
                 let from = 0
                 let indexTotal = 0
@@ -111,20 +115,12 @@ export class CategoriesService {
                             total, 
                             hits 
                         } } } = await this.esService.findBySingleField(
-                            ES_INDEX_CATEGORY, null, size, from,[{"id": "desc"}])
+                            ES_INDEX_CATEGORY, null, size, from,[{"name": "desc"}])
                     const count = total.value
                     if(count === 0) break
                   
                     for(let category of hits){
-                        const { 
-                            parents, 
-                            parentName 
-                        } = await this.createIndexByParentID(category._source.parent_id)
-                        console.log('---->', category._id,    parents, 
-                        parentName)
-                        await this.esService.update(ES_INDEX_CATEGORY, category._id ,{
-                            parents, parentName
-                        }, '')
+                       await this.reIndexById(category._source.parent_id, category._id)
                         
                     }
                     indexTotal += count
@@ -135,6 +131,16 @@ export class CategoriesService {
             }catch (err) {
                 console.log(err)
             }
+        }
+        async reIndexById(parent_id, categoryId: string){
+            const { 
+                parents, 
+                parentName 
+            } = await this.createIndexByParentID(parent_id)
+            console.log('---->', categoryId,  parents,   parentName)
+            return await this.esService.update(ES_INDEX_CATEGORY, categoryId,{
+                parents, parentName
+            }, '')
         }
         async createIndexByParentID(parent_id: number){
             let parents = []
