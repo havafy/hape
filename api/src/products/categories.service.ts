@@ -115,7 +115,7 @@ export class CategoriesService {
                             total, 
                             hits 
                         } } } = await this.esService.findBySingleField(
-                            ES_INDEX_CATEGORY, null, size, page * size,[{"id": "asc"}])
+                            ES_INDEX_CATEGORY, null, size, page * size,[{"id": "desc"}])
                     const count = total.value
                     if(count === 0) break
                   
