@@ -10,7 +10,7 @@ export class CategoriesService {
         readonly filesService: FilesService) {}
 
         async search (keyword: string){
-            const size = 10
+            const size = 50
             const from = 0
             const body = {
                 size,
@@ -155,19 +155,23 @@ export class CategoriesService {
             return { parents, parentName }
         }
         async get(id: any){
-            const { body: { 
-                hits: { 
-                    total, 
-                    hits 
-                } } } = await this.esService.findBySingleField(ES_INDEX_CATEGORY, {id}, 2, 0)
-            const count = total.value
 
-            if(count){
-                delete hits[0]._source['children']
-                return {...hits[0]._source}
-            }else{
-                console.log('[Alert] duplicate id', id)
+            if(id){
+                const { body: { 
+                    hits: { 
+                        total, 
+                        hits 
+                    } } } = await this.esService.findBySingleField(ES_INDEX_CATEGORY, {id}, 2, 0)
+                const count = total.value
+    
+                if(count){
+                    delete hits[0]._source['children']
+                    return {...hits[0]._source}
+                }else{
+                    console.log('[Alert] duplicate id', id)
+                }
             }
+           
             return null
         }
         indicateBody() {

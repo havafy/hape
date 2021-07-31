@@ -16,6 +16,7 @@ export default interface IProduct {
     readonly height?: number;
     readonly countryOrigin?: string;
     readonly tags?: string[];
+    readonly categoryRaw?: any;
     readonly expiryDate?: Date;
   }
   

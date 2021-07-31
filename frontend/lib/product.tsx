@@ -1,12 +1,18 @@
 import { FC, useState } from 'react'
+import { IoIosArrowForward } from 'react-icons/io'
 import IProduct from '@interfaces/product' 
+import Link from 'next/link'
 export const getProductUrl = (product: {name: string, id: string}) =>{
     let url = '/l/' + 
-    trimString(product.name.replace(/[&\/\\#”“!@$`’;,+()$~%.'':*^?<>{}]/g, '').replace(/\s/g, '-').trim(), 40) 
+    trimString(getSlug(product.name), 40) 
     + '--' + product.id
     return url
   }
- export const currencyFormat = (number: number) => {
+export const getSlug = (str: string) =>{
+    return str.trim().replace(/[&\/\\#”“!@$`’;,+()$~%.'':*^?<>{}]/g, '').replace(/\s/g, '-').trim()
+}
+
+export const currencyFormat = (number: number) => {
     return (
         <span>
     <span>₫</span>
@@ -17,4 +23,38 @@ export const trimString = function (string: string, length: number) {
     return string.length > length ? 
            string.substring(0, length) :
            string;
-  };
+}
+export const renderCategoryBreadcrumb = (category: any) =>{
+    if(category?.display_name){
+    return category.parentName.map((name: string, key: number)=>{
+        console.log('category:', category)
+        return <><Link href={getCategoryUrl({display_name: name, id: category.parents[key]})}>
+      <a>{name}</a>
+      </Link>     <IoIosArrowForward /> </>})
+    }
+    return <></>
+  
+} 
+export const getCategoryUrl = (category: any) =>{
+    if(category?.display_name){
+      let name = getSlug(category.display_name)
+      
+      return '/c/' + name + '.' + category.id
+    }
+    return ''
+  
+}
+export const allowedTags = function (str:string){
+  return strip_tags(str,'<div><ul><li><h2><h3><h4><b><i><span><img><p>')
+}
+export const strip_tags =  function (str:string, allow:string){
+    // making sure the allow arg is a string containing only tags in lowercase (<a><b><c>)
+    allow = (((allow || '') + '').toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join('')
+
+    var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi
+    var commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi
+    return str.replace(commentsAndPhpTags, '').replace(tags, function ($0, $1) {
+        return allow.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 :''
+    })
+}
+

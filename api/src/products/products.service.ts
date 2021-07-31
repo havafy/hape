@@ -92,7 +92,8 @@ export class ProductsService {
             }
             //move file from Waiting to Production folder
             productDto.images = await this.filesService.formalizeS3Files(productDto.images)
-
+            //filter the un-control tag on description
+            productDto.description = this.allowedTags(productDto.description)
             const record: any = [
                 { index: { _index: ES_INDEX_NAME } },  {
                 ...productDto,
@@ -165,6 +166,8 @@ export class ProductsService {
             productDto.images = updatedImages
             //remove unused images
             await this.filesService.cleanUnusedFiles(updatedImages, product.images)
+            //filter the un-control tag on description
+            productDto.description = this.allowedTags(productDto.description)
             await this.esService.update(ES_INDEX_NAME, productID ,productDto)
             const updatedProduct =  await this.esService.findById(ES_INDEX_NAME, productID);
             return {
@@ -184,7 +187,6 @@ export class ProductsService {
     async getRawProduct(id: string) {
         try {
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
-            console.log(_source)
             const categoryRaw = await this.categoriesService.get(_source.category)
             return {
                 found: true,
@@ -193,7 +195,7 @@ export class ProductsService {
                 }
             }
         }catch (err) {
-            console.log(err)
+            console.log('getRawProduct: ', err)
             return {
                 found: false,
             }
@@ -201,11 +203,11 @@ export class ProductsService {
 
     }
 
-    async pullFromWoocommerce (userID: string) {
+    async pullFromWoocommerce (userID: string, page: number, per_page: number) {
         try {
 
             const { data } = await axios.get(
-                'https://www.havamall.com/wp-json/wc/v2/products?page=1&per_page=2&orderby=date&order=desc',
+                'https://www.havamall.com/wp-json/wc/v2/products?page='+page+'&per_page='+per_page+'&orderby=date&order=desc',
                 {
                     auth: {
                         username: 'ck_17cffd73716807b8b1a4e83370ce8c918f264318',
@@ -215,7 +217,7 @@ export class ProductsService {
             )
         let result = []
         for(let product of data){
-            const sku = product.id
+            const sku = String(product.id)
             const found = await this.isSkuExisting(userID, sku)
   
             let images = []
@@ -239,7 +241,7 @@ export class ProductsService {
                 sale_price:  product.sale_price,
                 status: true,
                 permalink: product.permalink,
-                description: product.description,
+                description: this.allowedTags(product.description),
                 tags
             }
             if(found === false){
@@ -352,10 +354,13 @@ export class ProductsService {
     async getFullyProduct(id: string) {
         try {
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
+            const categoryRaw = await this.categoriesService.get(_source.category)
             return {
                 found: true,
                 product: {
+                    id,
                     ..._source,
+                    categoryRaw,
                     images: this.applyCDN(_source.images)
                 }
             }
@@ -395,6 +400,21 @@ export class ProductsService {
             message: "This product is not found.",
         }
     }
+    allowedTags (str:string){
+        return this.strip_tags(str,'<div><ul><li><h2><h3><h4><b><i><span><img><p>')
+     }
+    strip_tags  (str:string, allow:string){
+          // making sure the allow arg is a string containing only tags in lowercase (<a><b><c>)
+          allow = (((allow || '') + '').toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join('')
+      
+          var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi
+          var commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi
+          return str.replace(commentsAndPhpTags, '').replace(tags, function ($0, $1) {
+              return allow.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 :''
+          })
+      }
+      
+      
     async createIndex(){
         const existing = await this.esService.checkIndexExisting(ES_INDEX_NAME)
         if(!existing){

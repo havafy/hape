@@ -48,7 +48,6 @@
     @apply flex
 }
 .categoryMenu a{
-    @apply font-semibold
 }
 .categoryMenu svg{
     margin: 2px 5px 0 5px;

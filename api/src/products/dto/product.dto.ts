@@ -19,7 +19,7 @@ export class ProductDto {
 
   @IsOptional()
   @MaxLength(70)
-  @MinLength(5)
+  @MinLength(3)
   sku: string;
 
   @IsOptional()
@@ -37,8 +37,9 @@ export class ProductDto {
   @Max(900000000)
   price: number;
 
-  @MaxLength(100)
-  @MinLength(3)
+  @MinLength(3,{
+    message: 'Vui lòng nhập danh mục',
+  })
   category: string;
 
   @IsOptional()
@@ -61,7 +62,7 @@ export class ProductDto {
   discountEnd: Date;
 
   @IsNotEmpty()
-  @MaxLength(1024)
+  @MaxLength(5024)
   @MinLength(50)
   description: string;
 

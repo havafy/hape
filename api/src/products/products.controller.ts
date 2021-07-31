@@ -23,8 +23,8 @@ export class ProductsController {
     @Get('/api/products/pull')
     async pull(@Res() res): Promise<any> {
         const userID = res.req.user.id
-        
-        return res.json(await this.productService.pullFromWoocommerce(userID))
+        let {page = 1, per_page = 30 } = res.req.query
+        return res.json(await this.productService.pullFromWoocommerce(userID, page, per_page))
     }
     @Put('/api/products')
     async update(@Res() res,  @Body() productDto: ProductDto): Promise<any> {

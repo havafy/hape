@@ -425,3 +425,22 @@ body.layout{
 .order-page .label-SHIPPING_FAIL{
   background: #ffa6a6;
 }
+.product-description{
+
+}
+.product-description p{
+  margin-bottom: 10px;
+}
+.product-description li{
+  margin-left: 5px;
+}
+.product-description img{
+  clear: both;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  width: auto;
+}
+.product-description h4, .product-description h3, .product-description h2{
+  @apply font-bold mb-3
+}

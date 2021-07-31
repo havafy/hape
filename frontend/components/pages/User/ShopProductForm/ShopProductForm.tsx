@@ -19,7 +19,6 @@ import locale from 'antd/lib/locale/vi_VN';
 // const { RangePicker } = DatePicker;
 import { useAuth } from '@context/AuthContext'
 import s from './ShopProductForm.module.css'
-import category from '@config/category'
 
 
 const ShopProductForm: FC = () => {
@@ -96,6 +95,10 @@ const ShopProductForm: FC = () => {
       message.error('Vui lòng chọn danh mục.')
       return
     }
+    if(fileList.length ===0 ){
+      message.error('Vui lòng cung cấp hình sản phẩm.')
+      return
+    }
     setIsLoading(true)
     try{
         const discountBegin = discountDate[0] !== '' ? discountDate[0] : null
@@ -122,13 +125,15 @@ const ShopProductForm: FC = () => {
         }
         if(response.data.status){
           updateProduct(response.data.product)
+          message.success(id ?  'Cập nhật thành công': 'Thêm sản phẩm thành công')
         }else{
-          setFormMessage([response.data.message])
+          message.error(response.data.message)
         }
 
     } catch (err){
       if(err?.response?.data){
-        setFormMessage(err.response.data.message)
+        // setFormMessage(err.response.data.message)
+        message.error(err.response.data.message.join(', '))
       }
     }
     setIsLoading(false)
@@ -176,24 +181,25 @@ const ShopProductForm: FC = () => {
     }
   }
   const pickupCategory = (category: any) =>{
-    console.log('pickupCategory', category)
     setCategoryID(category.id)
     setCategory(getFullCategoryName(category, false))
     setCategoryResults([])
   } 
   const getFullCategoryName = (category: any, reverse = true) =>{
-    console.log(category)
-    let name = category.display_name
-    if(category.parentName.length > 0){
-      if(reverse){
-        name = category.parentName.reverse().join(' / ') + ' / ' + name 
-      }else{
-        name = category.parentName.join(' / ') + ' / ' + name 
-      }
+    if(category?.display_name){
+      let name = category.display_name
+      if(category.parentName.length > 0){
+        if(reverse){
+          name = category.parentName.reverse().join(' / ') + ' / ' + name 
+        }else{
+          name = category.parentName.join(' / ') + ' / ' + name 
+        }
 
+      }
+      
+      return name
     }
-    
-    return name
+    return ''
   }
   const cleanCategoryInput = () =>{
     setCategory('')
@@ -208,7 +214,7 @@ const ShopProductForm: FC = () => {
     onFinishFailed={onFinishFailed}  >
 
 
-        <div className="">
+        <div  className={s.formBox}>
  
           <div className="md:grid md:grid-cols-3 md:gap-6">
                 <div className="md:col-span-2">
@@ -233,7 +239,7 @@ const ShopProductForm: FC = () => {
                     </button>
                 </div>
             </div>
-            <div className={s.formBox}>
+            <div>
 
              <div className={s.formMessage}>
                     {Array.isArray(formMessage) && formMessage.map((item: string, i:any) => {     
@@ -274,7 +280,7 @@ const ShopProductForm: FC = () => {
                   <Form.Item name="sku"
                       rules={[
                         { required: true, message: 'Vui lòng nhập SKU sản phẩm!' },
-                        { min: 5, message: 'Yêu cầu dài hơn 5 ký tự.' },
+                        { min: 3, message: 'Yêu cầu dài hơn 3 ký tự.' },
                       ]} >
                     <Input placeholder='Mã sản phẩm(SKU)' className={s.input}  />
                   </Form.Item>
@@ -299,7 +305,7 @@ const ShopProductForm: FC = () => {
                     className={cn(s.categoryClose, category === '' ? 'invisible' : '')} 
                     onClick={e=>cleanCategoryInput()}/>
                   </div>
-                  {categoryResults.length > 0 && <div className={s.dropdownBox}>
+                  {categoryResults.length > 0 && <div className={cn(s.dropdownBox,category === '' ? 'hidden' : '')}>
                     {categoryResults.map((category: any)=>{
                       if(category.parentName){
                         return (<div 

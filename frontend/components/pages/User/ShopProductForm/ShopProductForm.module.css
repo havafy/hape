@@ -18,7 +18,9 @@
     min-width: 55%;
 }
 .dropdownBox{
-    border: 1px solid #f2f2f2;
+    border: 1px solid #f2f2f2; 
+    max-height: 300px;
+    overflow-y: auto;
     @apply absolute bg-white w-full shadow-lg z-10
 }
 .dropdownItem{
@@ -108,7 +110,7 @@
  height: 20px;
 }
 .formBox{
-    @apply shadow sm:pr-16  px-12 py-5 my-5 bg-white
+    @apply shadow px-8 py-6 bg-white
 }
 .formMessage{
     @apply text-sm text-red mb-5

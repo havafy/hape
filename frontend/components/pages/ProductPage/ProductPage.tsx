@@ -3,16 +3,15 @@ import Link from 'next/link'
 import s from './ProductPage.module.css'
 import axios from 'axios'
 import { QuantityBox } from '@components/common'
-import {getName} from '@config/category'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import IProduct from '@interfaces/product'
-import { getProductUrl, currencyFormat } from '@lib/product'
+import { allowedTags, currencyFormat, getProductUrl, renderCategoryBreadcrumb} from '@lib/product'
 import { BiCart } from 'react-icons/bi'
 import { message as Message } from 'antd'
 import { IoIosArrowForward } from 'react-icons/io'
 import { GiReturnArrow } from 'react-icons/gi'
-
+import cn from 'classnames'
 import { FaCertificate, FaShippingFast } from 'react-icons/fa'
 import { Carousel } from 'antd'
 import { useAuth } from '@context/AuthContext'
@@ -49,8 +48,15 @@ const ProductPage: FC<Props> = ({pid}) => {
         let {data: {product, count}} = await axios.get('/pages/product/'+ productID,  { 
           params: { pageSize: PAGE_SIZE, current: page ? page : 1 }
         })
-        setProduct(product)
-        setTotal(count)
+        if(product){
+          const pathUrl = getProductUrl(product)
+          if( pathUrl !== '/l/' + pid){
+            router.push(pathUrl)
+          }
+          setProduct(product)
+          setTotal(count)
+        }
+
         setLoading(false)
     })()
   }
@@ -93,10 +99,7 @@ const ProductPage: FC<Props> = ({pid}) => {
             <div className={s.boxWrap}>
                   <div className="mb-3">
                   <div className={s.categoryMenu}>
-                          <Link href={'/c/'+ product.category}>
-                            <a>{getName(product.category)}</a>
-                            </Link> 
-                            <IoIosArrowForward />
+                            {renderCategoryBreadcrumb(product.categoryRaw)}
                             {product.name} 
                         </div>
                     </div>
@@ -144,15 +147,16 @@ const ProductPage: FC<Props> = ({pid}) => {
             </div>      
             </div>    
  
-            <div className={s.productBox}>  
+            <div className={cn(s.productBox,product.weight ? '': 'hidden')}>  
               <div className={s.contentTitle}>THÔNG TIN CHI TIẾT</div>
-              <div className="my-5 mr-10">
+              <div className="my-3 mr-10">
                 <AttributeList product={product} />
               </div>
             </div>
             <div className={s.productBox}>  
               <div className={s.contentTitle}>Mô Tả Sản phẩm</div>
-              <div className="my-5 mr-10">{product.description}</div>
+              <div className={cn('my-5 mr-10', 'product-description')}  
+              dangerouslySetInnerHTML={{ __html: allowedTags(product.description) }} />
             </div>
   
        </div>

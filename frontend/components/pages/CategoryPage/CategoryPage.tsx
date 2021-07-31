@@ -10,7 +10,14 @@ interface Props {
   pid: string;
 }
 const PAGE_SIZE = 30
+const extractID = (pid: string) =>{
+  if(!pid) return ''
+  const urlSlipt = pid.split('.');
+  return urlSlipt[urlSlipt.length-1]
+}
 const CategoryPage: FC<Props> = ({pid}) => {
+  const categoryID = extractID(pid)
+
   const router = useRouter()
   let { page } = router.query
   const [ total, setTotal ] = useState(1)
@@ -22,7 +29,7 @@ const CategoryPage: FC<Props> = ({pid}) => {
   const pullProducts = async () =>{
     setLoading(true);
     (async () => {
-        let {data: {products, count}} = await axios.get('/pages/category/'+ pid,  { 
+        let {data: {products, count}} = await axios.get('/pages/category/'+ categoryID,  { 
           params: { pageSize: PAGE_SIZE, current: page ? page : 1 }
         })
         setProducts(products)
@@ -30,6 +37,7 @@ const CategoryPage: FC<Props> = ({pid}) => {
         setLoading(false)
     })()
   }
+
   const onPageNumberChange = (pageRq: number) => {
 
     router.push({
