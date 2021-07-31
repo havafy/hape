@@ -13,9 +13,9 @@ export class FilesService {
   ) {}
 
   async test(){
-    const url = 'https://www.havamall.com/wp-content/uploads/2021/07/ngũ-cốc.png'
+    const url = encodeURI('https://www.havamall.com/wp-content/uploads/2021/07/ngũ-cốc.png')
 
-  return await this.getBase64(url)
+  return url
   }
   // remove file by array
   async removeFromS3(  files: string[]) {
@@ -170,6 +170,8 @@ export class FilesService {
                 ACL:'public-read'
               }).promise();
               updatedUrl.push(uploadResult.Location)
+            }else{
+              console.log('[ERROR] getBase64: ' + url)
             }
 
           }
