@@ -109,7 +109,7 @@ export class CategoriesService {
                 let size = 50
                 let page = 0
                 let indexTotal = 0
-                while(page < 2){
+                while(page < 300){
                     const { body: { 
                         hits: { 
                             total, 
