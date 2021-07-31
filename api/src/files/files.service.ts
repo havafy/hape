@@ -52,16 +52,21 @@ export class FilesService {
     }
   
   }
-  async  getBase64(url:string) {
-    const res = await axios.get(url, { responseType: "arraybuffer" });
-    if(res.data && await this.isMediaFile(res.data)){
-      
-      return await sharp(res.data).resize(MAX_WIDTH, MAX_HEIGHT, {
-        fit: 'contain',
-        background: { r: 255, g: 255, b: 255, alpha: 1 } })
-        .toBuffer();
+  async getBase64(url:string) {
+    try{
+      const res = await axios.get(url, { responseType: "arraybuffer" });
+      if(res.data && await this.isMediaFile(res.data)){
+        
+        return await sharp(res.data).resize(MAX_WIDTH, MAX_HEIGHT, {
+          fit: 'contain',
+          background: { r: 255, g: 255, b: 255, alpha: 1 } })
+          .toBuffer();
+      }
+    }catch(err){
+
     }
-    return
+
+    return null
   }
   async isMediaFile(buffer){
     const file = await fromBuffer(buffer)
@@ -151,20 +156,23 @@ export class FilesService {
           }else{
             // if this is external URL, let download it to our S3
             const dataBuffer = await this.getBase64(url)
-            const fileName =  nanoid() + '.' + await this.getExtFile(dataBuffer)
-            const Key = folder + '/' + (keyword !== '' ? keyword + '-' : '') + fileName
-            const uploadResult = await s3.upload({
-              Bucket: process.env.AWS_S3_BUCKET,
-              Body: dataBuffer,
-              Key,
-              ACL:'public-read'
-            }).promise();
-            updatedUrl.push(uploadResult.Location)
+            if(dataBuffer !== null){
+              const fileName =  nanoid() + '.' + await this.getExtFile(dataBuffer)
+              const Key = folder + '/' + (keyword !== '' ? keyword + '-' : '') + fileName
+              const uploadResult = await s3.upload({
+                Bucket: process.env.AWS_S3_BUCKET,
+                Body: dataBuffer,
+                Key,
+                ACL:'public-read'
+              }).promise();
+              updatedUrl.push(uploadResult.Location)
+            }
+
           }
 
           }catch(e){
             //file not existing
-            console.log('error', e)
+            console.log('formalizeS3Files: ', e.message)
           }
 
       }

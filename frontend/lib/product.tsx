@@ -27,7 +27,7 @@ export const trimString = function (string: string, length: number) {
 export const renderCategoryBreadcrumb = (category: any) =>{
     if(category?.display_name){
     return <>
-    {category.parentName.map((name: string, key: number)=>{
+    {category.parentName.reverse().map((name: string, key: number)=>{
         return <><Link href={getCategoryUrl({display_name: name, id: category.parents[key]})}>
       <a key={key}>{name}</a>
       </Link>     <IoIosArrowForward /> </>})}

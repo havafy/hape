@@ -166,12 +166,13 @@ export class ProductsService {
             }
             const now = new Date();
             productDto.updatedAt = now.toISOString()
-     
-            //move file from Waiting to Production folder
-            const updatedImages = await this.filesService.formalizeS3Files(productDto.images)
-            productDto.images = updatedImages
-            //remove unused images
-            await this.filesService.cleanUnusedFiles(updatedImages, product.images)
+            if(productDto.images){
+                //move file from Waiting to Production folder
+                const updatedImages = await this.filesService.formalizeS3Files(productDto.images)
+                productDto.images = updatedImages
+                //remove unused images
+                await this.filesService.cleanUnusedFiles(updatedImages, product.images)
+            }
             //filter the un-control tag on description
             productDto.description = this.allowedTags(productDto.description)
 
