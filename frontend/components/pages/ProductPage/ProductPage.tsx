@@ -23,7 +23,7 @@ interface ProductInfoProps {
 }
 const extractID = (pid: string) =>{
   if(!pid) return ''
-  const urlSlipt = pid.split('--');
+  const urlSlipt = pid.split('.');
   return urlSlipt[urlSlipt.length-1]
 }
 const PAGE_SIZE = 30

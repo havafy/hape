@@ -5,7 +5,7 @@ import Link from 'next/link'
 export const getProductUrl = (product: {name: string, id: string}) =>{
     let url = '/l/' + 
     trimString(getSlug(product.name), 40) 
-    + '--' + product.id
+    + '.' + product.id
     return url
   }
 export const getSlug = (str: string) =>{
@@ -26,11 +26,14 @@ export const trimString = function (string: string, length: number) {
 }
 export const renderCategoryBreadcrumb = (category: any) =>{
     if(category?.display_name){
-    return category.parentName.map((name: string, key: number)=>{
-        console.log('category:', category)
+    return <>
+    {category.parentName.map((name: string, key: number)=>{
         return <><Link href={getCategoryUrl({display_name: name, id: category.parents[key]})}>
       <a>{name}</a>
-      </Link>     <IoIosArrowForward /> </>})
+      </Link>     <IoIosArrowForward /> </>})}
+      <Link href={getCategoryUrl(category)}><a>{category.display_name}</a></Link> 
+      <IoIosArrowForward /> 
+      </>
     }
     return <></>
   

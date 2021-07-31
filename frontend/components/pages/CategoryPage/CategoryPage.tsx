@@ -22,6 +22,7 @@ const CategoryPage: FC<Props> = ({pid}) => {
   let { page } = router.query
   const [ total, setTotal ] = useState(1)
   const [ products, setProducts ] = useState([])
+  const [ category, setCategory ] = useState({display_name: ''})
   const [ loading, setLoading ] = useState<boolean>(true)
   useEffect(() => {
     pullProducts()
@@ -29,11 +30,15 @@ const CategoryPage: FC<Props> = ({pid}) => {
   const pullProducts = async () =>{
     setLoading(true);
     (async () => {
-        let {data: {products, count}} = await axios.get('/pages/category/'+ categoryID,  { 
+        let {data: {products, category, count}} = await axios.get('/pages/category/'+ categoryID,  { 
           params: { pageSize: PAGE_SIZE, current: page ? page : 1 }
         })
-        setProducts(products)
-        setTotal(count)
+        if(count){
+          setProducts(products)
+          setCategory(category)
+          setTotal(count)
+        }
+
         setLoading(false)
     })()
   }
@@ -47,33 +52,37 @@ const CategoryPage: FC<Props> = ({pid}) => {
   };
 
   return (
-    <main className="mt-24">
+    <main className="mt-24 category-page">
       <div className={s.root}>
-      <div className="md:grid md:grid-cols-12 md:gap-6">
+      {products.length > 0 && <div className="md:grid md:grid-cols-12 md:gap-6">
         {/* <div className="md:col-span-2">
             <Sidebar />
           </div> */}
           <div className="md:col-span-12"> 
-          <h1 className={s.pageTitle}>{getName(pid)}</h1>
-            { !loading && Array.isArray(products) && <div>
-     
-              <div className={s.productList}>
-                {products.map((product: any, key) => {
+ 
+            { <h1 className={s.pageTitle}>{category.display_name}</h1> }
+              { !loading && Array.isArray(products) && <div>
+      
+                <div className={s.productList}>
+                  {products.map((product: any, key) => {
 
-                  return( 
-                    <ProductItem product={product} key={key}/>
-                    )
-              
-                    })}
-            </div> 
-            <div className="text-center">
-            <Pagination current={Number(page)} 
-                  onChange={onPageNumberChange} 
-                  pageSize={PAGE_SIZE} total={total} />
-                  </div>
-            </div> }
+                    return( 
+                      <div className="col-span-1" key={key}> 
+                      <ProductItem product={product} key={key}/>
+                      </div>
+                      )
+                
+                      })}
+              </div> 
+              <div className="text-center">
+              <Pagination current={Number(page)} 
+                    onChange={onPageNumberChange} 
+                    pageSize={PAGE_SIZE} total={total} />
+                    </div>
+              </div> }      
+  
         </div>
-      </div>
+      </div> }
       </div>
     </main>
   )

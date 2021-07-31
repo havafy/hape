@@ -1,6 +1,7 @@
 import { FC, useState } from 'react'
 import Link from 'next/link'
 import IProduct from '@interfaces/product' 
+import cn from 'classnames'
 import s from './ProductItem.module.css'
 import { getProductUrl, currencyFormat } from '@lib/product'
 
@@ -20,7 +21,7 @@ const PriceOnly: FC<Props> = ({product}) =>{
 }
 const ProductItem: FC<Props> = ({product}) =>{
     return (
-      <div className={s.root}>
+      <div className={cn(s.root,'product-item')}>
           <div className={s.image}>
             <Link href={getProductUrl(product)}><a>
               <img src={product.images[0]} alt={product.name} width="200px" />

@@ -43,6 +43,12 @@ export class ProductDto {
   category: string;
 
   @IsOptional()
+  @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(3)
+  categories: string[];
+
+  @IsOptional()
   @IsNumber()
   @Min(1)
   @Max(10000)

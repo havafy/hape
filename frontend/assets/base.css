@@ -444,3 +444,10 @@ body.layout{
 .product-description h4, .product-description h3, .product-description h2{
   @apply font-bold mb-3
 }
+
+.category-page{
+
+}
+.category-page .product-item{
+  @apply bg-white py-3 px-3 mb-5 shadow
+}

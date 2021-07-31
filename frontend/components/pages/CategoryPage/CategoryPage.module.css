@@ -9,5 +9,5 @@
     @apply grid grid-flow-row grid-cols-6 gap-6 mb-10
 }
 .pageTitle{
-    @apply text-2xl font-semibold tracking-normal mb-10
+    @apply text-2xl font-semibold tracking-normal mb-10 text-center
 }

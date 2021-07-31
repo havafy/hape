@@ -94,10 +94,13 @@ export class ProductsService {
             productDto.images = await this.filesService.formalizeS3Files(productDto.images)
             //filter the un-control tag on description
             productDto.description = this.allowedTags(productDto.description)
+            // collect category ID and his parents
+            const categories = await this.collectGroupCategory(productDto.category)
+            
             const record: any = [
                 { index: { _index: ES_INDEX_NAME } },  {
                 ...productDto,
-                userID,
+                userID, categories,
                 updatedAt: createdAt,
                 createdAt
             }]
@@ -168,10 +171,14 @@ export class ProductsService {
             await this.filesService.cleanUnusedFiles(updatedImages, product.images)
             //filter the un-control tag on description
             productDto.description = this.allowedTags(productDto.description)
-            await this.esService.update(ES_INDEX_NAME, productID ,productDto)
+
+            // collect category ID and his parents
+            const categories = await this.collectGroupCategory(productDto.category)
+            await this.esService.update(ES_INDEX_NAME, productID ,{...productDto, categories})
             const updatedProduct =  await this.esService.findById(ES_INDEX_NAME, productID);
+            const categoryRaw = await this.categoriesService.get(productDto.category)
             return {
-                product: { ...updatedProduct._source },
+                product: { ...updatedProduct._source, categoryRaw},
                 status: true
             }
     
@@ -183,7 +190,18 @@ export class ProductsService {
             status: false,
         }
     }
+    
+    async collectGroupCategory(id: string) {
+        if(id !==''){
+            const category = await this.categoriesService.get(id)
+            if(category.id){
+                return [category.id, ...category.parents]
+            }
 
+        }
+        return []
+
+    }
     async getRawProduct(id: string) {
         try {
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
@@ -354,7 +372,7 @@ export class ProductsService {
     async getFullyProduct(id: string) {
         try {
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
-            const categoryRaw = await this.categoriesService.get(_source.category)
+            const categoryRaw = await this.categoriesService.get(_source.categories[0])
             return {
                 found: true,
                 product: {
