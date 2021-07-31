@@ -2,7 +2,7 @@ import {
     Controller, 
     Post, 
     Body, 
-    Res, 
+    Res, Get,
     UseGuards, UseInterceptors, 
     UploadedFile} from "@nestjs/common";
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -41,7 +41,11 @@ export class FilesController {
       status: 'fail',
     }
 
-}
+  }
+  @Get("api/test")
+  public async test(@Body() body: any) {
+    return this.filesService.test()
+  }
    
 //   @Post()
 //   public async upload(
