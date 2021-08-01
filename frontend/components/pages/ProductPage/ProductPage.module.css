@@ -4,7 +4,7 @@
     @apply mx-auto max-w-7xl my-10
 }
 .productBox{
-    @apply pt-6 md:pb-6 px-6 bg-white md:mb-5
+    @apply pt-6  px-6 bg-white
 }
 .pageTitle{
     @apply text-2xl font-semibold tracking-normal mb-10
@@ -43,7 +43,7 @@
     @apply inline-block text-gray-600 
 }
 .categoryMenu{
-    @apply flex hidden md:block
+    @apply md:flex hidden mb-5
 }
 .categoryMenu a{
 }

@@ -97,7 +97,7 @@ const ProductPage: FC<Props> = ({pid}) => {
       setQuantity(number)
     }, [])  
   return (
-    <main className="mt-12 md:mt-24">
+    <main className="mt-12 md:mt-20">
   
       { !loading &&   product &&       
             <div className={s.boxWrap}>
