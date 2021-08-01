@@ -44,7 +44,11 @@ export class FilesController {
   }
   @Get("api/test")
   public async test(@Body() body: any) {
-    return this.filesService.test()
+    await this.filesService.test()
+    return  {
+      status: 'ok',
+    }
+
   }
    
 //   @Post()

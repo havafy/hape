@@ -69,15 +69,26 @@ const Navbar: FC<Props> = ({darkMode, hideHeader}) => (
              <i className="header-popover-arrow" style={{'transform': `translate(0px, 0px)`, 'right': `15px`}}></i>
                   <CategoryMenu />
                 </div>
-              </li> */}
+              </li>
+              
+                        'thucpham-saykho': '200796',
+            'thuc-pham-dong-hop': '200801',
+            'thuc-pham-dong-lanh': '200802',
+            'gia-vi': '200804',
+            'nguyen-lieu-lam-bep': '200814',
+            'nha-cua-doi-song': '201237',
+            'bep-phong-an': '201237',
+            'sua-do-uong': '200838',
+            'banh-keo-chocolate': '200785',
+              */}
                 
               <li>
-                <Link href="/c/cua-hang-yeu-thich">
+                <Link href="/c/thực-phẩm-hữu-cơ.200796">
                   <a className={s.link}>Hữu Cơ</a>
                 </Link>
               </li>
               <li>
-                <Link href="/c/khuyen-mai">
+                <Link href="/c/.200801">
                   <a className={s.link}>Đồ khô & hộp</a>
                 </Link>
               </li>
@@ -88,12 +99,12 @@ const Navbar: FC<Props> = ({darkMode, hideHeader}) => (
                 </Link>
               </li>
               <li>
-                <Link href="/c/don-kho">
+                <Link href="/c/gia-vi.200804">
                   <a className={s.link}>Nguyên liệu & gia vị</a>
                 </Link>
               </li>
               <li>
-                <Link href="/c/don-kho">
+                <Link href="/c/.200802">
                   <a className={s.link}>Đông Lạnh</a>
                 </Link>
               </li>

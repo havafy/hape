@@ -38,29 +38,41 @@ export class HomePageService {
                 }, 
             }
         })
+/*
 
-        blocks.push(await this.getBlockByCategory('Thuc-Pham-Do-Uong', "Thực Phẩm & Đồ Uống"))
+          'thucpham-saykho': '200796',
+            'thuc-pham-dong-hop': '200801',
+            'thuc-pham-dong-lanh': '200802',
+            'gia-vi': '200804',
+            'nguyen-lieu-lam-bep': '200814',
+            'nha-cua-doi-song': '201237',
+            'bep-phong-an': '201237',
+            'sua-do-uong': '200838',
+            'banh-keo-chocolate': '200785',*/
+        blocks.push(await this.getBlockByCategory('200796', "T"))
 
-        blocks.push(await this.getBlockByCategory('Nha-cua-Doi-song', "Nhà cửa & Đời sống"))
+        blocks.push(await this.getBlockByCategory('200801', "Đồ đống hộp & Đậu"))
 
-        blocks.push(await this.getBlockByCategory('Voucher-Dich-Vu'))
+        blocks.push(await this.getBlockByCategory('200802', "Thực phẩm đông lạnh"))
 
-        blocks.push(await this.getBlockByCategory('Thoi-Trang-Nam'))
+        blocks.push(await this.getBlockByCategory('200804', "Gia vị & Nguyên liệu"))
 
-        blocks.push(await this.getBlockByCategory('Thoi-Trang-Nu'))
-
+        blocks.push(await this.getBlockByCategory('200814', "Làm bánh & Phụ gia"))
+        blocks.push(await this.getBlockByCategory('201237', "Nhà cửa & Đời sống"))
+        blocks.push(await this.getBlockByCategory('200838', "Sữa & Nước ngọt"))
+        blocks.push(await this.getBlockByCategory('200785', "Bánh ngọt & Kẹo"))
 
         return {blocks}
     }
-    async getBlockByCategory(category: string, title = ''){
+    async getBlockByCategory(categories: string, title = ''){
         let  must = [ 
-            {match: { category }},
+            {match: { categories }},
             {match: { status: true }}
         ]
          return { 
             type: 'productSlide',
             title,
-            category,
+            categories,
             data: await this.productsService.getByMultiFields({must})
         }
     }

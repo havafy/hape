@@ -13,9 +13,22 @@ export class FilesService {
   ) {}
 
   async test(){
-    const url = encodeURI('https://www.havamall.com/wp-content/uploads/2021/07/ngũ-cốc.png')
+    try{
+      let i = 17
+      while(i < 25){
+   
+        const{ data } = await axios.get('https://www.hape.vn/api/products/pull?page='+i+'&per_page=50', {
+          headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjI3NzQxMDQ0LCJleHAiOjE2MjkwMzcwNDR9._9d1I0qTUbTHhBHPldPx5m_qIicWr2Rq0jjtEPM6vCE` },
+        })
+        console.log('----------page: ' + i, data)
+        i++
+      }
+    }catch(error){
+      console.log(error)
+    }
 
-  return url
+    return ''
+
   }
   // remove file by array
   async removeFromS3(  files: string[]) {
