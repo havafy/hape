@@ -97,7 +97,7 @@ const ProductPage: FC<Props> = ({pid}) => {
       setQuantity(number)
     }, [])  
   return (
-    <main className="mt-24">
+    <main className="mt-12 md:mt-24">
   
       { !loading &&   product &&       
             <div className={s.boxWrap}>
@@ -163,7 +163,7 @@ const ProductPage: FC<Props> = ({pid}) => {
             </div>
             <div className={s.productBox}>  
               <div className={s.contentTitle}>Mô Tả Sản phẩm</div>
-              <div className={cn('my-5 mr-10', 'product-description')}  
+              <div className={cn('my-5 md:mr-10', 'product-description')}  
               dangerouslySetInnerHTML={{ __html: allowedTags(product.description) }} />
             </div>
   

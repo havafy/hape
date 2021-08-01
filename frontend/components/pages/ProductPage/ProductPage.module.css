@@ -4,7 +4,7 @@
     @apply mx-auto max-w-7xl my-10
 }
 .productBox{
-    @apply py-6 px-6 bg-white mb-5
+    @apply pt-6 md:pb-6 px-6 bg-white md:mb-5
 }
 .pageTitle{
     @apply text-2xl font-semibold tracking-normal mb-10
@@ -29,23 +29,21 @@
 .promoBox label{
     
     font-size: 15px;
-    max-width: 120px;
-    @apply inline-block
+    @apply inline-block md:w-36 mb-5 md:mb-0
 }
 .promoBox svg{
     vertical-align: top;
-    margin: 7px 0 0 0;
     fill: var(--main-color);
     width: 22px;
     height: 22px;
-    @apply inline mr-3
+    @apply inline mr-3 md:mt-2
 }
 .actionLabel{
     min-width: 150px;
     @apply inline-block text-gray-600 
 }
 .categoryMenu{
-    @apply flex
+    @apply flex hidden md:block
 }
 .categoryMenu a{
 }

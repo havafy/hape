@@ -6,7 +6,7 @@
 .copyright{
   border-top: 1px solid #f1f1f1;
   font-size: 0.8rem;
-  @apply py-4 flex flex-col text-gray-500 text-center
+  @apply py-5 mx-5 flex flex-col text-gray-500 text-center
   md:flex-row justify-center 
   items-center space-y-4
 }
@@ -18,7 +18,7 @@
 }
 .iconSocial svg{
   fill: #444;
-  @apply h-6 w-6 flex
+  @apply h-7 w-7 flex
 }
 .iconSocial a:hover svg{
   fill: var(--main-color);
