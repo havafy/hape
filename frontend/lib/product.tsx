@@ -9,7 +9,8 @@ export const getProductUrl = (product: {name: string, id: string}) =>{
     return url
   }
 export const getSlug = (str: string) =>{
-    return str.trim().replace(/[&\/\\#”“!@$`’;,+()$~%.'':*^?<>{}]/g, '').replace(/\s/g, '-').trim()
+    return str.trim().replace(/[&\/\\#”“!@$`’;,+()$~%.'':*^?<>{}]/g, '')
+    .replace(/\s/g, '-').replace('---', '-').replace('--', '-').trim()
 }
 
 export const currencyFormat = (number: number) => {

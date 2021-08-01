@@ -25,7 +25,7 @@ const HomeContent: FC = () => {
                 if(block.type === 'MainBanners')
                   return <Banners data={block} key={key}/>
                 if(block.type === 'productSlide')
-                  return <ProductBox data={block}key={key} />
+                  return <ProductBox data={block} key={key} />
               })
     
             }

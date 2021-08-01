@@ -7,7 +7,9 @@ import moment from 'moment'
 import { useRouter } from 'next/router'
 import IProduct from '@interfaces/product'
 import { NextSeo } from 'next-seo'
-import { allowedTags, currencyFormat, getProductUrl, renderCategoryBreadcrumb} from '@lib/product'
+import { allowedTags, trimString,
+  currencyFormat, getProductUrl, 
+  renderCategoryBreadcrumb} from '@lib/product'
 import { BiCart } from 'react-icons/bi'
 import { message as Message } from 'antd'
 import { IoIosArrowForward } from 'react-icons/io'
@@ -100,8 +102,8 @@ const ProductPage: FC<Props> = ({pid}) => {
       { !loading &&   product &&       
             <div className={s.boxWrap}>
                  <NextSeo
-                    title={product.name}
-                    description=""
+                    title={trimString(product.name, 65)}
+                    description={trimString(product.description, 160)}
                     />
                   <div className="mb-3">
                   <div className={s.categoryMenu}>

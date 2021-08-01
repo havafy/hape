@@ -5,6 +5,8 @@ import axios from 'axios'
 import { ProductItem } from '@components/common'
 import { NextSeo } from 'next-seo'
 import { Pagination } from 'antd';
+import { getCategoryUrl } from '@lib/product'
+
 import { useRouter } from 'next/router'
 interface Props {
   pid: string;
@@ -37,6 +39,12 @@ const CategoryPage: FC<Props> = ({pid}) => {
           setProducts(products)
           setCategory(category)
           setTotal(count)
+          const pathUrl = getCategoryUrl(category)
+          const pathRq = pid.split('?')
+          console.log('pathRq:', pathRq)
+          if( pathUrl !== '/c/' + pathRq[0]){
+            router.push(pathUrl)
+          }
         }
 
         setLoading(false)

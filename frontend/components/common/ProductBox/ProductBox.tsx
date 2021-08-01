@@ -17,8 +17,15 @@ interface Props {
     return (
      <> 
      {Array.isArray(products) && products.length > 0 && <div className={s.root}>
+     <div className="">
+       <div className=" text-center">
           <h3>{title}</h3>
-            <div className="grid grid-flow-col grid-cols-6 grid-rows-1 gap-6">
+          </div>
+
+          </div>
+ 
+
+            <div className="grid grid-cols-6  gap-6">
                 { products.map((product: IProduct, key) => (
                     <ProductItem product={product} key={key}/>
                 ))}

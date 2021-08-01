@@ -83,28 +83,28 @@ const Navbar: FC<Props> = ({darkMode, hideHeader}) => (
               */}
                 
               <li>
-                <Link href="/c/thực-phẩm-hữu-cơ.200796">
+                <Link href="/c/Thực-phẩm-và-đồ-uống.200647">
                   <a className={s.link}>Hữu Cơ</a>
                 </Link>
               </li>
               <li>
-                <Link href="/c/.200801">
+                <Link href="/c/Thực-phẩm-đóng-hộp.200801">
                   <a className={s.link}>Đồ khô & hộp</a>
                 </Link>
               </li>
 
               <li>
-                <Link href="/page/bestseller">
+                <Link href="/c/Kẹo.200785">
                   <a className={s.link}>Bánh Kẹo & Uống</a>
                 </Link>
               </li>
               <li>
-                <Link href="/c/gia-vi.200804">
+                <Link href="/c/Gia-vị-Hương-liệu.200804">
                   <a className={s.link}>Nguyên liệu & gia vị</a>
                 </Link>
               </li>
               <li>
-                <Link href="/c/.200802">
+                <Link href="/c/Đông-Lạnh.200802">
                   <a className={s.link}>Đông Lạnh</a>
                 </Link>
               </li>

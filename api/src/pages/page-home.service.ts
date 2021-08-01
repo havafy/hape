@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { url } from 'inspector';
 import { SearchService } from '../search/search.service';
 import { ProductsService } from "../products/products.service";
+import { CategoriesService } from "../products/categories.service";
 
 @Injectable()
 export class HomePageService {
     constructor(readonly esService: SearchService,
+        readonly categoriesService: CategoriesService,
         readonly productsService: ProductsService) {}
     
     async getContent(search: string = '') {
@@ -49,7 +51,7 @@ export class HomePageService {
             'bep-phong-an': '201237',
             'sua-do-uong': '200838',
             'banh-keo-chocolate': '200785',*/
-        blocks.push(await this.getBlockByCategory('200796', "T"))
+        blocks.push(await this.getBlockByCategory('200796', "Mì & Thực phẩm khô"))
 
         blocks.push(await this.getBlockByCategory('200801', "Đồ đống hộp & Đậu"))
 
@@ -69,9 +71,11 @@ export class HomePageService {
             {match: { categories }},
             {match: { status: true }}
         ]
+        const category = await this.categoriesService.get(categories)
          return { 
             type: 'productSlide',
             title,
+            category,
             categories,
             data: await this.productsService.getByMultiFields({must})
         }
