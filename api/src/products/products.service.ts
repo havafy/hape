@@ -229,6 +229,18 @@ export class ProductsService {
     }
 
     async pullFromWoocommerce (userID: string, page: number, per_page: number) {
+        const categoryMapping = {
+            'thucpham-saykho': '200796',
+            'thuc-pham-dong-hop': '200801',
+            'thuc-pham-dong-lanh': '200802',
+            'gia-vi': '200804',
+            'nguyen-lieu-lam-bep': '200814',
+            'nha-cua-doi-song': '201237',
+            'bep-phong-an': '201237',
+            'sua-do-uong': '200838',
+            'banh-keo-chocolate': '200785',
+    
+        }
         try {
 
             const { data } = await axios.get(
@@ -252,11 +264,20 @@ export class ProductsService {
                 })
             }
             let tags = []
+            let category = ''
             if(product.categories.length){
                 tags = product.categories.map((cat: any) => {
                     return cat.slug
                 })
+                for(let tag of  tags){
+                    if(categoryMapping[tag]){
+                        category = categoryMapping[tag]
+                        break
+                    }
+                }
+                
             }
+            console.log(tags, category)
             const postData = {
                 name: product.name,
                 price: product.price,
@@ -265,6 +286,7 @@ export class ProductsService {
                 regular_price: product.regular_price,
                 sale_price:  product.sale_price,
                 status: true,
+                category,
                 permalink: product.permalink,
                 description: this.allowedTags(product.description),
                 tags
