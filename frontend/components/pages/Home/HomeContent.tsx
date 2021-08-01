@@ -19,7 +19,7 @@ const HomeContent: FC = () => {
     })()
   }, [])
   return (
-    <main className="mt-16">
+    <main className="mt-12">
       { ready && Array.isArray(data) && <>
           {data.map((block: any, key) => {
                 if(block.type === 'MainBanners')
@@ -40,7 +40,7 @@ const Banners: FC<{data: any}> = ({data: {data}}) => {
   <div className="mx-auto max-w-7xl">
   <div className="md:grid md:grid-cols-2 md:gap-6">
     <div className="md:col-span-1">
-      <div className="px-4 sm:px-0">
+      <div className="md:px-4 px-0">
         <Link href={data.bannerBig.link}>
           <a><img src={data.bannerBig.src} /></a>
         </Link>
@@ -50,22 +50,22 @@ const Banners: FC<{data: any}> = ({data: {data}}) => {
     <div className="md:grid md:grid-cols-2 md:gap-6">
         <div className="md:col-span-1">
         <Link href={data.banner1.link}>
-          <a><img src={data.banner1.src} /></a>
+          <a><img className="w-full" src={data.banner1.src} /></a>
         </Link>
         </div>
         <div className="md:col-span-1">
         <Link href={data.banner2.link}>
-          <a><img src={data.banner2.src} /></a>
+          <a><img className="w-full" src={data.banner2.src} /></a>
         </Link>
         </div>
         <div className="md:col-span-1">
         <Link href={data.banner3.link}>
-          <a><img src={data.banner3.src} /></a>
+          <a><img className="w-full" src={data.banner3.src} /></a>
         </Link>
         </div>
         <div className="md:col-span-1">
         <Link href={data.banner4.link}>
-          <a><img src={data.banner4.src} /></a>
+          <a><img className="w-full" src={data.banner4.src} /></a>
         </Link>
         </div>
       </div>

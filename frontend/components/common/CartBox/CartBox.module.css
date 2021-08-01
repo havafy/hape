@@ -9,7 +9,7 @@
     margin: 8px 0 0 0;
     transition: fill 275ms ease;
     fill: var(--main-color);
-    @apply inline-block mr-5
+    @apply inline-block mr-8
 }
 
 .root label{

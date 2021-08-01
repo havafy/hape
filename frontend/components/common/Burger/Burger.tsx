@@ -26,7 +26,7 @@ const Burger: FC<Props> = ({ className }) => {
     <div className="burgerMenu">
       <div className="flex cursor-pointer pt-1" onClick={(e: any) => setVisible(true)} >
         <BurgerIcon fill="#333" width="26" height="26" />
-        <span className="pl-2 text-base font-semibold">Menu</span>
+
 
       </div>
       <Drawer className="burgerMenuDrawer"

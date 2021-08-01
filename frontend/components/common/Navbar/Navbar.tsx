@@ -54,15 +54,15 @@ const Navbar: FC<Props> = ({darkMode, hideHeader}) => (
   { !hideHeader && <NavbarRoot>
     <Container>
       <div className="siteNavbar relative grid grid-cols-12 justify-between align-center  ">
-        <div className="col-span-1 items-center">
+        <div className="col-span-3 md:col-span-1 items-center pl-2">
           <Link href="/">
             <a className={s.logo} aria-label="Logo">
-              <Hape fill="#DB4140" width="80px" />
+              <Hape fill="#DB4140" className="w-16 md:w-20" />
             </a>
           </Link>
           </div>
-          <div className="col-span-6">
-            <ul className="navMenu mt-3 ml-10 space-x-5 block">
+          <div className="col-span-6 hidden md:block">
+            <ul className="navMenu mt-3 ml-10 space-x-5">
                 {/*<li className="dropdown">
                   <span className={s.link}><BurgerIcon /></span>
                 <div className="submenu">
@@ -71,16 +71,7 @@ const Navbar: FC<Props> = ({darkMode, hideHeader}) => (
                 </div>
               </li>
               
-                        'thucpham-saykho': '200796',
-            'thuc-pham-dong-hop': '200801',
-            'thuc-pham-dong-lanh': '200802',
-            'gia-vi': '200804',
-            'nguyen-lieu-lam-bep': '200814',
-            'nha-cua-doi-song': '201237',
-            'bep-phong-an': '201237',
-            'sua-do-uong': '200838',
-            'banh-keo-chocolate': '200785',
-              */}
+  */}
                 
               <li>
                 <Link href="/c/Thực-phẩm-và-đồ-uống.200647">
@@ -111,18 +102,16 @@ const Navbar: FC<Props> = ({darkMode, hideHeader}) => (
             </ul>
           </div>
         
-          <div className="col-span-3 searchBar">
+          <div className="col-span-6 md:col-span-3 searchBar">
            <SearchBar />
           </div>
 
    
-          <div className="col-span-2">
-            <div className="sm:flex hidden justify-end flex-1 space-x-8 ">
+          <div className="col-span-3 md:col-span-2 justify-end">
+            <div className="justify-end flex-1 space-x-8 ">
               <UserNav />
             </div>
-            <div className="sm:hidden flex justify-end flex-1 space-x-8 ">
-              <Burger />
-            </div>
+
           </div>
       </div> 
     </Container>

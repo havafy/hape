@@ -451,3 +451,8 @@ body.layout{
 .category-page .product-item{
   @apply bg-white py-3 px-3 mb-5 shadow
 }
+@media screen and (max-width: 720px) {
+  .nprogress-busy .spinner {
+    display: none;
+  }
+}
