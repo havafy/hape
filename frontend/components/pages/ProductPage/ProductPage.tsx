@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import IProduct from '@interfaces/product'
 import { NextSeo } from 'next-seo'
 import { allowedTags, trimString,
-  currencyFormat, getProductUrl, 
+  currencyFormat, 
   renderCategoryBreadcrumb} from '@lib/product'
 import { BiCart } from 'react-icons/bi'
 import { message as Message } from 'antd'
@@ -27,7 +27,7 @@ interface ProductInfoProps {
 
 
 const ProductPage: FC<Props> = ({product}) => {
-  const productID = product.id
+  const productID = product.id 
   const router = useRouter()
   const { accessToken, updateAction } = useAuth();
   const headerApi = { 
@@ -93,7 +93,7 @@ const ProductPage: FC<Props> = ({product}) => {
                         <div className={s.galleryBox}>
                         <Carousel effect="fade">
                           {
-                            product.images.map((url) =>{
+                            product.images.map((url: any) =>{
                               return <div> <img src={url} alt={product.name} /></div>
                             })
 
