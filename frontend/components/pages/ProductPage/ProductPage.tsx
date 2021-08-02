@@ -13,7 +13,6 @@ import { allowedTags, trimString,
   renderCategoryBreadcrumb} from '@lib/product'
 import { BiCart } from 'react-icons/bi'
 import { message as Message } from 'antd'
-import { IoIosArrowForward } from 'react-icons/io'
 import { GiReturnArrow } from 'react-icons/gi'
 import cn from 'classnames'
 import { FaCertificate, FaShippingFast } from 'react-icons/fa'
@@ -53,6 +52,7 @@ const ProductPage: FC<Props> = ({product, related}) => {
         Message.error("Đây là sản phẩm trong shop của bạn.");
       }else{
         updateAction({event: 'CART_SUMMARY_UPDATE', payload: data })
+        Message.success("Đã thêm sản phẩm")
         if(goto!==''){
           router.push('/checkout')
         }

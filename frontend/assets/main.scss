@@ -6,5 +6,6 @@
 @tailwind components;
 @import './components.css';
 @import './ui';
+@import './_fix-mobile.css';
 @tailwind utilities;
 

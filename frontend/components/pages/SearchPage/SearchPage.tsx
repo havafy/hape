@@ -43,7 +43,7 @@ const SearchPage: FC<Props> = ({products, keyword, count, page}) => {
             <Sidebar />
           </div> */}
           <div className="md:col-span-12"> 
- 
+    
   
               { Array.isArray(products) && <div>
       

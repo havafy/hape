@@ -10,7 +10,9 @@
     @apply text-xl pl-5 ml-5 font-semibold tracking-normal inline-block 
 }
 .header{
-   @apply bg-white shadow py-2 px-7 md:grid md:grid-cols-12 md:gap-6
+   @apply bg-white shadow 
+   hidden
+   py-2 px-7 md:grid md:grid-cols-12 md:gap-6
    text-gray-500
 }
 .addressBox{
@@ -18,7 +20,7 @@
 }
 .item{
     align-items: center;
-    @apply md:grid md:grid-cols-12 md:gap-6 
+    @apply grid grid-cols-12 gap-6 
 }
 .cartByShop{
     @apply bg-white shadow mt-5
@@ -180,7 +182,7 @@
     @apply bg-white mb-5 shadow 
 }
 .leanHeader{
-    @apply  px-5 py-5 mx-auto max-w-7xl md:grid md:grid-cols-12 md:gap-6
+    @apply  px-5 py-5 mx-auto max-w-7xl grid grid-cols-12 gap-6
 }
 .gotoCartWrap{
     padding: 5px 0 0 0;
@@ -199,12 +201,12 @@
 }
 
 .cartInputColumn{
-    @apply md:col-span-4 self-center
+    @apply md:col-span-4 self-center pb-3 md:pb-0
 }
 .cartShippingColumn{
     @apply md:col-span-4 self-center
 }
 .cartPaymentColumn{
-    @apply md:col-span-4 self-center text-right
+    @apply md:col-span-4 self-center text-left md:text-right
 
 }

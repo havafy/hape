@@ -165,8 +165,8 @@ return (<>
                           return (<div key={i}>• {item}</div>) 
                         })}
                 </div>
-          <div className="md:grid md:grid-cols-2 md:gap-6">
-            <div className="md:col-span-1">
+          <div className="grid grid-cols-2 gap-6">
+            <div className="col-span-1 pb-3 md:pb-0">
               <Form.Item name="fullName"
                   rules={[
                     { required: true, message: 'Vui lòng nhập họ tên!' },
@@ -175,7 +175,7 @@ return (<>
                 <Input placeholder='Họ tên người nhận' className={s.input}  />
               </Form.Item>
               </div>
-              <div className="md:col-span-1">
+              <div className="col-span-1">
               <Form.Item name="phoneNumber"
                   rules={[
                     { required: true, message: 'Nhập số điện thoại!' },

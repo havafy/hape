@@ -1,21 +1,23 @@
 .root{
-    min-height: 50rem;
+    min-height: 30rem;
     @apply mx-auto max-w-7xl my-10
 }
 
 .pageTitle{
-    @apply text-2xl font-semibold tracking-normal mb-10
+    @apply text-2xl mx-2 font-semibold tracking-normal mb-5
 }
 .header{
-   @apply bg-white shadow mb-3  py-3 px-7 md:grid md:grid-cols-12 md:gap-6
+   @apply bg-white shadow 
+   hidden  mx-2 
+   mb-3  py-3 px-7 md:grid md:grid-cols-12 md:gap-6
    text-gray-500
 }
 .item{
     align-items: center;
-    @apply md:grid md:grid-cols-12 md:gap-6 
+    @apply grid grid-cols-12 md:grid-cols-12 md:gap-6 
 }
 .cartByShop{
-    @apply bg-white shadow mt-5
+    @apply bg-white shadow mx-2 mt-5
 }
 .itemBox{
     @apply py-3 px-7
@@ -68,7 +70,8 @@
     fill: #111;
 }
 .footer{
-    @apply bg-white text-base shadow mt-5  py-3 px-7 md:grid md:grid-cols-12 md:gap-6
+    @apply bg-white text-base shadow 
+    mx-2 mt-5  py-3 px-7 md:grid md:grid-cols-12 md:gap-6
  }
 .button{
     color: #fff!important;
@@ -80,7 +83,7 @@
  
 }
 .cartFooter{
-    @apply text-right text-gray-500
+    @apply text-right text-gray-500 
     px-5 py-5 self-center
 }
 .grandTotalCart{

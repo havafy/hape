@@ -152,7 +152,7 @@ span.highlight {
 }
 
 .user-logged-box{
-    margin: 4px 30px 0 0;
+    margin: 4px 18px 0 0;
     @apply text-sm cursor-pointer
  }
   

@@ -169,8 +169,9 @@ const CheckoutPage: FC<Props> = ({}) => {
                 </div>
                 <div className={s.header}>
                   <div className="md:col-span-8">Sản Phẩm </div>
-                  <div className="md:col-span-1">Đơn Giá </div>
                   <div className="md:col-span-2 text-center">Số Lượng </div>
+                  <div className="md:col-span-1">Đơn Giá </div>
+       
                   <div className="md:col-span-1">Tổng</div>
                 </div>
               {cartGroup?.carts?.map((cart: any, key: any) => {
@@ -233,17 +234,19 @@ console.log('paymentInfo:', paymentInfo)
     <h1 className="text-xl font-semibold mt-5 mb-8">Cảm ơn bạn đã đặt hàng!</h1>
 
 
-     {paymentInfo.map((payment: any, key: any) => {
-       /*
-       shopName: "2222"
-       order
-       accountName: "1111"
-accountNumber: "1111"
-payment: "222"*/
-      return (
-        <div key={key}>{payment.accountName}</div>
-      )
-    })}
+     {
+//      paymentInfo.map((payment: any, key: any) => {
+//        /*
+//        shopName: "2222"
+//        order
+//        accountName: "1111"
+// accountNumber: "1111"
+// payment: "222"*/
+//       return (
+//         <div key={key}>{payment.accountName}</div>
+//       )
+//     })
+    }
 
     <div className="my-10">
       <Link href="/user/orders"><a>
@@ -270,13 +273,13 @@ const LeanHeader = () =>{
   return(
     <div className={s.leanHeaderWrap}>
     <div className={s.leanHeader}>
-       <div className="md:col-span-8 flex">
+       <div className="col-span-8 md:col-span-8 flex">
         <span className={s.gotoCartWrap}>
             <Link href='/cart'><a className={s.gotoCart}><MdArrowBack /> Giỏ hàng</a></Link> 
           </span> 
          <h1 className={s.pageTitle}>Thanh Toán</h1>
       </div>
-      <div className="md:col-span-4 text-right">
+      <div className="col-span-4 md:col-span-4 text-right">
         <Hape className="inline-block" fill="#DB4140" width="60px" />
       </div>
 
@@ -330,10 +333,10 @@ const SelectAddressForm: FC<{
         </>     
       )
     })}    </Radio.Group>
-    <div className="mt-3 mb-3">
+    {addresses.length >0 && <div className="mt-3 mb-3">
       <button className={s.buttonPrimary} onClick={e=>pickupAddress(selected)}>Chọn</button>
       <button className={s.buttonNormal} onClick={e=>pickupAddress('goBack')}>Trở về</button>
-      </div>
+      </div> }
     </div>     
   )
 }
@@ -353,7 +356,7 @@ const CartShopBox: FC<{cart: any;}> = ({cart}) => {
     {cart.items.map((item: any, keyIndex: any) => {
       return(
         <div className={s.item} key={keyIndex}>
-            <div className="md:col-span-8 flex">
+            <div className="col-span-12 md:col-span-8 flex">
               <span className="mr-5">
                  <img src={item.thumb} className={s.thumb} />
               </span>
@@ -364,11 +367,11 @@ const CartShopBox: FC<{cart: any;}> = ({cart}) => {
               </div>
               
             </div>
-            <div className="md:col-span-1">{currencyFormat(item.price)}</div>
-            <div className="md:col-span-2 text-center">
-            {item.quantity}
+            <div className="col-span-2 md:col-span-2 text-center">
+             x{item.quantity}
              </div>
-            <div className="md:col-span-1">
+            <div className="col-span-6 md:col-span-1 hidden md:block">{currencyFormat(item.price)}</div>
+            <div className="col-span-2 md:col-span-1">
               <span className={s.itemTotal}>{currencyFormat(item.total)}</span>
               </div>
 
@@ -390,7 +393,7 @@ const CartShopBox: FC<{cart: any;}> = ({cart}) => {
       <div className={s.cartPaymentColumn}>
       Phương thức thanh toán: <span className="text-green-600">Thanh toán khi nhận hàng</span>
       </div>
-    <div className="md:col-span-12 text-right mt-3 self-center">
+    <div className="md:col-span-12 md:text-right mt-3 self-center">
        <span>
         Tổng số tiền ({cart.quantityTotal} sản phẩm):
         </span>
