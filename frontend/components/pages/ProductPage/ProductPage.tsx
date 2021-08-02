@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import IProduct from '@interfaces/product'
 import { NextSeo } from 'next-seo'
 import { allowedTags, trimString,
-  currencyFormat, 
+  currencyFormat, filterChar, 
   renderCategoryBreadcrumb} from '@lib/product'
 import { BiCart } from 'react-icons/bi'
 import { message as Message } from 'antd'
@@ -27,6 +27,7 @@ interface ProductInfoProps {
 
 
 const ProductPage: FC<Props> = ({product}) => {
+  const name = filterChar(product.name)
   const productID = product.id 
   const router = useRouter()
   const { accessToken, updateAction } = useAuth();
@@ -78,13 +79,13 @@ const ProductPage: FC<Props> = ({product}) => {
       {  product &&       
             <div className={s.boxWrap}>
                  <NextSeo
-                    title={trimString(product.name, 65)}
+                    title={trimString(name, 65)}
                     description={trimString(product.description, 160)}
                     />
                   <div className="mb-3">
                   <div className={s.categoryMenu}>
                             {renderCategoryBreadcrumb(product.categoryRaw)}
-                            {product.name} 
+                            {name} 
                         </div>
                     </div>
             <div className={s.productBox}>    
@@ -104,7 +105,7 @@ const ProductPage: FC<Props> = ({product}) => {
 
                   </div>
                 <div className="md:col-span-7">
-                      <h1 className={s.pageTitle}>{product?.name}</h1>
+                      <h1 className={s.pageTitle}>{name}</h1>
                       <div className={s.priceBox}>
                           { product.sale_price ? 
                             <PriceDiscountIncl product={product} /> : 

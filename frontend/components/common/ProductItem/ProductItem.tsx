@@ -3,7 +3,7 @@ import Link from 'next/link'
 import IProduct from '@interfaces/product' 
 import cn from 'classnames'
 import s from './ProductItem.module.css'
-import { getProductUrl, currencyFormat } from '@lib/product'
+import { getProductUrl, currencyFormat, filterChar } from '@lib/product'
 
 interface Props {
     product: IProduct;
@@ -20,15 +20,16 @@ const PriceOnly: FC<Props> = ({product}) =>{
   </div>
 }
 const ProductItem: FC<Props> = ({product}) =>{
+    const name = filterChar(product.name)
     return (
       <div className={cn(s.root,'product-item')}>
           <div className={s.image}>
             <Link href={getProductUrl(product)}><a>
-              <img src={product.images[0]} alt={product.name} width="200px" />
+              <img src={product.images[0]} alt={name} width="200px" />
               </a></Link>
           </div>
           <div className={s.name}>
-            <Link href={getProductUrl(product)}><a>{product.name}</a></Link>
+            <Link href={getProductUrl(product)}><a>{name}</a></Link>
             </div>
 
            { product.sale_price ? 

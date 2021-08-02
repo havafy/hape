@@ -1,15 +1,36 @@
-import Head from 'next/head'
+import React from 'react'
 import { Layout } from '@components/common'
 import { SearchPage } from '@components/pages'
-import { useRouter } from 'next/router'
+import axios from 'axios'
+const isServer = typeof window !== 'object'
 
-export default function Search() {
-    const router = useRouter()
-    const { keyword } = router.query
-  return (
-    <Layout>
-        <SearchPage keyword={keyword} />
-        
-    </Layout>
-  )
+class Search extends React.Component {
+
+  render () {
+    let { products, keyword, count} = this.props
+   return( <Layout>
+            <SearchPage products={products} keyword={keyword} count={count}/>
+        </Layout>
+   )
+  }
+
 }
+Search.getInitialProps = async (context) => {
+  try {
+    const { keyword } = context.query
+    const { products, count } = await pullProduct(keyword)
+
+    return{
+        products, count, keyword
+    }
+  }catch(err){
+    console.log('Search:' ,err)
+  }
+}
+
+const pullProduct = async (keyword) =>{
+    let {data: { products, count}} = await axios.get('/search?keyword='+ keyword)
+    return { products, count }
+
+}
+export default Search

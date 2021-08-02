@@ -6,10 +6,11 @@ import { ProductItem } from '@components/common'
 import { NextSeo } from 'next-seo'
 import { Pagination } from 'antd';
 
-
 import { useRouter } from 'next/router'
 interface Props {
+  products: any[];
   keyword: string;
+  count: number;
 }
 const PAGE_SIZE = 30
 const Empty = () => {
@@ -18,29 +19,11 @@ const Empty = () => {
 
   </div>
 }
-const SearchPage: FC<Props> = ({keyword}) => {
-
+const SearchPage: FC<Props> = ({products, keyword, count}) => {
 
   const router = useRouter()
   let { page } = router.query
-  const [ total, setTotal ] = useState(null)
-  const [ products, setProducts ] = useState([])
-  const [ loading, setLoading ] = useState<boolean>(true)
-  useEffect(() => {
-    pullProducts()
-  }, [keyword, page])
-  const pullProducts = async () =>{
-    setLoading(true);
-    let {data: {products, count}} = await axios.get('/search?keyword='+ keyword,  { 
-      params: { pageSize: PAGE_SIZE, current: page ? page : 1 }
-    })
-    setProducts(products)
-    setTotal(count)
-  
-    setLoading(false)
-
-  }
-
+ 
   const onPageNumberChange = (pageRq: number) => {
 
     router.push({
@@ -54,7 +37,7 @@ const SearchPage: FC<Props> = ({keyword}) => {
       <NextSeo title={"Tìm kiếm: " + keyword} description="" />
       <div className={s.root}>
       { keyword !== '' && <h1 className={s.pageTitle}>{"Tìm kiếm: " + keyword}</h1> }
-      { total === 0 && <Empty />}
+      { count === 0 && <Empty />}
       {products.length > 0 && <div className="md:grid md:grid-cols-12 md:gap-6">
         {/* <div className="md:col-span-2">
             <Sidebar />
@@ -62,7 +45,7 @@ const SearchPage: FC<Props> = ({keyword}) => {
           <div className="md:col-span-12"> 
  
   
-              { !loading && Array.isArray(products) && <div>
+              { Array.isArray(products) && <div>
       
                 <div className={s.productList}>
                   {products.map((product: any, key) => {
@@ -78,7 +61,7 @@ const SearchPage: FC<Props> = ({keyword}) => {
               <div className="text-center">
               <Pagination current={Number(page)} 
                     onChange={onPageNumberChange} 
-                    pageSize={PAGE_SIZE} total={total} />
+                    pageSize={PAGE_SIZE} total={count} />
                     </div>
               </div> }      
   
