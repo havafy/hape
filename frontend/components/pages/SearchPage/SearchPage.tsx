@@ -11,6 +11,7 @@ interface Props {
   products: any[];
   keyword: string;
   count: number;
+  page: number;
 }
 const PAGE_SIZE = 30
 const Empty = () => {
@@ -19,10 +20,9 @@ const Empty = () => {
 
   </div>
 }
-const SearchPage: FC<Props> = ({products, keyword, count}) => {
+const SearchPage: FC<Props> = ({products, keyword, count, page}) => {
 
   const router = useRouter()
-  let { page } = router.query
  
   const onPageNumberChange = (pageRq: number) => {
 
@@ -36,7 +36,7 @@ const SearchPage: FC<Props> = ({products, keyword, count}) => {
     <main className="mt-24 category-page">
       <NextSeo title={"Tìm kiếm: " + keyword} description="" />
       <div className={s.root}>
-      { keyword !== '' && <h1 className={s.pageTitle}>{"Tìm kiếm: " + keyword}</h1> }
+      { keyword !== undefined && <h1 className={s.pageTitle}>{"Tìm kiếm: " + keyword}</h1> }
       { count === 0 && <Empty />}
       {products.length > 0 && <div className="md:grid md:grid-cols-12 md:gap-6">
         {/* <div className="md:col-span-2">
@@ -61,6 +61,7 @@ const SearchPage: FC<Props> = ({products, keyword, count}) => {
               <div className="text-center">
               <Pagination current={Number(page)} 
                     onChange={onPageNumberChange} 
+                    showSizeChanger={false}
                     pageSize={PAGE_SIZE} total={count} />
                     </div>
               </div> }      

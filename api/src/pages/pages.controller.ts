@@ -61,11 +61,11 @@ export class PagesController {
 
     @Get('/api/search')
     async searchProduct(@Res() res): Promise<any> {
-        let {pageSize = 30, current = 1, keyword = '' } = res.req.query
-        if(pageSize > 100){
-            pageSize = 30
-        }
-        const from = pageSize * (current -1 )
+        let {page = 1, keyword = '' } = res.req.query
+       
+        const pageSize = 30
+        
+        const from = pageSize * (page -1 )
         return res.json(await this.productPageService.search(keyword, pageSize, from))
     }
     @Get('/api/pages/product/:id')

@@ -3,24 +3,12 @@ import Link from 'next/link'
 import s from './Home.module.css'
 import axios from 'axios'
 import { ProductBox } from '@components/common'
-interface Props {
-  products: any[];
-  title: string;
-}
-const HomeContent: FC = () => {
-  const [ data, setData ] = useState([])
-  const [ ready, setReady ] = useState<boolean>(false)
-  useEffect(() => {
-    (async () => {
-        let {data: {blocks}} = await axios.get('/pages/home')
-        setData(blocks)
-     
-        setReady(true)
-    })()
-  }, [])
+
+const HomeContent: FC<{data: any[]}>= ({data}) => {
+
   return (
-    <main className="mt-12">
-      { ready && Array.isArray(data) && <>
+    <main className="md:mt-16 mt-12">
+      {  Array.isArray(data) && <>
           {data.map((block: any, key) => {
                 if(block.type === 'MainBanners')
                   return <Banners data={block} key={key}/>

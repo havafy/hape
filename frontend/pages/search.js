@@ -16,21 +16,22 @@ class Search extends React.Component {
 
 }
 Search.getInitialProps = async (context) => {
-  try {
-    const { keyword } = context.query
-    const { products, count } = await pullProduct(keyword)
+    let count = 0
+    let products = []
+    const { keyword, page = 1} = context.query
+     
+  
+    try {
+        let { data } = await axios.get('/search', { params: { keyword, page} } )
+        products = data.products
+        count = data.count
 
-    return{
-        products, count, keyword
+
+    }catch(err){
+        console.log('Search:' ,err)
     }
-  }catch(err){
-    console.log('Search:' ,err)
-  }
+    return {products, count, keyword, page }
 }
 
-const pullProduct = async (keyword) =>{
-    let {data: { products, count}} = await axios.get('/search?keyword='+ keyword)
-    return { products, count }
 
-}
 export default Search

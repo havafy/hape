@@ -55,7 +55,13 @@ export class ProductsService {
                     hits: { 
                         total, 
                         hits 
-                    } } } = await this.esService.findByMultiFields({index: ES_INDEX_NAME, must, size, from, sort})
+                    } } } = await this.esService.findByMultiFields({
+                        index: ES_INDEX_NAME, must, 
+                        _source: [
+                            'name','sku','images','price',
+                            'regular_price', 'sale_price', 'quantity'],
+                        size, from, sort
+                    })
                 const count = total.value
                 let products = []
                 if(count){
@@ -459,6 +465,16 @@ export class ProductsService {
         try {
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
             const categoryRaw = await this.categoriesService.get(_source.categories[0])
+
+            let must = [ 
+                {match: { categories : _source.category}},
+                {match: { status: true }}
+            ]
+            const related = await this.getByMultiFields({
+                must,  size: 20,  from: 0,   
+                sort: [{"createdAt": "desc"}]  
+            })
+    
             return {
                 found: true,
                 product: {
@@ -466,7 +482,8 @@ export class ProductsService {
                     ..._source,
                     categoryRaw,
                     images: this.applyCDN(_source.images)
-                }
+                },
+                related
             }
         }catch (err) {
             return {

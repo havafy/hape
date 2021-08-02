@@ -10,46 +10,15 @@ import { getCategoryUrl } from '@lib/product'
 import { useRouter } from 'next/router'
 interface Props {
   pid: string;
+  products: any[];
+  category: any;
+  page: number;
+  count: number;
 }
 const PAGE_SIZE = 30
-const extractID = (pid: string) =>{
-  if(!pid) return ''
-  const urlSlipt = pid.split('.');
-  return urlSlipt[urlSlipt.length-1]
-}
-const CategoryPage: FC<Props> = ({pid}) => {
-  const categoryID = extractID(pid)
 
+const CategoryPage: FC<Props> = ({pid, products, category, page, count}) => {
   const router = useRouter()
-  let { page } = router.query
-  const [ total, setTotal ] = useState(1)
-  const [ products, setProducts ] = useState([])
-  const [ category, setCategory ] = useState({display_name: ''})
-  const [ loading, setLoading ] = useState<boolean>(true)
-  useEffect(() => {
-    pullProducts()
-  }, [pid, page])
-  const pullProducts = async () =>{
-    setLoading(true);
-    (async () => {
-        let {data: {products, category, count}} = await axios.get('/pages/category/'+ categoryID,  { 
-          params: { pageSize: PAGE_SIZE, current: page ? page : 1 }
-        })
-        if(count){
-          setProducts(products)
-          setCategory(category)
-          setTotal(count)
-          const pathUrl = getCategoryUrl(category)
-          const pathRq = pid.split('?')
-          console.log('pathRq:', pathRq)
-          if( pathUrl !== '/c/' + pathRq[0]){
-            router.push(pathUrl)
-          }
-        }
-
-        setLoading(false)
-    })()
-  }
 
   const onPageNumberChange = (pageRq: number) => {
 
@@ -70,7 +39,7 @@ const CategoryPage: FC<Props> = ({pid}) => {
           <div className="md:col-span-12"> 
  
             { <h1 className={s.pageTitle}>{category.display_name}</h1> }
-              { !loading && Array.isArray(products) && <div>
+              { Array.isArray(products) && <div>
       
                 <div className={s.productList}>
                   {products.map((product: any, key) => {
@@ -86,7 +55,8 @@ const CategoryPage: FC<Props> = ({pid}) => {
               <div className="text-center">
               <Pagination current={Number(page)} 
                     onChange={onPageNumberChange} 
-                    pageSize={PAGE_SIZE} total={total} />
+                    showSizeChanger={false}
+                    pageSize={PAGE_SIZE} total={count} />
                     </div>
               </div> }      
   

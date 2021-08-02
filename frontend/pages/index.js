@@ -1,14 +1,30 @@
-import Head from 'next/head'
+import React from 'react'
 import { Layout } from '@components/common'
 import { HomeContent } from '@components/pages'
-import { useAuth } from "../context/AuthContext";
-export default function Home() {
-  const { user, login, logout } = useAuth();
+import axios from 'axios'
+const isServer = typeof window !== 'object'
+class Home extends React.Component {
 
-  return (
-    <Layout>
-        <HomeContent />
+  render () {
+    let { data } = this.props
+   return( <Layout>
+           <HomeContent data={data}/>
+        </Layout>
+   )
+  }
 
-    </Layout>
-  )
 }
+Home.getInitialProps = async (context) => {
+    let data = {}
+    try {
+      let {data: {blocks}} = await axios.get('/pages/home')
+      data = blocks
+
+    }catch(err){
+        // console.log('Home:' ,err)
+    }
+    return { data}
+}
+
+
+export default Home
