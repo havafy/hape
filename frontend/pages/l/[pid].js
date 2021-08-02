@@ -9,7 +9,7 @@ import Router from 'next/router'
 class Product extends React.Component {
 
   render () {
-    let { product, pid } = this.props
+    let { product, pid} = this.props
     if(!isServer && product){
       const pathUrl = getProductUrl(product)
       if( pathUrl !== '/l/' + pid){
@@ -18,7 +18,7 @@ class Product extends React.Component {
 
     }
    return( <Layout>
-            <ProductPage product={product}/>
+            <ProductPage {...this.props}/>
         </Layout>
    )
   }
@@ -27,10 +27,9 @@ class Product extends React.Component {
 Product.getInitialProps = async (context) => {
   try {
     const { pid } = context.query
-    const product = await pullProduct(extractID(pid))
 
     return{
-      product,
+      ...await pullProduct(extractID(pid)),
       pid
     }
   }catch(err){
@@ -43,8 +42,8 @@ const extractID = (pid) =>{
   return urlSlipt[urlSlipt.length-1]
 }
 const pullProduct = async (productID) =>{
-    let {data: { product }} = await axios.get('/pages/product/'+ productID)
-    return product
+    let { data } = await axios.get('/pages/product/'+ productID)
+    return data
 
 }
 export default  Product

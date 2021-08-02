@@ -13,7 +13,7 @@ const HomeContent: FC<{data: any[]}>= ({data}) => {
                 if(block.type === 'MainBanners')
                   return <Banners data={block} key={key}/>
                 if(block.type === 'productSlide')
-                  return <ProductBox data={block} key={key} />
+                  return <ProductBox products={block.data.products} title={block.title} key={key} />
               })
     
             }

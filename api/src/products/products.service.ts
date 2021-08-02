@@ -471,7 +471,7 @@ export class ProductsService {
                 {match: { status: true }}
             ]
             const related = await this.getByMultiFields({
-                must,  size: 20,  from: 0,   
+                must,  size: 12,  from: 0,   
                 sort: [{"createdAt": "desc"}]  
             })
     
@@ -483,7 +483,7 @@ export class ProductsService {
                     categoryRaw,
                     images: this.applyCDN(_source.images)
                 },
-                related
+                related: related.products
             }
         }catch (err) {
             return {

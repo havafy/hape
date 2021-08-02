@@ -2,7 +2,8 @@ import { FC, useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import s from './ProductPage.module.css'
 import axios from 'axios'
-import { QuantityBox } from '@components/common'
+import { QuantityBox, ProductBox} from '@components/common'
+
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import IProduct from '@interfaces/product'
@@ -20,13 +21,14 @@ import { Carousel, Skeleton } from 'antd'
 import { useAuth } from '@context/AuthContext'
 interface Props {
   product: any;
+  related: {products: any[]};
 }
 interface ProductInfoProps {
   product: IProduct;
 }
 
 
-const ProductPage: FC<Props> = ({product}) => {
+const ProductPage: FC<Props> = ({product, related}) => {
   const name = filterChar(product.name)
   const productID = product.id 
   const router = useRouter()
@@ -143,7 +145,8 @@ const ProductPage: FC<Props> = ({product}) => {
               <div className={cn('my-5 md:mr-10', 'product-description')}  
               dangerouslySetInnerHTML={{ __html: allowedTags(product.description) }} />
             </div>
-  
+                            
+            {Array.isArray(related) && <ProductBox title="Sản phẩm tương tự" products={related} />}
        </div>
   }
 

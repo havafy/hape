@@ -6,14 +6,12 @@ import { ProductItem } from '@components/common'
 import product from 'next-seo/lib/jsonld/product'
 import IProduct from '@interfaces/product' 
 interface Props {
-    data: { 
-      title: string, 
-      data:{ 
-        products: IProduct[]
-      }
-    };
+    title: string;
+  products: any[]
+    
   }
-  const ProductBox: FC<Props> = ({data: { title, data:{ products }}}) =>{
+  const ProductBox: FC<Props> = ({ title, products }) =>{
+
     return (
      <> 
      {Array.isArray(products) && products.length > 0 && <div className={s.root}>
