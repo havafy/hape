@@ -59,11 +59,12 @@ export function AuthProvider({ children }: Props) {
                if(data?.user){
                    setUser(data.user)
                }
+        
                if(data?.carts){
                 setAction({event: 'CART_SUMMARY_UPDATE', payload: data.carts})
                }
             } catch (err){
-                console.log('err:' , err)
+                cleanToken()
             }
         
 
@@ -72,7 +73,11 @@ export function AuthProvider({ children }: Props) {
     useEffect(()=> {
         getUserProfile()
     },[])
+    const cleanToken = () => {
 
+        localStorage.setItem('accessToken', '')
+        window.location.reload()
+    }
     const login = (accessToken: string, user: userInterface) => {
         localStorage.setItem('accessToken', accessToken)
         setAccessToken(accessToken)
