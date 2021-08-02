@@ -1,19 +1,27 @@
-.input {
-  @apply bg-transparent px-3 py-2 appearance-none w-full transition duration-150 ease-in-out pr-10;
 
-  @screen sm {
-    min-width: 300px;
-  }
+
+.searchBarBox{
+  margin-top: 8px;
+  background: #f2f2f2;
+  border-radius: 3px;
+  height: 31px;
+  @apply relative w-4/5
+}
+.searchInput{
+  padding: 5px 10px;
+  font-size: 13px;
+  width: 100%;
+  background: transparent;
 }
 
-.input:focus {
-  @apply outline-none shadow-outline-normal;
-}
 
-.iconContainer {
-  @apply absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none;
+.searchBarBox svg{
+  width: 20px;
+  height: 20px;
+  fill: #666;
+  margin: 4px 0 0 7px;
 }
-
-.icon {
-  @apply h-5 w-5;
+.searchBarBox button{
+  width: 100%;
+  height: 100%;
 }

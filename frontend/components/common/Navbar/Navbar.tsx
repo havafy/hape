@@ -2,51 +2,16 @@ import { FC, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router' 
 import { Logo, Container } from '@components/ui'
-import { Burger, UserNav } from '@components/common'
+import { SearchBar, UserNav } from '@components/common'
 import { Hape } from '@components/icons'
 import { Burger as BurgerIcon } from '@components/icons'
-import { BiSearch } from 'react-icons/bi'
+
 import NavbarRoot from './NavbarRoot'
 import s from './Navbar.module.css'
 import CategoryMenu  from './CategoryMenu'
 interface Props {
   darkMode?: boolean;
   hideHeader?: boolean;
-}
-
-const SearchBar: React.FC = () =>{
-  
-    const router = useRouter() 
-    const { k } = router.query
-    const [ keyword, setKeyword ] = useState<string>()
-    const handleSearchChange = (e: any) => {
-      setKeyword(e.target.value)
-  
-    }
-    const handleKeyPress = (e: any) => {
-      if(e.key === 'Enter'){
-        gotoSearchPage()
-      }
-    }
-    const gotoSearchPage = () => {
-      router.push('/search?k=' +keyword)
-    }
-    return (
-      <div className={s.searchBarBox}>
-        <div className="flex">
-          <div className="flex-grow">
-            <input type="text" 
-            placeholder="Tìm sản phẩm" 
-            value={keyword? keyword : k}
-            className={s.searchInput} 
-            onKeyPress={handleKeyPress}
-            onChange={e=>handleSearchChange(e)} />
-          </div>     
-          <div className="flex-none w-10">
-            <button type="button" onClick={gotoSearchPage}><BiSearch /></button></div>
-        </div>
-      </div>
-    )
 }
 
 const Navbar: FC<Props> = ({darkMode, hideHeader}) => (

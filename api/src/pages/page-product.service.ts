@@ -17,5 +17,14 @@ export class ProductPageService {
         return await this.productsService.getFullyProduct(id)
     
     }
+        
+    async search(keyword: string, pageSize, from) {
+
+        if(keyword === '' ){
+            return {}
+        }
+        return await this.productsService.searchByKeyword(keyword, pageSize, from)
+    
+    }
     
 }

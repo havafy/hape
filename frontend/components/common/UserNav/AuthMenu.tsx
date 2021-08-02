@@ -5,15 +5,15 @@ import LoggedBox from  './LoggedBox'
 const AuthMenu = () => {
   const { accessToken, user, logout } = useAuth();
   return (
-    <div>
+    <>
       {
         accessToken !== '' ? <LoggedBox/>
-         :  <div>
+         :  <>
           <RegisterForm />
    
-          </div>
+          </>
       }
-    </div>
+    </>
 
   )
 }

@@ -1,6 +1,6 @@
 export { default as HomeContent } from './Home'
 export { default as ContactForm } from './ContactForm'
-export { default as Magento } from './Services/Magento'
+export { default as SearchPage } from './SearchPage'
 export { default as Mobile } from './Services/Mobile'
 export { default as React } from './Services/React'
 export { default as Hire } from './Services/Hire'

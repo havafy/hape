@@ -78,7 +78,64 @@ export class ProductsService {
 
         }
     }
-
+    
+    async searchByKeyword(keyword, size, from) {
+        let count = 0
+        let products = []
+        try {
+            const body = {
+                size,
+                from,
+                query: {   
+                    bool: {
+                        must: [
+                          {
+                            query_string: {
+                                fields: [ "name","tags.*"],
+                                query: '*' + keyword + '*',
+                                analyze_wildcard: true
+                             }
+                          },
+                          {
+                            match: {
+                                status: true 
+                            }
+                          }
+                        ]
+                    }
+                    
+                },
+                _source: [
+                    'name','sku','images','price',
+                    'regular_price', 'sale_price', 'quantity']
+            }      
+            
+            const { body: { 
+                hits: { 
+                    total, 
+                    hits 
+                } } } = await this.esService.search(ES_INDEX_NAME, body)
+            count = total.value
+ 
+            if(count){
+                products = hits.map((item: any) => {
+                    return{
+                        id: item._id,
+                        ...item._source,
+                     }
+                })
+            }
+   
+        }catch(error){
+            
+        }
+        return {
+            count,
+            size,
+            from,
+            products
+        }
+    }
     async create(userID: string, productDto: any) {
         try {
             const now = new Date();
@@ -526,7 +583,7 @@ export class ProductsService {
                         userID: { type: 'long' },
                         //--- ------
                         type:{ type: 'text' }, // "simple"
-                        status: { type: 'boolean' },//"publish"
+                        status: { type: 'boolean' },// true = publish
                         catalog_visibility: { type: 'text' }, // "visible"
                         //---- review ------
                         reviews_allowed: { type: 'boolean' },
