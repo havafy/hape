@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import Link from 'next/link'
 import s from './StaticPage.module.css'
+import { allowedTags } from '@lib/product'
 import axios from 'axios'
 
 
@@ -31,8 +32,9 @@ const StaticPage: FC<{pid: string}> = ({pid}) => {
       <div className="md:grid md:grid-cols-2 md:gap-6">
           <div className="md:col-span-2">
           {pageContent !== null && <div>
-            <div dangerouslySetInnerHTML={{ __html: pageContent }}>
-         </div>
+            <div className='product-description'  
+              dangerouslySetInnerHTML={{ __html: allowedTags(pageContent) }} />
+    
             </div> }
           </div>
       </div>
