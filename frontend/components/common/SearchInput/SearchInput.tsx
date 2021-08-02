@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import cn from 'classnames'
 import { BiSearch } from 'react-icons/bi'
-import s from './SearchBar.module.css'
+import s from './SearchInput.module.css'
 import { useRouter } from 'next/router'
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
   id?: string
 }
 
-const SearchBar: React.FC = () =>{
+const SearchInput: React.FC = () =>{
   
   const router = useRouter() 
   const { k } = router.query
@@ -27,7 +27,7 @@ const SearchBar: React.FC = () =>{
     router.push('/search?keyword=' + keyword)
   }
   return (
-    <div className={s.searchBarBox}>
+    <div className={s.searchInputBox}>
       <div className="flex">
         <div className="flex-grow">
           <input type="text" 
@@ -44,4 +44,4 @@ const SearchBar: React.FC = () =>{
   )
 }
 
-export default SearchBar
+export default SearchInput

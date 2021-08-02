@@ -16,53 +16,29 @@ import { IoIosArrowForward } from 'react-icons/io'
 import { GiReturnArrow } from 'react-icons/gi'
 import cn from 'classnames'
 import { FaCertificate, FaShippingFast } from 'react-icons/fa'
-import { Carousel } from 'antd'
+import { Carousel, Skeleton } from 'antd' 
 import { useAuth } from '@context/AuthContext'
 interface Props {
-  pid: string;
+  product: any;
 }
 interface ProductInfoProps {
   product: IProduct;
 }
-const extractID = (pid: string) =>{
-  if(!pid) return ''
-  const urlSlipt = pid.split('.');
-  return urlSlipt[urlSlipt.length-1]
-}
-const PAGE_SIZE = 30
-const ProductPage: FC<Props> = ({pid}) => {
-  const productID = extractID(pid)
+
+
+const ProductPage: FC<Props> = ({product}) => {
+  const productID = product.id
   const router = useRouter()
   const { accessToken, updateAction } = useAuth();
   const headerApi = { 
     headers: { 'Authorization': `Bearer ${accessToken}` } 
   }
-  let { page } = router.query
-  const [ total, setTotal ] = useState(1)
-  const [ quantity, setQuantity ] = useState(1)
-  const [ product, setProduct ] = useState<IProduct | null>(null)
-  const [ loading, setLoading ] = useState<boolean>(true)
-  useEffect(() => {
-    pullProducts()
-  }, [pid, page])
-  const pullProducts = async () =>{
-    setLoading(true);
-    (async () => {
-        let {data: {product, count}} = await axios.get('/pages/product/'+ productID,  { 
-          params: { pageSize: PAGE_SIZE, current: page ? page : 1 }
-        })
-        if(product){
-          const pathUrl = getProductUrl(product)
-          if( pathUrl !== '/l/' + pid){
-            router.push(pathUrl)
-          }
-          setProduct(product)
-          setTotal(count)
-        }
 
-        setLoading(false)
-    })()
-  }
+  const [ quantity, setQuantity ] = useState(1)
+  // useEffect(() => {
+  //   pullProducts()
+  // }, [pid, page])
+
   const addToCart = async (goto: string = '') => {
     try{
       let {data } = await axios.post('/cart' , { 
@@ -98,8 +74,8 @@ const ProductPage: FC<Props> = ({pid}) => {
     }, [])  
   return (
     <main className="mt-12 md:mt-20">
-  
-      { !loading &&   product &&       
+      { product.id === undefined && <LoadingBox /> }
+      {  product &&       
             <div className={s.boxWrap}>
                  <NextSeo
                     title={trimString(product.name, 65)}
@@ -174,7 +150,13 @@ const ProductPage: FC<Props> = ({pid}) => {
     </main>
   )
 }
+const LoadingBox = ()=>{
 
+  return <div className={s.loadingBox}>
+
+    <Skeleton />
+  </div>
+  }
 const AttributeList: FC<ProductInfoProps> = ({product})=>{
 
   let attributes: {label: string, value: string}[] = []

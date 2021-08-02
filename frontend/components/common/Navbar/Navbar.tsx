@@ -2,7 +2,7 @@ import { FC, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router' 
 import { Logo, Container } from '@components/ui'
-import { SearchBar, UserNav } from '@components/common'
+import { SearchInput, UserNav } from '@components/common'
 import { Hape } from '@components/icons'
 import { Burger as BurgerIcon } from '@components/icons'
 
@@ -68,7 +68,7 @@ const Navbar: FC<Props> = ({darkMode, hideHeader}) => (
           </div>
         
           <div className="col-span-6 md:col-span-3 searchBar">
-           <SearchBar />
+           <SearchInput />
           </div>
 
    
