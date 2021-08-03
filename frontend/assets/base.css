@@ -429,7 +429,7 @@ body.layout{
 
 }
 .content-description p{
-  margin-bottom: 12px;
+ @apply mb-4
 
 }
 .content-description li{
@@ -463,4 +463,26 @@ body.layout{
 }
 .page-content{
   @apply text-base
+}
+.info-content table tr {
+  border: 1px solid #e2e3e5;
+}
+.info-content table {
+  width: 100%;
+  font-size: 14px;
+  border: 1px solid #e2e3e5;
+  margin: 10px 0 20px;
+}
+.info-content table tr * {
+  padding: 10px;
+}
+.info-content table tr {
+  border: 1px solid #e2e3e5;
+}
+.info-content table * {
+  font-size: 14px;
+  border: 1px solid #e2e3e5;
+}
+.info-content table th {
+  font-weight: 600;
 }

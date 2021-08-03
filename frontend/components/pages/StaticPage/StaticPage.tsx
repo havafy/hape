@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { NextSeo } from 'next-seo'
 
 import s from './StaticPage.module.css'
-import { allowedTags, trimString } from '@lib/product'
+import { allowedTags, trimString, strip_tags} from '@lib/product'
 
 const StaticPage: FC<{page: any}> = ({page}) => {
 
@@ -40,11 +40,11 @@ const StaticPage: FC<{page: any}> = ({page}) => {
           {page?.slug && <div className="bg-white shadow py-5 px-10">
           <NextSeo
               title={trimString(page.title, 65)}
-              description={trimString(page.content, 160)}
+              description={trimString(strip_tags(page.content,''), 160)}
               />
             <h1 className="text-2xl font-bold mb-5">{page.title}</h1>
             <div className='page-content content-description '  
-              dangerouslySetInnerHTML={{ __html: allowedTags(page.content) }} />
+              dangerouslySetInnerHTML={{ __html: allowedTags(page.content, '<a>') }} />
     
             </div> }
           </div>

@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 import IProduct from '@interfaces/product'
 import { NextSeo } from 'next-seo'
 import { allowedTags, trimString,
-  currencyFormat, filterChar, 
+  currencyFormat, filterChar, strip_tags,
   renderCategoryBreadcrumb} from '@lib/product'
 import { BiCart } from 'react-icons/bi'
 import { message as Message } from 'antd'
@@ -82,7 +82,7 @@ const ProductPage: FC<Props> = ({product, related}) => {
             <div className={s.boxWrap}>
                  <NextSeo
                     title={trimString(name, 65)}
-                    description={trimString(product.description, 160)}
+                    description={trimString(strip_tags(product.description, ''), 160)}
                     />
                   <div className="mb-3">
                   <div className={s.categoryMenu}>

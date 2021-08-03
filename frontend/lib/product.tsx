@@ -51,8 +51,10 @@ export const getCategoryUrl = (category: any) =>{
 export const filterChar = (text: string) => {
     return text.replace(/&quot;/g, '"').replace(/&amp;/g, '&')
 }
-export const allowedTags = function (str:string){
-  return strip_tags(str,'<div><ul><li><h2><h3><h4><b><i><span><img><p><br>')
+export const allowedTags = function (str:string, more = ''){
+    let allows = '<div><ul><li><h2><h3><h4><b><i><span><img><p><br><tr><table><td><th>'
+    if(more !== '') allows += more
+  return strip_tags(str, allows)
 }
 export const strip_tags =  function (str:string, allow:string){
     // making sure the allow arg is a string containing only tags in lowercase (<a><b><c>)
