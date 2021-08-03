@@ -45,13 +45,17 @@ export class ProductsController {
         const response = await this.productService.getByUserID(userID, pageSize, from )
         return res.json(response)
     }
+    @Post('/api/products/reindex')
+    async reindex(@Res() res): Promise<any> {
+        return res.json(await this.productService.reindex())
+    }
     @Get('/api/products/:id')
     async get(@Res() res, @Param() params: ProductGetDto): Promise<any> {
         const id = params.id
         const data = await this.productService.getRawProduct(id)
         return res.json(data)
     }
-
+ 
     @Delete('/api/products/:id')
     async delete(@Res() res, @Param() params: ProductGetDto): Promise<any> {
         const userID = res.req.user.id

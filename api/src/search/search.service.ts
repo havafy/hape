@@ -73,20 +73,7 @@ export class SearchService {
     async findBySingleField(index: string, queryMatch: any, size = 30, from = 0, sort = []) {
         const reqParams = {index, body: { size,  from }}
         if(queryMatch){
-            reqParams.body['query'] = { 
-                 //match: { ...queryMatch }   
-                 "query_string": {
-
-                    "default_field": "slug",
-                  
-                    "default_operator": "AND",
-                  
-                    "analyze_wildcard": false,
-                  
-                    "query": queryMatch.slug
-                  
-                  }
-                }
+            reqParams.body['query'] = {  match: { ...queryMatch } }
         }
         if(sort.length){
             reqParams.body['sort'] = sort
@@ -145,7 +132,7 @@ export class SearchService {
             } }*/
         return await this.esService.search({index, body});
     }
-    makeID (length: number = 10) {
+    makeID (length: number = 10)  {
         var result           = '';
         var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         var charactersLength = characters.length;

@@ -117,7 +117,7 @@ export class CategoriesService {
                         } } } = await this.esService.findBySingleField(
                             ES_INDEX_CATEGORY, null, size, page * size,[{"id": "desc"}])
                     const count = total.value
-                    if(count === 0) break
+                    if(hits.length === 0) break
                   
                     for(let category of hits){
                        await this.reIndexById(category._source.parent_id, category._id)

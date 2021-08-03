@@ -192,7 +192,7 @@ export class ProductsService {
         try{
             let i = 0
             while(true){
-                let product_id = this.esService.makeID(8)
+                let product_id = this.esService.makeID()
                 const { body: { 
                     hits: { 
                         total, 
@@ -210,7 +210,7 @@ export class ProductsService {
         }catch(err){
            
         }
-        return this.esService.makeID(10)
+        return this.esService.makeID()
     }
     async isSkuExisting(userID, sku: string){
         try{   
@@ -366,21 +366,19 @@ export class ProductsService {
                 }
                 
             }
-        
-            const product_id = await this.getUniqueID()
+
             const postData = {
-                product_id
-                // name: product.name,
-                // price: product.price,
-                // quantity: product.stock_quantity,
-                // sku,
-                // regular_price: product.regular_price,
-                // sale_price:  product.sale_price,
-                // status: true,
-                // category,
-                // permalink: product.permalink,
-                // description: this.allowedTags(product.description),
-                // tags
+                name: product.name,
+                price: product.price,
+                quantity: product.stock_quantity,
+                sku,
+                regular_price: product.regular_price,
+                sale_price:  product.sale_price,
+                status: true,
+                category,
+                permalink: product.permalink,
+                description: this.allowedTags(product.description),
+                tags
             }
             if(found === false){
                 await this.create(userID, { 
@@ -404,6 +402,39 @@ export class ProductsService {
         }
     }
 
+    }
+    async reindex(){
+        try{
+
+            let size = 50
+            let page = 0
+            let indexTotal = 0
+            while(page < 3){
+                const { body: { 
+                    hits: { 
+                        total, 
+                        hits 
+                    } } } = await this.esService.findBySingleField(
+                        ES_INDEX_NAME, null, size, page * size,[{"createdAt": "desc"}])
+                const count = total.value
+                if(hits.length === 0) break
+              
+                for(let product of hits){
+                    const product_id = await this.getUniqueID()
+                    console.log('name:' + product._source.name)
+                    if(product._source.product_id === undefined){
+                        await this.esService.update(ES_INDEX_NAME, product._id ,{ product_id })
+                    }
+                   
+                }
+                indexTotal += count
+                console.log('reIndex page:' + page, total.value)
+                page++
+            }
+            return { indexTotal }
+        }catch (err) {
+            console.log('reindex:', err)
+        }
     }
     async getFullyProduct(id: string) {
         try {
