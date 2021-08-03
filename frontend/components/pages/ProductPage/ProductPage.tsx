@@ -141,8 +141,8 @@ const ProductPage: FC<Props> = ({product, related}) => {
               </div>
             </div>
             <div className={s.productBox}>  
-              <div className={s.contentTitle}>Mô Tả Sản phẩm</div>
-              <div className={cn('my-5 md:mr-10 pl-5 pr-10', 'content-description')}  
+              <div className={s.contentTitle}>Mô Tả Sản phẩm {product.name}</div>
+              <div className={cn('my-5 m-auto md:w-3/4', 'content-description')}  
               dangerouslySetInnerHTML={{ __html: allowedTags(product.description) }} />
             </div>
                             

@@ -4,17 +4,17 @@
     @apply mx-auto max-w-7xl my-10
 }
 .productBox{
-    @apply pt-6  px-6 bg-white
+    @apply pt-6 px-3 md:px-0  bg-white
 }
 .pageTitle{
-    @apply text-2xl font-semibold tracking-normal mb-10
+    @apply text-2xl px-3 md:px-0 font-semibold tracking-normal mb-10
 }
 .priceBox{
     background: #fafafa;
     @apply py-2 px-2
 }
 .contentTitle{
-    @apply py-2 pl-5 text-gray-700 text-base font-semibold uppercase
+    @apply py-2 m-auto md:w-3/4 text-gray-700 text-base font-semibold uppercase
 }
 .price{
     font-size: 1.8rem;
@@ -24,7 +24,7 @@
 .promoBox{
 
     border-top: #f2f2f2 1px solid;
-    @apply py-6 px-3 my-7
+    @apply pt-6 px-3 mt-7
 }
 .promoBox label{
     
@@ -40,7 +40,7 @@
 }
 .actionLabel{
     min-width: 150px;
-    @apply inline-block text-gray-600 
+    @apply inline-block text-gray-600 px-3 md:px-0 
 }
 .categoryMenu{
     @apply md:flex hidden mb-5
