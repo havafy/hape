@@ -21,7 +21,7 @@ export class StaticPageDto {
     seo_description: string;
 
 
-    @MaxLength(1000)
+    @MaxLength(5000)
     @MinLength(3)
     content: string;
 
