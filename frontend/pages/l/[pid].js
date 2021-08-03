@@ -27,13 +27,26 @@ class Product extends React.Component {
 Product.getInitialProps = async (context) => {
   try {
     const { pid } = context.query
+    const { product, found } = await pullProduct(extractID(pid))
 
+    if(found){
+      const pathUrl = getProductUrl(product)
+      // redirect to right url
+      if(pathUrl !== '/l/' + pid){
+          if (context.res) { // server
+            context.res.writeHead(302, {  Location: encodeURI(pathUrl) })
+            context.res.end();
+          } else { // client
+            Router.push(pathUrl);
+          }
+      }
+    }
     return{
-      ...await pullProduct(extractID(pid)),
+      product,
       pid
     }
   }catch(err){
-    console.log(err)
+    console.log('----', err)
   }
 }
 const extractID = (pid) =>{
