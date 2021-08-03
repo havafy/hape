@@ -58,7 +58,7 @@ export class ProductsService {
                     } } } = await this.esService.findByMultiFields({
                         index: ES_INDEX_NAME, must, 
                         _source: [
-                            'name','sku','images','price',
+                            'name','sku','images','price',  'product_id',
                             'regular_price', 'sale_price', 'quantity'],
                         size, from, sort
                     })
@@ -112,7 +112,7 @@ export class ProductsService {
                     
                 },
                 _source: [
-                    'name','sku','images','price',
+                    'name','sku','images','price', 'product_id',
                     'regular_price', 'sale_price', 'quantity']
             }      
             
@@ -299,20 +299,36 @@ export class ProductsService {
 
     }
     async getRawProduct(id: string) {
+        let product: any
+        let categoryRaw = {}
+        let found = false
         try {
-            const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
-            const categoryRaw = await this.categoriesService.get(_source.category)
-            return {
-                found: true,
-                product: {
-                    ..._source, categoryRaw
-                }
+            const { body: { 
+                hits: { 
+                    total, 
+                    hits 
+                } } } = await this.esService.findBySingleField(
+                    ES_INDEX_NAME, { product_id: id})
+            if(total.value){
+                product = { ...hits[0]._source, _id: hits[0]._id }
+            }else{
+                let data = await this.esService.findById(ES_INDEX_NAME, id);
+                product = { ...data._source, _id: data._id }
+                
             }
+            if(product.product_id){
+                found = true
+                categoryRaw = await this.categoriesService.get(product.category)
+            }
+           
+
         }catch (err) {
-            console.log('getRawProduct: ', err)
-            return {
-                found: false,
-            }
+        }
+
+        return {
+            found,
+            categoryRaw,
+            product
         }
 
     }
@@ -409,26 +425,24 @@ export class ProductsService {
             let size = 50
             let page = 0
             let indexTotal = 0
-            while(page < 3){
+            while(page < 30){
                 const { body: { 
                     hits: { 
                         total, 
                         hits 
                     } } } = await this.esService.findBySingleField(
                         ES_INDEX_NAME, null, size, page * size,[{"createdAt": "desc"}])
-                const count = total.value
                 if(hits.length === 0) break
-              
                 for(let product of hits){
                     const product_id = await this.getUniqueID()
                     console.log('name:' + product._source.name)
                     if(product._source.product_id === undefined){
                         await this.esService.update(ES_INDEX_NAME, product._id ,{ product_id }, '')
+                        indexTotal++
                     }
                    
                 }
-                indexTotal += count
-                console.log('reIndex page:' + page, total.value)
+                console.log('reIndex page:' + page, indexTotal)
                 page++
             }
             return { indexTotal }
@@ -438,11 +452,12 @@ export class ProductsService {
     }
     async getFullyProduct(id: string) {
         try {
-            const { _source } =  await this.esService.findById(ES_INDEX_NAME, id);
-            const categoryRaw = await this.categoriesService.get(_source.categories[0])
+            const { product } =  await this.getRawProduct(id);
+
+            const categoryRaw = await this.categoriesService.get(product.categories[0])
 
             let must = [ 
-                {match: { categories : _source.category}},
+                {match: { categories : product.category}},
                 {match: { status: true }}
             ]
             const related = await this.getByMultiFields({
@@ -453,19 +468,18 @@ export class ProductsService {
             return {
                 found: true,
                 product: {
-                    id,
-                    ..._source,
+                    ...product,
                     categoryRaw,
-                    images: this.applyCDN(_source.images)
+                    images: this.applyCDN(product.images)
                 },
                 related: related.products
             }
         }catch (err) {
-            return {
-                found: false,
-            }
+       
         }
-
+        return {
+            found: false,
+        }
     }
     async remove(userID: number, id: string) {
         try {

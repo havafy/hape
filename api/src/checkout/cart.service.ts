@@ -132,7 +132,6 @@ export class CartService {
 
                 //IF items empty, let remove this cart
                 if(cart.items.length === 0){
-                    console.log('---', cart)
                     await this.esService.delete(ES_INDEX_CART, cart.id )
                 }else{
                     await this.rebuildCart(cart)

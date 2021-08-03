@@ -1,5 +1,6 @@
 export default interface IProduct {
     readonly id: string;
+    readonly product_id: string;
     readonly name: string;
     readonly sku: string;
     readonly description: string;

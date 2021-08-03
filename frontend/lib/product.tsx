@@ -2,10 +2,10 @@ import { FC, useState } from 'react'
 import { IoIosArrowForward } from 'react-icons/io'
 import IProduct from '@interfaces/product' 
 import Link from 'next/link'
-export const getProductUrl = (product: {name: string, id: string}) =>{
+export const getProductUrl = (product: {name: string, product_id: string}) =>{
     let url = '/l/' + 
     trimString(getSlug(product.name), 40) 
-    + '.' + product.id
+    + '.' + product.product_id
     return url
   }
 export const getSlug = (str: string) =>{

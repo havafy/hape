@@ -77,7 +77,7 @@ const ProductPage: FC<Props> = ({product, related}) => {
     }, [])  
   return (
     <main className="mt-12 md:mt-20">
-      { product.id === undefined && <LoadingBox /> }
+      { product === undefined && <LoadingBox /> }
       {  product &&       
             <div className={s.boxWrap}>
                  <NextSeo

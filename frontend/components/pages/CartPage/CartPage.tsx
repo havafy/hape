@@ -92,7 +92,7 @@ const CartPage: FC<Props> = ({}) => {
                       <span className="mr-5">
                       <Link href={getProductUrl({
                               name: item.name,
-                              id: item.productID
+                              product_id: item.productID
                             })}><a>
                               <img src={item.thumb} className={s.thumb} />
                               </a></Link>
@@ -101,7 +101,7 @@ const CartPage: FC<Props> = ({}) => {
                         <span className={s.itemName}>
                         <Link href={getProductUrl({
                                 name: item.name,
-                                id: item.productID
+                                product_id: item.productID
                               })}><a>{item.name}</a></Link>
                         </span>
                       </div>

@@ -152,7 +152,7 @@ return (
                     {order.items && order.items.map((item:any)=> { 
                       const productURL = getProductUrl({
                                   name: item.name,
-                                  id: item.productID
+                                  id: item.product_id
                                 })
                       return(<div className={s.orderItem}>
                           <div className="col-span-2">
