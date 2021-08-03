@@ -14,7 +14,7 @@
     @apply py-2 px-2
 }
 .contentTitle{
-    @apply py-2 text-gray-700 text-base font-semibold uppercase
+    @apply py-2 pl-5 text-gray-700 text-base font-semibold uppercase
 }
 .price{
     font-size: 1.8rem;
