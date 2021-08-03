@@ -423,7 +423,7 @@ export class ProductsService {
                     const product_id = await this.getUniqueID()
                     console.log('name:' + product._source.name)
                     if(product._source.product_id === undefined){
-                        await this.esService.update(ES_INDEX_NAME, product._id ,{ product_id })
+                        await this.esService.update(ES_INDEX_NAME, product._id ,{ product_id }, '')
                     }
                    
                 }
