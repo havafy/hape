@@ -1,0 +1,6 @@
+.title{
+    @apply mb-2 font-bold text-base
+}
+.menu{
+    @apply pt-3
+}

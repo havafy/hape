@@ -425,23 +425,24 @@ body.layout{
 .order-page .label-SHIPPING_FAIL{
   background: #ffa6a6;
 }
-.product-description{
+.content-description{
 
 }
-.product-description p{
+.content-description p{
   margin-bottom: 10px;
+
 }
-.product-description li{
+.content-description li{
   margin-left: 5px;
 }
-.product-description img{
+.content-description img{
   clear: both;
   display: block;
   margin: 0 auto;
   margin-bottom: 20px;
   width: auto;
 }
-.product-description h4, .product-description h3, .product-description h2{
+.content-description h4, .content-description h3, .content-description h2{
   @apply font-bold mb-3
 }
 
@@ -455,4 +456,11 @@ body.layout{
   #nprogress .spinner {
     display: none;
   }
+}
+.content-description .sub-title {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.page-content{
+  @apply text-base
 }

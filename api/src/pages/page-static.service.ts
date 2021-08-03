@@ -13,7 +13,7 @@ export class StaticPageService {
     
     async get(slug: string) {
         const check = await this.getBySlug(slug)
-        if(check === null) return { status: 500, message: 'Page is existing.' }
+        if(check === null) return { status: 500, message: 'Page is not exist.' }
         return { page: check, status: 200}
     }
     async isAdmin(userID: string) {
@@ -71,17 +71,20 @@ export class StaticPageService {
         }
 
         try{    
+
+       
             const check =  await this.esService.findById(ES_INDEX_PAGE, pageID);
         
             if(!check.found){
                 return { status: 500, message: 'Page is not existing.' }
             } 
-            if(pageDto.slug !== ''){
+            if(pageDto.slug !== undefined){
                 const checkSlug = await this.getBySlug(pageDto.slug )
                 if(checkSlug !== null && checkSlug.id !== pageID){
                     return { status: 500, message: 'Slug is existing.' }
                 }
             }
+   
             const now = new Date();
             const updatedAt = now.toISOString()
             await this.esService.update(ES_INDEX_PAGE, pageID ,{
@@ -97,7 +100,7 @@ export class StaticPageService {
             console.log(err)
         }
         return {
-            status: 400,
+            status: 400
         }
     }
     async remove(userID: string, id: string) {
