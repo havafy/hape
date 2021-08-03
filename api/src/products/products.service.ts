@@ -162,10 +162,11 @@ export class ProductsService {
             if(productDto.category){
                 categories = await this.collectGroupCategory(productDto.category)
             }
-            
+            const product_id = await this.getUniqueID()
             const record: any = [
                 { index: { _index: ES_INDEX_NAME } },  {
                 ...productDto,
+                product_id,
                 userID, categories,
                 updatedAt: createdAt,
                 createdAt
@@ -185,6 +186,31 @@ export class ProductsService {
             }
         }
         
+    }
+    async getUniqueID (){
+  
+        try{
+            let i = 0
+            while(true){
+                let product_id = this.esService.makeID(8)
+                const { body: { 
+                    hits: { 
+                        total, 
+                        hits 
+                    } } } = await this.esService.findBySingleField(
+                        ES_INDEX_NAME,  { product_id })
+                const count = total.value
+                if(!count){
+                    return product_id
+                }
+                i++
+                if(i > 10) break
+            }
+   
+        }catch(err){
+           
+        }
+        return this.esService.makeID(10)
     }
     async isSkuExisting(userID, sku: string){
         try{   
@@ -340,25 +366,28 @@ export class ProductsService {
                 }
                 
             }
-            console.log(tags, category)
+        
+            const product_id = await this.getUniqueID()
             const postData = {
-                name: product.name,
-                price: product.price,
-                quantity: product.stock_quantity,
-                sku,
-                regular_price: product.regular_price,
-                sale_price:  product.sale_price,
-                status: true,
-                category,
-                permalink: product.permalink,
-                description: this.allowedTags(product.description),
-                tags
+                product_id
+                // name: product.name,
+                // price: product.price,
+                // quantity: product.stock_quantity,
+                // sku,
+                // regular_price: product.regular_price,
+                // sale_price:  product.sale_price,
+                // status: true,
+                // category,
+                // permalink: product.permalink,
+                // description: this.allowedTags(product.description),
+                // tags
             }
             if(found === false){
                 await this.create(userID, { 
                     ...postData, images
                 })
             }else{
+                console.log('update id: ' + found.id, postData)
                 // don't allow update image
                 await this.update(userID, {
                     ...postData, id: found.id
@@ -367,91 +396,6 @@ export class ProductsService {
             result.push(product.name)
         }
 
-/*
-        "id": 21080,
-        "name": "Sữa Đặc Có Đường LaRosée 500g Nắp Giựt Tiện Lợi",
-        "slug": "sua-dac-co-duong-larosee-500g-nap-giut-tien-loi",
-        "permalink": "https://www.havamall.com/shop/sua-dac-co-duong-larosee-500g-nap-giut-tien-loi/",
-        "date_created": "2021-07-29T11:29:31",
-        "date_created_gmt": "2021-07-29T04:29:31",
-        "date_modified": "2021-07-29T11:29:31",
-        "date_modified_gmt": "2021-07-29T04:29:31",
-        "type": "simple",
-        "status": "publish",
-        "featured": false,
-        "catalog_visibility": "visible",
-        "description": "",
-        "short_description": "",
-        "sku": "",
-        "price": "28000",
-        "regular_price": "35000",
-        "sale_price": "28000",
-        "date_on_sale_from": null,
-        "date_on_sale_from_gmt": null,
-        "date_on_sale_to": null,
-        "date_on_sale_to_gmt": null,
-        "price_html": "<del><span class=\"woocommerce-Price-amount amount\">35,000<span class=\"woocommerce-Price-currencySymbol\">&#8363;</span></span></del> <ins><span class=\"woocommerce-Price-amount amount\">28,000<span class=\"woocommerce-Price-currencySymbol\">&#8363;</span></span></ins>",
-        "on_sale": true,
-        "purchasable": true,
-        "total_sales": 0,
-
-        "tax_status": "taxable",
-        "tax_class": "",
-        "manage_stock": false,
-        "stock_quantity": null,
-        "in_stock": true,
-
-        "weight": "",
-        "dimensions": {
-            "length": "",
-            "width": "",
-            "height": ""
-        },
-        "shipping_required": true,
-        "shipping_taxable": true,
-        "shipping_class": "",
-        "shipping_class_id": 0,
-        "reviews_allowed": true,
-        "average_rating": "0.00",
-        "rating_count": 0,
-        "related_ids": [
-            4360,
-            6462,
-            4348,
-            6479,
-            4272
-        ],
-        "upsell_ids": [],
-        "cross_sell_ids": [],
-        "parent_id": 0,
-        "purchase_note": "",
-        "categories": [
-            {
-                "id": 36,
-                "name": "THỰC PHẨM",
-                "slug": "thuc-pham-tieu-dung"
-            },
-            {
-                "id": 135,
-                "name": "Sữa - Đồ uống",
-                "slug": "sua-do-uong"
-            },
-            {
-                "id": 143,
-                "name": "Thực phẩm đóng hộp",
-                "slug": "thuc-pham-dong-hop"
-            }
-        ],
-        "tags": [],
-        "images": [
-            {
-                "id": 21081,
-                "src": "https://www.havamall.com/wp-content/uploads/2021/07/dfrge.png",
-                "name": "dfrge",
-                "position": 0
-            }
-        ],
-*/
         return result
     }catch (error) {
         console.log('pullFromWoocommerce: ', error)
@@ -568,7 +512,7 @@ export class ProductsService {
                 },
                 mappings: {
                     properties: {
-                        id:{ type: 'long'},
+                        product_id:{ type: 'long'}, // must is unique
                         name: {
                             type: 'text',
                             fields: {

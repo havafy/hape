@@ -44,9 +44,8 @@ export class FilesController {
   }
   @Get("api/test")
   public async test(@Body() body: any) {
-    await this.filesService.test()
     return  {
-      status: 'ok',
+      status: await this.filesService.test()
     }
 
   }

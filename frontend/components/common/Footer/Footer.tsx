@@ -18,7 +18,7 @@ const Footer: FC = () => (
       <h3 className={s.title}>Chăm sóc khách hàng</h3>
       <ul className="flex flex-initial flex-col md:flex-1">
         <li className={s.menu}> <Link href="/page/thanh-toan"><a>Thanh Toán</a></Link></li>
-        <li className={s.menu}> <Link href="/page/van-chuyen"><a>Vận Chuyển</a></Link></li>
+        <li className={s.menu}> <Link href="/page/phi-van-chuyen"><a>Phí Vận Chuyển</a></Link></li>
         <li className={s.menu}> <Link href="/page/tra-hang-hoan-tien"><a>Trả Hàng & Hoàn Tiền</a></Link></li>
         <li className={s.menu}> <Link href="/page/chinh-sach-bao-hanh"><a>Chính Sách Bảo Hành</a></Link></li>
           </ul>

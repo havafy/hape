@@ -20,7 +20,6 @@ Page.getInitialProps = async (context) => {
     const { pid }  = context.query
     try {
       let { data } = await axios.get('/pages/' + pid)
-      console.log('data:' ,data)
       page = data.page
     }catch(err){
         console.log('Page:' ,err)

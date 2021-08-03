@@ -59,6 +59,7 @@ export class StaticPageService {
                 total 
             }}} = await this.esService.findBySingleField( ES_INDEX_PAGE, { slug })
             const count = total.value
+            console.log('-----------slug:',hits)
             if(count){
                 return { ...hits[0]._source, id: hits[0]._id}
             }

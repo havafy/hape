@@ -5,7 +5,6 @@ import { ProductsService } from "../products/products.service"
 import { ShopService } from "../shop/shop.service"
 import { AddressService } from "../address/address.service"
 import { OrderUpdateDto  } from './dto/order-update.dto';
-import { nanoid } from 'nanoid'
 export const PAYMENT_METHODS = [
     'COD','ZALO_TRANSFER', 'MOMO_TRANSFER', 'BANK_TRANSFER',
     'VNPAY_TRANSFER', 'VIETTEL_TRANSFER',
@@ -88,7 +87,7 @@ export class OrdersService {
         try{
             let i = 0
             while(true){
-                let orderNumber =  nanoid(8).toUpperCase()
+                let orderNumber = this.esService.makeID(8).toUpperCase()
                 const { body: { 
                     hits: { 
                         total, 
@@ -106,7 +105,7 @@ export class OrdersService {
         }catch(err){
            
         }
-        return nanoid(20).toUpperCase()
+        return this.esService.makeID(10).toUpperCase()
     }
    
     async createOrderByCart({cart, userID, addressID}) {

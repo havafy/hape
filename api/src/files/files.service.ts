@@ -14,7 +14,7 @@ export class FilesService {
 
   async test(){
     try{
-      let i = 17
+      let i = 1
       while(i < 25){
    
         const{ data } = await axios.get('https://www.hape.vn/api/products/pull?page='+i+'&per_page=50', {
