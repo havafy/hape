@@ -68,6 +68,12 @@ export class Items {
   @Max(10000)
   price: number;
 
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(10000)
+  regular_price: number;
+
   @IsNumber()
   @Min(1)
   @Max(10000)
@@ -82,4 +88,7 @@ export class Items {
   @MinLength(5)
   thumb: string;
 
+  @MaxLength(300)
+  @MinLength(5)
+  sku: string;
 }

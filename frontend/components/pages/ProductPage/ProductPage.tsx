@@ -29,7 +29,7 @@ interface ProductInfoProps {
 
 const ProductPage: FC<Props> = ({product, related}) => {
   const name = filterChar(product.name)
-  const productID = product.id 
+  const productID = product.product_id 
   const router = useRouter()
   const { accessToken, updateAction } = useAuth();
   const headerApi = { 
@@ -37,9 +37,6 @@ const ProductPage: FC<Props> = ({product, related}) => {
   }
 
   const [ quantity, setQuantity ] = useState(1)
-  // useEffect(() => {
-  //   pullProducts()
-  // }, [pid, page])
 
   const addToCart = async (goto: string = '') => {
     try{

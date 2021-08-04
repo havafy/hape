@@ -164,8 +164,9 @@ export class CartService {
             }
         }
         async create(
-                    {productID, quantity, userID, shopID}: 
-                    {
+                    {   productID, quantity,
+                        userID, shopID
+                    }:{
                         productID: string; 
                         quantity: number; 
                         userID: string; 
@@ -209,6 +210,8 @@ export class CartService {
                     cart.items[i].name = product.name
                     cart.items[i].price = product.price
                     cart.items[i].thumb = product.images[0]
+                    cart.items[i].sku = product.sku
+                    cart.items[i].regular_price = product.regular_price
                     if(found && product.status){
                         cart.items[i].total = product.price * quantity
                         subtotal += product.price * quantity

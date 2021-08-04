@@ -32,9 +32,9 @@ export class CheckoutService {
                  if(order){
                     orders.push(order)
                     payments.push({
-                        payment: 'MOMO_TRANSFER', 
-                        accountNumber: '4444',
-                        accountName: 'Nguyen van a'
+                        // payment: 'MOMO_TRANSFER', 
+                        // accountNumber: '4444',
+                        // accountName: 'Nguyen van a'
                     })
                  }
         

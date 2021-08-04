@@ -27,7 +27,7 @@ class Product extends React.Component {
 Product.getInitialProps = async (context) => {
   try {
     const { pid } = context.query
-    const { product, found } = await pullProduct(extractID(pid))
+    const { product, found, related } = await pullProduct(extractID(pid))
 
     if(found){
       const pathUrl = getProductUrl(product)
@@ -43,6 +43,7 @@ Product.getInitialProps = async (context) => {
     }
     return{
       product,
+      related,
       pid
     }
   }catch(err){
