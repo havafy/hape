@@ -154,6 +154,7 @@ export class OrdersService {
             await this.cartService.remove(cartID)
             // send mail to customer
             const user = await this.getUser(userID);
+            console.log('---',user)
             this.sendMailCustomer({
                 sendTo: user.email,
                 orderNumber: _source.orderNumber,
@@ -171,6 +172,7 @@ export class OrdersService {
 
     }
     sendMailCustomer({sendTo, orderNumber, orderID }): void {
+        console.log('---', {sendTo, orderNumber, orderID })
         const subject = 'Đơn hàng #' + orderNumber + ' đã xác nhận thành công'
         this.mailerService.sendMail({
             to: sendTo,
@@ -182,7 +184,7 @@ export class OrdersService {
               title: subject,
               description:
                 "Cảm ơn bạn đã lựa chọn mua sắm tại Hape. Đơn hàng #"+orderNumber+" đã đặt thành công.",
-              LinkURL: process.env.FRONTEND_URL + "/user/order-detail/" + orderID ,
+              LinkURL: process.env.FRONTEND_URL + "user/order-detail?id=" + orderID ,
               LinkText: "Xem thông tin đơn hàng."
             },
           })
