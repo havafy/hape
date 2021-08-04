@@ -52,14 +52,24 @@ export class StaticPageService {
         
     }
     async getBySlug(slug: string) {
-
+        const body = {
+            size: 2,
+            from: 0,
+            query: {   
+                match:{
+                    slug:{
+                        query: slug
+                    }
+                 }
+            },
+            _source: ['content', 'slug', 'title']
+        }   
         const { body:
             { hits: { 
                 hits, 
                 total 
-            }}} = await this.esService.findBySingleField( ES_INDEX_PAGE, { slug })
+            }}} = await this.esService.search(ES_INDEX_PAGE, body)
             const count = total.value
-            console.log('-----------slug:',hits)
             if(count){
                 return { ...hits[0]._source, id: hits[0]._id}
             }
@@ -133,7 +143,14 @@ export class StaticPageService {
         const existing = await this.esService.checkIndexExisting(ES_INDEX_PAGE)
         if(!existing){
             this.esService.createIndex(ES_INDEX_PAGE, { mappings: { 
-                properties: {  title: { type: 'text'  }, createdAt: { type: 'date' },  }  
+                properties: {  
+                    title: { type: 'text'  }, 
+                    slug: { // search with hyphens on keyword
+                        type: "keyword",
+                        index: true 
+                      },
+                    createdAt: { type: 'date' },  
+                }  
             } })
         }
     }

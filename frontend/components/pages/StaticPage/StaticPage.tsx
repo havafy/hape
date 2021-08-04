@@ -27,9 +27,9 @@ const StaticPage: FC<{page: any}> = ({page}) => {
               <h3 className={s.title}>Về Hape</h3>
               <ul className="flex flex-initial flex-col md:flex-1">
                 <li className={s.menu}> <Link href="/page/about-us"><a>Giới thiệu Hape</a></Link></li>
-            
+                <li className={s.menu}> <Link href="/page/lien-he"><a>Liên hệ</a></Link></li>
                 <li className={s.menu}> <Link href="/page/chinh-sach-bao-mat"><a>Chính sách bảo Mật</a></Link></li>
-                <li className={s.menu}> <Link href="/page/dieu-khoan"><a>Điều khoản sử dụng</a></Link></li>
+                <li className={s.menu}> <Link href="/page/dieu-khoan-su-dung"><a>Điều khoản sử dụng</a></Link></li>
                 <li className={s.menu}> <Link href="/page/tuyen-dung"><a>Tuyển Dụng</a></Link></li>
                   </ul>
                </div>

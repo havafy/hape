@@ -22,7 +22,7 @@ export class StaticPageUpdateDto {
     seo_description: string;
 
     @IsOptional()
-    @MaxLength(5000)
+    @MaxLength(50000)
     @MinLength(3)
     content: string;
 

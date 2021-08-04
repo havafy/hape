@@ -21,6 +21,7 @@ export const currencyFormat = (number: number) => {
     </span>)
 }
 export const trimString = function (string: string, length: number) {
+    string = filterChar(string)
     return string.length > length ? 
            string.substring(0, length) :
            string;
