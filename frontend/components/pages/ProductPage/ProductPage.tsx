@@ -28,8 +28,7 @@ interface ProductInfoProps {
 
 
 const ProductPage: FC<Props> = ({product, related}) => {
-  const name = filterChar(product.name)
-  const productID = product.product_id 
+
   const router = useRouter()
   const { accessToken, updateAction } = useAuth();
   const headerApi = { 
@@ -38,6 +37,8 @@ const ProductPage: FC<Props> = ({product, related}) => {
 
   const [ quantity, setQuantity ] = useState(1)
 
+  const name = product ? filterChar(product.name) : null
+  const productID = product.product_id 
   const addToCart = async (goto: string = '') => {
     try{
       let {data } = await axios.post('/cart' , { 
@@ -93,8 +94,8 @@ const ProductPage: FC<Props> = ({product, related}) => {
                         <div className={s.galleryBox}>
                         <Carousel effect="fade">
                           {
-                            product.images.map((url: any) =>{
-                              return <div> <img src={url} alt={product.name} /></div>
+                            product.images.map((url: any, key: number) =>{
+                              return <div key={key}> <img src={url} alt={product.name} /></div>
                             })
 
                           }
@@ -106,7 +107,7 @@ const ProductPage: FC<Props> = ({product, related}) => {
                 <div className="md:col-span-7">
                       <h1 className={s.pageTitle}>{name}</h1>
                       <div className={s.priceBox}>
-                          { product.sale_price ? 
+                          { product.regular_price ? 
                             <PriceDiscountIncl product={product} /> : 
                             <PriceOnly product={product}/>    }
                       </div>
@@ -220,8 +221,9 @@ const PromoBox: FC<any> = ()=>{
 }
 const PriceDiscountIncl: FC<ProductInfoProps> = ({product}) =>{
   return <div>
-      <span className={s.priceOriginal}>{currencyFormat(product.price)}</span>
-  <span className={s.price}>{currencyFormat(product.sale_price)}</span>
+      <span className={s.price}>{currencyFormat(product.price)}</span>
+      <span className={s.priceOriginal}>{currencyFormat(product.regular_price)}</span>
+
 
   </div>
 }

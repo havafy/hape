@@ -152,14 +152,8 @@ export class OrdersService {
 
             //clean up the cart
             await this.cartService.remove(cartID)
-            // send mail to customer
-            const user = await this.getUser(userID);
-            console.log('---',user)
-            this.sendMailCustomer({
-                sendTo: user.email,
-                orderNumber: _source.orderNumber,
-                orderID
-            })
+   
+            this.sendEvent({order: _source, userID, orderID})
             return {
              ..._source, 
              id: orderID
@@ -171,19 +165,32 @@ export class OrdersService {
         return null
 
     }
+    async sendEvent({order, userID, orderID }) {
+        // send mail to customer
+        const user = await this.getUser(userID);
+        const shopper = await this.getUser(order.shopID);
+        this.sendMailShopper({
+            sendTo: shopper.email,
+            orderNumber: order.orderNumber,
+            orderID
+        })
+        this.sendMailCustomer({
+            sendTo: user.email,
+            orderNumber: order.orderNumber,
+            orderID
+        })
+    }
     sendMailCustomer({sendTo, orderNumber, orderID }): void {
-        console.log('---', {sendTo, orderNumber, orderID })
         const subject = 'Đơn hàng #' + orderNumber + ' đã xác nhận thành công'
         this.mailerService.sendMail({
             to: sendTo,
-            from: process.env.EMAIL_FROM,
             subject,
             text: subject,
             template: './index',
             context: {
               title: subject,
               description:
-                "Cảm ơn bạn đã lựa chọn mua sắm tại Hape. Đơn hàng #"+orderNumber+" đã đặt thành công.",
+                "Cảm ơn bạn đã lựa chọn mua sắm tại Hape. Đơn hàng đã đặt thành công.",
               LinkURL: process.env.FRONTEND_URL + "user/order-detail?id=" + orderID ,
               LinkText: "Xem thông tin đơn hàng."
             },
@@ -193,6 +200,28 @@ export class OrdersService {
           })
           .catch(err => {
             console.log('sendMailCustomer: Failed!', err);
+          });
+    }
+    sendMailShopper({sendTo, orderNumber, orderID }): void {
+        const subject = 'Bạn có đơn hàng mới #' + orderNumber 
+        this.mailerService.sendMail({
+            to: sendTo,
+            subject,
+            text: subject,
+            template: './index',
+            context: {
+              title: subject,
+              description:
+                "Chúc mừng bạn, có một đơn hàng mới từ Hape, với mã đơn hàng là #" + orderNumber +" . Xin vui lòng xác nhận và cập nhật tình trạng đơn hàng chính xác.",
+              LinkURL: process.env.FRONTEND_URL + "user/shop-order-detail?id=" + orderID ,
+              LinkText: "Xem thông tin đơn hàng."
+            },
+          })
+          .then(response => {
+            console.log('sendMailShopper: successfully!');
+          })
+          .catch(err => {
+            console.log('sendMailShopper: Failed!', err);
           });
     }
     async getUser(userID){

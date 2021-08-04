@@ -6,6 +6,7 @@ export default interface IProduct {
     readonly description: string;
     readonly price: number;
     readonly sale_price: number;
+    readonly regular_price: number;
     readonly discountBegin: Date;
     readonly discountEnd: Date;
     readonly category: string;

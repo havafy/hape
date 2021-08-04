@@ -361,7 +361,7 @@ export class ProductsService {
         for(let product of data){
             const sku = String(product.id)
             const found = await this.isSkuExisting(userID, sku)
-  
+        
             let images = []
             if(product.images.length){
                 images = product.images.map((image: any) => {
@@ -385,11 +385,11 @@ export class ProductsService {
 
             const postData = {
                 name: product.name,
-                price: product.price,
+                price: Number(product.price),
                 quantity: product.stock_quantity,
                 sku,
-                regular_price: product.regular_price,
-                sale_price:  product.sale_price,
+                regular_price: Number(product.regular_price),
+                sale_price:  Number(product.sale_price),
                 status: true,
                 category,
                 permalink: product.permalink,
@@ -401,13 +401,15 @@ export class ProductsService {
                     ...postData, images
                 })
             }else{
-                console.log('update id: ' + found.id, postData)
+
                 // don't allow update image
                 await this.update(userID, {
                     ...postData, id: found.id
                     })
+
             }
             result.push(product.name)
+
         }
 
         return result
