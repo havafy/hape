@@ -25,6 +25,12 @@ export class Users {
   })
   email: string;
 
+  @Column()
+  email_verify: boolean;
+
+  @Column({ nullable: true})
+  verify_key: string;
+  
   @Column({ length: 60 })
   password: string;
 

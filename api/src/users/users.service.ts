@@ -97,6 +97,9 @@ export class UsersService {
       where
     })
   }
+  public async save(user): Promise<Users> {
+    return await this.userRepository.save(user)
+  }
   public async findById(userId: number): Promise<Users> {
     const user = await this.userRepository.findOne({
       where: {

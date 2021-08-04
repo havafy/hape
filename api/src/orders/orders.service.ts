@@ -3,7 +3,9 @@ import { SearchService } from '../search/search.service'
 import { CartService } from '../checkout/cart.service';
 import { ProductsService } from "../products/products.service"
 import { ShopService } from "../shop/shop.service"
+import { UsersService } from "../users/users.service"
 import { AddressService } from "../address/address.service"
+import { MailerService } from '@nestjs-modules/mailer';
 import { OrderUpdateDto  } from './dto/order-update.dto';
 export const PAYMENT_METHODS = [
     'COD','ZALO_TRANSFER', 'MOMO_TRANSFER', 'BANK_TRANSFER',
@@ -27,6 +29,8 @@ export class OrdersService {
         readonly shopService: ShopService,
         readonly cartService: CartService,
         readonly addressService: AddressService,
+        private readonly mailerService: MailerService,
+       // private readonly usersService: UsersService,
         
         ) {}
     async getByUserID(userID: string, size: number, from: number){
@@ -148,7 +152,13 @@ export class OrdersService {
 
             //clean up the cart
             await this.cartService.remove(cartID)
-
+            // send mail to customer
+            const user = await this.getUser(userID);
+            this.sendMailCustomer({
+                sendTo: user.email,
+                orderNumber: _source.orderNumber,
+                orderID
+            })
             return {
              ..._source, 
              id: orderID
@@ -159,6 +169,41 @@ export class OrdersService {
         }
         return null
 
+    }
+    sendMailCustomer({sendTo, orderNumber, orderID }): void {
+        const subject = 'Đơn hàng #' + orderNumber + ' đã xác nhận thành công'
+        this.mailerService.sendMail({
+            to: sendTo,
+            from: process.env.EMAIL_FROM,
+            subject,
+            text: subject,
+            template: './index',
+            context: {
+              title: subject,
+              description:
+                "Cảm ơn bạn đã lựa chọn mua sắm tại Hape. Đơn hàng #"+orderNumber+" đã đặt thành công.",
+              LinkURL: process.env.FRONTEND_URL + "/user/order-detail/" + orderID ,
+              LinkText: "Xem thông tin đơn hàng."
+            },
+          })
+          .then(response => {
+            console.log('sendMailCustomer: successfully!');
+          })
+          .catch(err => {
+            console.log('sendMailCustomer: Failed!', err);
+          });
+    }
+    async getUser(userID){
+        const { body:
+            { hits: { 
+                hits, 
+                total 
+            }}} = await this.esService.findBySingleField( 'users', {userID})
+            const count = total.value
+            if(count){
+                return hits[0]._source
+            }
+            return
     }
     async getOrder(id:string, userID: string) {
         

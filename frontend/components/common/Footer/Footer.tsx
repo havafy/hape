@@ -95,7 +95,7 @@ const Footer: FC = () => (
       Công ty TNHH IMEX GLOBAL ENTERPRISES <br/>
 Địa chỉ đăng ký kinh doanh: 254 Nguyễn Hoàng, Phường An Phú, Thành phố Thủ Đức, Thành phố Hồ Chí Minh.<br/>
 Giấy chứng nhận Đăng ký Kinh doanh số 0315138097 do Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh cấp ngày 29/06/2018
-<br/>    <span>© 2017 - Bản quyền thuộc về Công ty TNHH Imex Global Enterprise</span>
+<br/>    <span>© 2017 - Bản quyền thuộc về Hape.vn</span>
       </div>
 
     </div>

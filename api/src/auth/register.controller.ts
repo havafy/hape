@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpStatus, Get } from '@nestjs/common';
 import { RegisterService } from './register.service';
 import { RecaptchaService } from './recaptcha.service';
 import { RegisterUserDto } from './dto/register-user.dto';
@@ -89,6 +89,21 @@ export class RegisterController {
           .replace(/đ/g, 'd')
           .replace(/’/g, '')
       return cleanTextUtils.strip.nonASCII(path)
+  }
+  @Get('api/auth/test')
+  public async test(
+    @Res() res
+  ): Promise<any> {
+    await this.registerService.sendMailConfirmEmail({email: 'ntnpro@gmail.com'}, '222222')
+    return res.json({})
+  }
+  @Get('api/auth/verify')
+  public async verify(
+    @Res() res
+  ): Promise<any> {
+    const { key } = res.req.query
+    await this.registerService.verifyEmail(key)
+    return res.redirect(process.env.FRONTEND_URL)
   }
   @Post('api/auth/checkEmail')
   public async checkEmail(
