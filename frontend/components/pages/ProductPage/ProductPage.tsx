@@ -37,8 +37,8 @@ const ProductPage: FC<Props> = ({product, related}) => {
 
   const [ quantity, setQuantity ] = useState(1)
 
-  const name = product ? filterChar(product.name) : null
-  const productID = product.product_id 
+  const name = product ? filterChar(product.name) : ''
+  const productID = product ? product.product_id : ''
   const addToCart = async (goto: string = '') => {
     try{
       let {data } = await axios.post('/cart' , { 
@@ -75,7 +75,7 @@ const ProductPage: FC<Props> = ({product, related}) => {
     }, [])  
   return (
     <main className="mt-12 md:mt-20">
-      { product === undefined && <LoadingBox /> }
+      { !product && <LoadingBox /> }
       {  product &&       
             <div className={s.boxWrap}>
                  <NextSeo
