@@ -14,20 +14,25 @@ export class FilesService {
 
   async test(){
     try{
-      let i = 1
-      while(i < 25){
+
+    //  return await this.copyOrderItemThumb(
+    //     "https://hape.s3.ap-southeast-1.amazonaws.com/media/2021_7_1/nxBxt85qkjUb6rXol9HRq.jpg"
+    //     ,"MEMEMEA"
+    //   )
+      // let i = 1
+      // while(i < 25){
    
-        const{ data } = await axios.get('https://www.hape.vn/api/products/pull?page='+i+'&per_page=50', {
-          headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjI3NzQxMDQ0LCJleHAiOjE2MjkwMzcwNDR9._9d1I0qTUbTHhBHPldPx5m_qIicWr2Rq0jjtEPM6vCE` },
-        })
-        console.log('----------page: ' + i, data)
-        i++
-      }
+      //   const{ data } = await axios.get('https://www.hape.vn/api/products/pull?page='+i+'&per_page=50', {
+      //     headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjI3NzQxMDQ0LCJleHAiOjE2MjkwMzcwNDR9._9d1I0qTUbTHhBHPldPx5m_qIicWr2Rq0jjtEPM6vCE` },
+      //   })
+      //   console.log('----------page: ' + i, data)
+      //   i++
+      // }
     }catch(error){
       console.log(error)
-    }
+    } 
 
-    return ''
+    return '3333'
 
   }
   // remove file by array
@@ -69,12 +74,12 @@ export class FilesService {
     }
   
   }
-  async getBase64(url: string) {
+  async getBase64(url: string, width = MAX_WIDTH, height = MAX_HEIGHT) {
     try{
       const res = await axios.get(encodeURI(url), { responseType: "arraybuffer" });
       if(res.data && await this.isMediaFile(res.data)){
         
-        return await sharp(res.data).resize(MAX_WIDTH, MAX_HEIGHT, {
+        return await sharp(res.data).resize(width, height, {
           fit: 'contain',
           background: { r: 255, g: 255, b: 255, alpha: 1 } })
           .toBuffer();
@@ -130,6 +135,30 @@ export class FilesService {
     const Region = process.env.AWS_REGION
     return url.includes('https://'+Bucket+ ".s3." + Region)
   }
+  async copyOrderItemThumb(sourceURL: string, orderNumber: string){
+    try{     
+      const s3 = new S3();
+      const Bucket = process.env.AWS_S3_BUCKET
+      const now = new Date()
+      const folder = "orders/" + now.getFullYear() +'_' + now.getMonth() + '_' + now.getDate()
+      const Key = folder + '/' + orderNumber +'/'+ nanoid()
+
+      const dataBuffer = await this.getBase64(sourceURL, 320, 320)
+      if(dataBuffer !== null){
+          const uploadResult = await s3.upload({
+            Bucket,
+            Body: dataBuffer,
+            Key,
+            ACL:'public-read'
+          }).promise();
+          
+          return uploadResult.Location
+        }
+      }catch (err) {
+        console.log('copyOrderItemThumb', err)
+      }
+      return sourceURL
+  }
   async formalizeS3Files(files: string[], keyword=''){
 
     if(!files){
@@ -138,7 +167,7 @@ export class FilesService {
 
     let updatedUrl =[]
     const now = new Date();
-     const folder = "media/" + now.getFullYear() +'_' + now.getMonth() + '_' + now.getDate()
+    const folder = "media/" + now.getFullYear() +'_' + now.getMonth() + '_' + now.getDate()
     const Bucket = process.env.AWS_S3_BUCKET
     const s3 = new S3();
     for (const url of files) {

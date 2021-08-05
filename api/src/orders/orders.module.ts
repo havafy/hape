@@ -3,7 +3,6 @@ import { CartService } from '../checkout/cart.service';
 import { OrdersService } from './orders.service';
 import { OrdersController } from './orders.controller';
 import { SearchModule } from '../search/search.module';
-
 import { FilesService } from "../files/files.service";
 import { ProductsService } from "../products/products.service";
 import { AddressService } from '../address/address.service';
@@ -25,7 +24,7 @@ import { CategoriesService } from '../products/categories.service';
         ProductsService,
         AddressService,
         ShopService,
-        CategoriesService,
+        CategoriesService
         //UsersService
     ],
     controllers: [OrdersController],

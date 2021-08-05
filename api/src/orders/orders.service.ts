@@ -3,6 +3,7 @@ import { SearchService } from '../search/search.service'
 import { CartService } from '../checkout/cart.service';
 import { ProductsService } from "../products/products.service"
 import { ShopService } from "../shop/shop.service"
+import { FilesService } from "../files/files.service";
 import { UsersService } from "../users/users.service"
 import { AddressService } from "../address/address.service"
 import { MailerService } from '@nestjs-modules/mailer';
@@ -34,6 +35,7 @@ export class OrdersService {
         readonly cartService: CartService,
         readonly addressService: AddressService,
         private readonly mailerService: MailerService,
+        readonly filesService: FilesService
        // private readonly usersService: UsersService,
         
         ) {}
@@ -131,6 +133,13 @@ export class OrdersService {
             const orderNumber = await this.getOrderUniqueNumber()
             const cartID = cartData.id
             const address = await this.addressService.getSummary(addressID)
+            
+            //copy thumb image to separate folder
+            let i = 0
+            for(let item of cartData.items){
+                cartData.items[i].thumb = await this.filesService.copyOrderItemThumb(item.thumb, orderNumber)
+                i++
+            }
 
             // sync cart to order
             delete cartData.id //clean up
