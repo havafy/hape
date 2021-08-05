@@ -54,9 +54,9 @@
 		display: block;
 		margin: 0 auto !important;
 		/* makes it centered */
-		max-width: 580px;
-		padding: 10px;
-		width: 580px; 
+		max-width: 700px;
+		padding: 5px;
+		width: 700px; 
 	  }
 
 	  /* This should also be a block element, so that it will fill 100% of the .container */
@@ -64,7 +64,7 @@
 		box-sizing: border-box;
 		display: block;
 		margin: 0 auto;
-		max-width: 580px;
+		max-width: 700px;
 		padding: 10px; 
 	  }
 
@@ -244,7 +244,10 @@
 		border-bottom: 1px solid #f6f6f6;
 		margin: 20px 0; 
 	  }
-
+		.item-cell{
+				border-bottom: 1px solid #f6f6f6;
+				padding: 10px 0;
+		}
 	  /* -------------------------------------
 		  RESPONSIVE AND MOBILE FRIENDLY STYLES
 	  ------------------------------------- */
@@ -330,10 +333,36 @@
 		} 
 	  }
 
+	.orderPriceBox{
+		background: #fff6eb;
+		padding: 10px; 
+		text-align: right;
+		color: #555;
+	}
+	.orderPriceBox .row{
+		margin: 10px 0 0 0;
+	}
+	.orderPriceBox .label{ 
+		display: inline-block;
+		width: 100px;
+	}
+	.orderPriceBox .price{ 
+		display: inline-block;
+		width: 80px;
+	}
+	.order-info-box{
+		background: #efefef;
+				color: #555;
+		padding: 10px 20px;
+	}
+	.order-info-box .row{
+		margin: 5px 0 5px 0;
+	}
 	</style>
   </head>
   <body class="">
-		<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+	
+	<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
 	  <tr>
 		<td>&nbsp;</td>
 		<td class="container">
@@ -349,31 +378,85 @@
 						<img src="https://www.hape.vn/assets/logo_hape.svg"
 						 width="110px" style="margin-bottom: 10px;" />
 				
-				  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-					<tr>
-					  <td>
-						<p>Xin chào,</p>
-						<p>{{ description }}</p>
-						<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-						  <tbody>
-							<tr>
-							  <td align="left">
-								<table role="presentation" border="0" cellpadding="0" cellspacing="0">
-								  <tbody>
-									<tr>
-									  <td> <a href="{{ LinkURL }}" target="_blank">{{ LinkText }}</a> </td>
-									</tr>
-								  </tbody>
-								</table>
-							  </td>
-							</tr>
-						  </tbody>
-						</table>
-					  </td>
-					</tr>
-				  </table>
-				</td>
-			  </tr>
+<table role="presentation" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td>
+	<p style="margin: 20px 0 10px 0">Xin chào chủ shop,</p>
+	<p>{{ description }}</p>
+	<div style="padding: 10px;margin: 20px 0">
+		<div style="margin: 0 0 10px 0;">
+			<b>Địa Chỉ Nhận Hàng</b>
+		</div>
+		<div style="color: #555;">
+			<div style="font-size: 1rem;margin: 0 0 7px;">{{order.address.fullName}}</div>
+			{{order.address.phoneNumber}} <br/>
+			{{order.address.address}} {{order.address.regionFull}}
+		</div>
+	</div>
+
+	<div class="order-info-box">
+		<div class="row" style="color: #333;">Cửa hàng: <b>{{shopName}}</b></div>
+		<div style="display: flex;">
+			<div class="row" style="width: 50%;">Mã đơn hàng: #{{order.orderNumber}}</div>
+			<div class="row" style="width: 50%;text-align:right">Ngày đặt hàng: {{createdAt}}</div>
+		</div>
+	</div>
+
+	<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+		<tbody>
+		{{#each order.items}}
+			<tr><td align="left" class="item-cell" style="display: flex">
+				<img src={{this.thumb}} height="60px" />
+				<div>
+					<div style="margin: 10px 0 0 0">{{this.name}}</div>
+					<div style="margin-top: 5px">
+					Số lượng: {{this.quantity}}</div>
+				</div>
+			</td> <td align="left" class="item-cell">
+				<div style="margin: 10px 0 0 0">{{this.total}}</div>
+				</td></tr>
+  		{{/each}}
+
+	</tbody>
+	</table>
+	<div class="orderPriceBox">
+		<div class="row">
+			<span class="label">Tổng tiền hàng<span> 
+			<span class="price">{{order.subtotal}}</span>
+		</div>
+		<div class="row"> <span class="label">Phí giao hàng<span> 
+				<span class="price"></span>{{order.shippingCost}}
+				</div>
+
+		<div  class="row" style="font-weight:bold; font-size: 1rem">
+			<span class="label">Tổng số tiền<span>
+			<span class="price">{{order.grandTotal}}</span>
+		</div>
+	</div>
+	<div class="btn btn-primary" style="margin: 20px auto 50px auto; text-align: center">
+		 <a href="{{ LinkURL }}" target="_blank" >{{ LinkText }}</a> 
+	</div>
+
+	<div>
+
+
+<h3>BƯỚC TIẾP THEO</h3>
+1. Gọi điện/liên lạc với khách hàng và xác nhận đơn hàng, thông báo ngày 
+giờ nhận hàng và giá giao hàng(nếu phát sinh)
+<br/><br/>
+2. Đóng gói sản phẩm, bạn chủ động liên hệ đơn vị vận chuyển phù hợp để tiến hành giao hàng cho khách.
+<br/><br/>
+3. Cập nhật đúng tình trạng đơn hàng ở trang "Quản lý Đơn Hàng", ví dụ: tình trạng thanh toán, tình trạng đang giao hàng và đã giao hàng.
+<br/><br/>
+4. Liên hệ khách hàng để xác nhận chất lượng sản phẩm và dịch vụ.
+ <br/><br/>
+Trân trọng,<br/>
+Đội ngũ Hape
+	</td>
+</tr>
+</table>
+</td>
+</tr>
 
 			<!-- END MAIN CONTENT AREA -->
 			</table>

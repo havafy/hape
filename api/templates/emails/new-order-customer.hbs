@@ -54,9 +54,9 @@
 		display: block;
 		margin: 0 auto !important;
 		/* makes it centered */
-		max-width: 580px;
-		padding: 10px;
-		width: 580px; 
+		max-width: 700px;
+		padding: 5px;
+		width: 700px; 
 	  }
 
 	  /* This should also be a block element, so that it will fill 100% of the .container */
@@ -64,7 +64,7 @@
 		box-sizing: border-box;
 		display: block;
 		margin: 0 auto;
-		max-width: 580px;
+		max-width: 700px;
 		padding: 10px; 
 	  }
 
@@ -343,11 +343,10 @@
 		margin: 10px 0 0 0;
 	}
 	.orderPriceBox .label{ 
-		
 	}
 	.orderPriceBox .price{ 
 		display: inline-block;
-		width: 80px;
+		width: 90px;
 	}
 	.order-info-box{
 		background: #efefef;
@@ -360,7 +359,6 @@
 	</style>
   </head>
   <body class="">
-	<span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
 	<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
 	  <tr>
 		<td>&nbsp;</td>
@@ -420,15 +418,15 @@
 	</table>
 	<div class="orderPriceBox">
 		<div class="row">
-			<span class="label">Tổng tiền hàng:<span> 
+			<span class="label">Tổng tiền hàng<span> 
 			<span class="price">{{order.subtotal}}</span>
 		</div>
-		<div class="row"> <span class="label">Phí giao hàng:<span> 
+		<div class="row"> <span class="label">Phí giao hàng<span> 
 				<span class="price"></span>{{order.shippingCost}}
 				</div>
 
 		<div  class="row" style="font-weight:bold; font-size: 1rem">
-			<span class="label">Tổng số tiền:<span>
+			<span class="label">Tổng số tiền<span>
 			<span class="price">{{order.grandTotal}}</span>
 		</div>
 	</div>
