@@ -7,6 +7,10 @@ import { UsersService } from "../users/users.service"
 import { AddressService } from "../address/address.service"
 import { MailerService } from '@nestjs-modules/mailer';
 import { OrderUpdateDto  } from './dto/order-update.dto';
+var moment = require('moment'); // require
+var Handlebars = require('handlebars')
+const fs = require('fs')
+
 export const PAYMENT_METHODS = [
     'COD','ZALO_TRANSFER', 'MOMO_TRANSFER', 'BANK_TRANSFER',
     'VNPAY_TRANSFER', 'VIETTEL_TRANSFER',
@@ -165,34 +169,60 @@ export class OrdersService {
         return null
 
     }
+
+    async test (){
+        const userID = 31
+        const orderID = "8bBFEHsB4WwrigC8c-6c"
+        //get order information
+        const { _source } =  await this.esService.findById(ES_INDEX_ORDER, orderID);
+        return this.sendEvent({order: _source, userID, orderID})
+
+    }
     async sendEvent({order, userID, orderID }) {
         // send mail to customer
         const user = await this.getUser(userID);
-        const shopper = await this.getUser(order.shopID);
+        const shopper = await this.getShop(order.shopID);
+        //  try {
+        //     const source = fs.readFileSync(__dirname + '/../../templates/emails/new-order-customer.hbs', 'utf8')
+        //      var template = Handlebars.compile(source);
+        //      var result = template({
+        //             sendTo: shopper.email,
+        //             user,
+        //             orderNumber: order.orderNumber,
+        //             shopName: shopper.shopName,
+        //             createdAt: moment(order.createdAt).format('H:M D-M-Y'),
+        //             orderID, order,
+        //             LinkURL: process.env.FRONTEND_URL + "user/order-detail?id=" + orderID ,
+        //             LinkText: "Xem thông tin đơn hàng."
+        //         });
+        //      return result
+        
+        //     } catch (err) {
+        //     console.error('test:', err)
+        //   }
+        
+        
         this.sendMailShopper({
             sendTo: shopper.email,
             orderNumber: order.orderNumber,
-            orderID
+            orderID, order
         })
-        this.sendMailCustomer({
-            sendTo: user.email,
-            orderNumber: order.orderNumber,
-            orderID
-        })
-    }
-    sendMailCustomer({sendTo, orderNumber, orderID }): void {
-        const subject = 'Đơn hàng #' + orderNumber + ' đã xác nhận thành công'
+
+        const subject = 'Đơn hàng #' + order.orderNumber + ' đã xác nhận thành công'
         this.mailerService.sendMail({
-            to: sendTo,
+            to: user.email,
             subject,
             text: subject,
-            template: './index',
+            template: './new-order-customer',
             context: {
-              title: subject,
-              description:
-                "Cảm ơn bạn đã lựa chọn mua sắm tại Hape. Đơn hàng đã đặt thành công.",
-              LinkURL: process.env.FRONTEND_URL + "user/order-detail?id=" + orderID ,
-              LinkText: "Xem thông tin đơn hàng."
+                title: subject,
+                description: "Cảm ơn bạn đã lựa chọn mua sắm tại Hape. Đơn hàng đã xác nhận thành công.",
+                order, orderID, user,
+                orderNumber: order.orderNumber,
+                createdAt: moment(order.createdAt).format('H:M D-M-Y'),
+                shopName: shopper.shopName,
+                LinkURL: process.env.FRONTEND_URL + "user/order-detail?id=" + orderID ,
+                LinkText: "Xem thông tin đơn hàng."
             },
           })
           .then(response => {
@@ -202,7 +232,8 @@ export class OrdersService {
             console.log('sendMailCustomer: Failed!', err);
           });
     }
-    sendMailShopper({sendTo, orderNumber, orderID }): void {
+
+    sendMailShopper({sendTo, orderNumber, orderID, order }): void {
         const subject = 'Bạn có đơn hàng mới #' + orderNumber 
         this.mailerService.sendMail({
             to: sendTo,
@@ -210,11 +241,11 @@ export class OrdersService {
             text: subject,
             template: './index',
             context: {
-              title: subject,
-              description:
-                "Chúc mừng bạn, có một đơn hàng mới từ Hape, với mã đơn hàng là #" + orderNumber +" . Xin vui lòng xác nhận và cập nhật tình trạng đơn hàng chính xác.",
-              LinkURL: process.env.FRONTEND_URL + "user/shop-order-detail?id=" + orderID ,
-              LinkText: "Xem thông tin đơn hàng."
+                title: subject,
+                order,
+                description: "Chúc mừng bạn, Hape vừa nhận đơn hàng với sản phẩm của bạn, mã đơn hàng: #" + orderNumber +" . Xin vui lòng xác nhận và cập nhật tình trạng đơn hàng chính xác.",
+                LinkURL: process.env.FRONTEND_URL + "user/shop-order-detail?id=" + orderID ,
+                LinkText: "Xem thông tin đơn hàng."
             },
           })
           .then(response => {
@@ -230,6 +261,18 @@ export class OrdersService {
                 hits, 
                 total 
             }}} = await this.esService.findBySingleField( 'users', {userID})
+            const count = total.value
+            if(count){
+                return hits[0]._source
+            }
+            return
+    }
+    async getShop(userID){
+        const { body:
+            { hits: { 
+                hits, 
+                total 
+            }}} = await this.esService.findBySingleField( 'shops', {userID})
             const count = total.value
             if(count){
                 return hits[0]._source

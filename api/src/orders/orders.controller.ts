@@ -2,6 +2,7 @@ import { Controller, Get,Put, Body, Res, Post, Param, Delete, UseGuards} from '@
 import { OrdersService } from './orders.service';
 import { OrderUpdateDto  } from './dto/order-update.dto';
 import { AuthGuard } from '@nestjs/passport';
+
 @UseGuards(AuthGuard('jwt'))  
 @Controller()
 export class OrdersController {
@@ -29,7 +30,12 @@ export class OrdersController {
         const from = pageSize * (current -1 )
         return res.json(await this.ordersService.getByShopID(userID, pageSize, from))
     }
+    @Get('/api/orders/test')
+    async test(): Promise<any> {
+         const data = await this.ordersService.test()
 
+        return data
+    }
     @Get('/api/orders/:id')
     async get(@Res() res, @Param() params: any): Promise<any> {
         const id = params.id
