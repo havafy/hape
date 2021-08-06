@@ -469,15 +469,22 @@ export class ProductsService {
 
             const categoryRaw = await this.categoriesService.get(product.categories[0])
 
-            let must = [ 
-                {match: { categories : product.category}},
-                {match: { status: true }}
-            ]
-            const related = await this.getByMultiFields({
-                must,  size: 12,  from: 0,   
-                sort: [{"createdAt": "desc"}]  
-            })
-    
+            let related = []
+            if(product.category && product.category.length > 0){
+                let must = [ 
+                    {match: { categories : product.category}},
+                    {match: { status: true }}
+                ]
+                const data = await this.getByMultiFields({
+                    must,  size: 12,  from: 0,   
+                    sort: [{"createdAt": "desc"}]  
+                })
+                if(data.products){
+                    related = data.products
+                }
+        
+            }
+     
             return {
                 found: true,
                 product: {
@@ -485,7 +492,7 @@ export class ProductsService {
                     categoryRaw,
                     images: this.applyCDN(product.images)
                 },
-                related: related.products
+                related
             }
         }catch (err) {
        
