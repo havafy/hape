@@ -7,9 +7,9 @@ import { Error } from '@components/pages'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import IProduct from '@interfaces/product'
-import { NextSeo } from 'next-seo'
+import { NextSeo, ProductJsonLd } from 'next-seo'
 import { allowedTags, trimString,
-  currencyFormat, filterChar, strip_tags,
+  currencyFormat, filterChar, strip_tags, getProductUrl,
   renderCategoryBreadcrumb} from '@lib/product'
 import { BiCart } from 'react-icons/bi'
 import { message as Message } from 'antd'
@@ -81,10 +81,7 @@ const ProductPage: FC<Props> = ({product, related, found, isLoading = true}) => 
       { isLoading &&  <div className={s.boxWrap}><LoadingBox /></div> }
       {  found && product &&       
             <div className={s.boxWrap}>
-                 <NextSeo
-                    title={trimString(name, 65)}
-                    description={trimString(strip_tags(product.description, ''), 160)}
-                    />
+                    <SEO product={product} />
                   <div className="mb-3">
                   <div className={s.categoryMenu}>
                             {renderCategoryBreadcrumb(product.categoryRaw)}
@@ -235,11 +232,77 @@ const PriceOnly: FC<ProductInfoProps> = ({product}) =>{
       <div className={s.price}>{currencyFormat(product.price)}</div>
       </div>
 }
-const Sidebar: FC = () => {
+const SEO: FC<{product: any}> = ({product}) => {
+ const product_name = trimString(product.name, 65)
+ const description = trimString(strip_tags(product.description, ''), 160)
+const  url = process.env.NEXT_PUBLIC_SITE_URL + getProductUrl(product)
   return (
-      <div className={s.sidebar}>
-      Sidebar
-    </div>
+      <>
+          <NextSeo
+                    title={product_name}
+                    description={description}
+                    openGraph={{
+                      type: 'website',
+                      url,
+                      title: product_name,
+                      description: description,
+                    images: [
+                      {
+                        url: product.images[0],
+                        width: 1000,
+                        height: 1000,
+                        alt: product_name,
+                      }
+                    ]
+                  }}
+                    />
+ <ProductJsonLd
+      productName={product_name}
+      images={product.images}
+      description={description}
+      // brand="ACME"
+      /* reviews={[
+        {
+          author: {
+            type: 'Person',
+            name: 'Jim',
+          },
+          datePublished: '2017-01-06T03:37:40Z',
+          reviewBody:
+            'This is my favorite product yet! Thanks Nate for the example products and reviews.',
+          name: 'So awesome!!!',
+          reviewRating: {
+            bestRating: '5',
+            ratingValue: '5',
+            worstRating: '1',
+          },
+          publisher: {
+            type: 'Organization',
+            name: 'TwoVit',
+          },
+        },
+      ]} 
+      aggregateRating={{
+        ratingValue: '4.4',
+        reviewCount: '89',
+      }} */
+      
+      offers={[
+        {
+          price: product.price,
+          priceCurrency: 'VND',
+          priceValidUntil: '2021-12-30',
+          itemCondition: 'http://schema.org/UsedCondition',
+          availability: 'http://schema.org/InStock',
+          // url: 'https://www.example.com/executive-anvil',
+          seller: {
+            name: 'HavaMall',
+          },
+        }
+      ]}
+      // mpn="925872"
+    />
+    </>
   )
 }
 
