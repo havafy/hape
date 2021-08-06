@@ -178,8 +178,10 @@ export class ProductsService {
             const {  body: {items} } = await this.esService.createByBulk(ES_INDEX_NAME, record);
             const productID = items[0].index._id
             const { _source } =  await this.esService.findById(ES_INDEX_NAME, productID);
+            const categoryRaw = await this.categoriesService.get(_source.category)
             return {
                 product: { ..._source, id: productID},
+                categoryRaw,
                 status: true,
             }
         }catch (err){
@@ -285,7 +287,8 @@ export class ProductsService {
             const updatedProduct =  await this.esService.findById(ES_INDEX_NAME, productID);
             const categoryRaw = await this.categoriesService.get(productDto.category)
             return {
-                product: { ...updatedProduct._source, categoryRaw},
+                product: { ...updatedProduct._source},
+                categoryRaw,
                 status: true
             }
     

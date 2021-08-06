@@ -125,7 +125,7 @@ const ShopProductForm: FC = () => {
           router.push('/user/shop-product-form?id=' + response.data.product.id)
         }
         if(response.data.status){
-          updateProduct(response.data.product)
+          updateProduct(response.data.product, response.data.categoryRaw)
           message.success(id ?  'Cập nhật thành công': 'Thêm sản phẩm thành công')
         }else{
           message.error(response.data.message)
