@@ -46,7 +46,7 @@ export class ProductDto {
   @IsNumber()
   @Min(500)
   @Max(900000000)
-  discount_price: number;
+  sale_price: number;
 
   
   @MinLength(3,{

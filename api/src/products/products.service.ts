@@ -163,7 +163,7 @@ export class ProductsService {
                 categories = await this.collectGroupCategory(productDto.category)
             }
             // apply discount price
-            const price = productDto.discount_price ? productDto.discount_price : productDto.regular_price
+            const price = productDto.sale_price ? productDto.sale_price : productDto.regular_price
             // get unique ID
             const product_id = await this.getUniqueID()
             const record: any = [
@@ -275,7 +275,7 @@ export class ProductsService {
                 categories = await this.collectGroupCategory(productDto.category)
             }
              // apply discount price
-             const price = productDto.discount_price ? productDto.discount_price : productDto.regular_price
+             const price = productDto.sale_price ? productDto.sale_price : productDto.regular_price
           
             await this.esService.update(ES_INDEX_NAME, productID ,{
                 ...productDto, 
