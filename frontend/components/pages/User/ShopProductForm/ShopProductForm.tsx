@@ -34,7 +34,7 @@ const ShopProductForm: FC = () => {
   const [categoryResults, setCategoryResults] = useState<any[]>([])
   const [fileList, setFileList] = useState<any>([]);
   const [expiryDate, setExpiryDate] = useState<string>()
-  const [discountDate, setDiscountDate] = useState<string[]>(['', ''])
+  //const [discountDate, setDiscountDate] = useState<string[]>(['', ''])
   const [isLoading, setIsLoading] = useState(false)
   const [formMessage, setFormMessage] = useState<string[]>([])
   const headerApi = { 
@@ -44,9 +44,9 @@ const ShopProductForm: FC = () => {
   useEffect(() => {
     (async () => {
       if(id){
-        let { data: { found, product} } = await axios.get('/products/' + id, headerApi)
+        let { data: { found, product, categoryRaw} } = await axios.get('/products/' + id, headerApi)
         if(found){
-          updateProduct(product)
+          updateProduct(product, categoryRaw)
 
         }
       }
@@ -61,11 +61,12 @@ const ShopProductForm: FC = () => {
     }.bind(this), 1200)
 
   }
-  const updateProduct = (product: any) => {
+  const updateProduct = (product: any, categoryRaw: any) => {
     setProduct(product)
     setCategoryID(product.category)
-    setCategory(getFullCategoryName(product.categoryRaw))
-    setDiscountDate([product.discountBegin, product.discountEnd])
+    setCategory(getFullCategoryName(categoryRaw))
+
+    // setDiscountDate([product.discountBegin, product.discountEnd])
     // set images to review
     setFileList(product.images.map((url: string, key:string)=> {
           return {
@@ -101,14 +102,14 @@ const ShopProductForm: FC = () => {
     }
     setIsLoading(true)
     try{
-        const discountBegin = discountDate[0] !== '' ? discountDate[0] : null
-        const discountEnd= discountDate[1] !== '' ? discountDate[1] : null
+        // const discountBegin = discountDate[0] !== '' ? discountDate[0] : null
+        // const discountEnd= discountDate[1] !== '' ? discountDate[1] : null
         const postData = {
           ...values, 
           status,
           category: categoryID,
-          discountBegin,
-          discountEnd,
+          // discountBegin,
+          // discountEnd,
           images,
           tags,
           expiryDate
@@ -182,6 +183,7 @@ const ShopProductForm: FC = () => {
   }
   const pickupCategory = (category: any) =>{
     setCategoryID(category.id)
+
     setCategory(getFullCategoryName(category, false))
     setCategoryResults([])
   } 

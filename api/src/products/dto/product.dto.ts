@@ -65,7 +65,8 @@ export class ProductDto {
   @Min(1)
   @Max(10000)
   quantity: number;
-
+  
+  @IsOptional()
   @IsDate()
   discountBegin: Date;
   @IsOptional()

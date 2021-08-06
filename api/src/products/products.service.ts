@@ -467,7 +467,7 @@ export class ProductsService {
         try {
             const { product } =  await this.getRawProduct(id);
 
-            const categoryRaw = await this.categoriesService.get(product.categories[0])
+            const categoryRaw = await this.categoriesService.get(product.category)
 
             let related = []
             if(product.category && product.category.length > 0){
