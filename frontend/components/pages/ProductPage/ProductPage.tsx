@@ -3,7 +3,7 @@ import Link from 'next/link'
 import s from './ProductPage.module.css'
 import axios from 'axios'
 import { QuantityBox, ProductBox} from '@components/common'
-
+import { Error } from '@components/pages'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import IProduct from '@interfaces/product'
@@ -21,13 +21,15 @@ import { useAuth } from '@context/AuthContext'
 interface Props {
   product: any;
   related: {products: any[]};
+  found: boolean;
+  isLoading: boolean;
 }
 interface ProductInfoProps {
   product: IProduct;
 }
 
 
-const ProductPage: FC<Props> = ({product, related}) => {
+const ProductPage: FC<Props> = ({product, related, found, isLoading = true}) => {
 
   const router = useRouter()
   const { accessToken, updateAction } = useAuth();
@@ -75,8 +77,9 @@ const ProductPage: FC<Props> = ({product, related}) => {
     }, [])  
   return (
     <main className="mt-12 md:mt-20">
-      { !product && <LoadingBox /> }
-      {  product &&       
+      { (!isLoading && !found ) && <Error />}
+      { isLoading &&  <div className={s.boxWrap}><LoadingBox /></div> }
+      {  found && product &&       
             <div className={s.boxWrap}>
                  <NextSeo
                     title={trimString(name, 65)}

@@ -1,6 +1,7 @@
 // Remove trailing and leading slash, usually included in nodes
 // returned by the BigCommerce API
 import * as cleanTextUtils from 'clean-text-utils';
+import { trimString } from './product'
 const getSlug = (path: string) => {
      path = path.replace(/^\/|\/$/g, '')
           .trim()
@@ -34,6 +35,8 @@ export const phoneFormat = function(phone:string) {
   const pre = '(+84)'
   phone = phone.replace(pre,'')
 
+  //limit phone length max 11 chars
+  phone = trimString(phone, 11)
   //remove 0 on begin if it have
   if(phone.charAt(0) === '0'){
     phone = phone.substring(1)

@@ -37,7 +37,7 @@ Category.getInitialProps = async (context) => {
         category = data.category
         count = data.count
     }catch(err){
-        console.log('Category:' ,err)
+        console.log('Category:' ,err.message)
     }
     return {products, pid, category, count, page , }
 }

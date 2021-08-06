@@ -41,13 +41,17 @@ Product.getInitialProps = async (context) => {
           }
       }
     }
-    return{
-      product,
-      related,
-      pid
+    return {
+      product, related, pid, found, isLoading: false
     }
+ 
   }catch(err){
-    console.log('----', err)
+    console.log('Product: ', err.message)
+  }
+  return{
+    pid,
+    product: null,
+    found: false, isLoading: false
   }
 }
 const extractID = (pid) =>{

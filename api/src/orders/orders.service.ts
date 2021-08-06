@@ -217,7 +217,7 @@ export class OrdersService {
         //   }
         //   return '22'
         
-        const subject = 'Đơn hàng #' + order.orderNumber + ' đã xác nhận thành công'
+        const subject = 'Đơn hàng đã xác nhận thành công #' + order.orderNumber 
         this.mailerService.sendMail({
             to: user.email,
             subject,

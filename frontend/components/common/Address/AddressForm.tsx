@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Form, Input, Radio, Checkbox, TreeSelect} from 'antd'
 import s from './AddressForm.module.css'
 import { RiDeleteBin6Line, RiAddFill } from 'react-icons/ri'
+import { phoneFormat} from '@lib/get-slug'
 import { CgSpinner } from 'react-icons/cg'
 
 import { useAuth } from '@context/AuthContext'
@@ -21,7 +22,7 @@ const [selectedWard, setSelectedWard] = useState('');
 const [provinces, setProvinces] = useState([]);
 const [wards, setWards] = useState([]);
 const [districts, setDistricts] = useState([]);
-
+const [phone, setPhone] = useState<string>('')
 const [isDefault, setIsDefault] = useState(false);
 const [typeAddress, setTypeAddress] = useState('home')
 const [formMessage, setFormMessage] = useState<string[]>([])
@@ -61,6 +62,7 @@ const fillAddress = async (address: any) => {
     setReady(true)
     }.bind(this), 100)
   setFormMessage([])
+  setPhone(address.phoneNumber)
   setSelectedProvince(address.province)
   setSelectedDistrict(address.district)
   setSelectedWard(address.ward)
@@ -123,6 +125,7 @@ const onFinish = async (values: any) => {
   try {
     const submitData = {
       ...values,
+      phoneNumber: phone,
       province: selectedProvince,
       district: selectedDistrict,
       ward: selectedWard,
@@ -176,13 +179,9 @@ return (<>
               </Form.Item>
               </div>
               <div className="col-span-1">
-              <Form.Item name="phoneNumber"
-                  rules={[
-                    { required: true, message: 'Nhập số điện thoại!' },
-                    { min: 10, message: 'Yêu cầu dài hơn 10 ký tự.' },
-                    ]} >
-                <Input placeholder='Số điện thoại' className={s.input}  />
-              </Form.Item>
+              <input value={phone} 
+                        onChange={e=>{setPhone(phoneFormat(e.target.value))}}
+                        placeholder='Số điện thoại' className={s.input}  />
               </div>
             </div>
             <div className="mt-5">
