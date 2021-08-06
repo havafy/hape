@@ -16,6 +16,7 @@
 .contentTitle{
     @apply py-2 m-auto md:w-3/4 text-gray-700 text-base font-semibold uppercase
 }
+
 .price{
     font-size: 1.8rem;
     color: var(--main-color);
@@ -43,7 +44,7 @@
     @apply inline-block text-gray-600 px-3 md:px-0 
 }
 .categoryMenu{
-    @apply md:flex hidden mb-5
+    @apply lg:flex hidden mb-5
 }
 .categoryMenu a{
 }
@@ -53,6 +54,16 @@
     width: 18px;
     height: 18px;
 
+}
+.productNameBreadcrumb{
+    color: #666;
+    word-wrap: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    max-width: 500px;
 }
 .priceOriginal{
     font-size: 1rem;

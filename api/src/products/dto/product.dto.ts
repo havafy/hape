@@ -31,12 +31,24 @@ export class ProductDto {
   @MinLength(10)
   url: string;
 
-  
+  @IsOptional()
   @IsNumber()
   @Min(500)
   @Max(900000000)
   price: number;
 
+  @IsNumber()
+  @Min(500)
+  @Max(900000000)
+  regular_price: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(500)
+  @Max(900000000)
+  discount_price: number;
+
+  
   @MinLength(3,{
     message: 'Vui lòng nhập danh mục',
   })

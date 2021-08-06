@@ -268,13 +268,25 @@ const ShopProductForm: FC = () => {
               </div>
               <div className="mt-8 md:grid md:grid-cols-3 md:gap-6">
               <div className="md:col-span-1">
-                  <label className={s.label}>Giá sản phẩm(₫)</label>
-                    <Form.Item name="price"   
+                <label className={s.label}>Giá thường</label>
+                    <Form.Item name="regular_price"   
                     rules={[
                       { required: true, message: 'Vui lòng nhập giá.', }]}>
                     <InputNumber min={1000} max={90000000} placeholder='Giá sản phẩm' className={s.input}  />
                     </Form.Item>
+                </div>
+      
+              <div className="md:col-span-1">
+                  <label className={s.label}>Giá khuyến mãi</label>
+                    <Form.Item name="discount_price"   
+                    rules={[
+                      { required: true, message: 'Vui lòng nhập giá khuyến mãi.', }]}>
+                    <InputNumber min={1000} max={90000000} placeholder='Giá sản phẩm' className={s.input}  />
+                    </Form.Item>
                     </div>
+
+                </div>
+                <div className="mt-8 md:grid md:grid-cols-2 md:gap-6">
                 <div className="md:col-span-1">
                  <label className={s.label}>Mã sản phẩm(SKU)</label>
                   <Form.Item name="sku"

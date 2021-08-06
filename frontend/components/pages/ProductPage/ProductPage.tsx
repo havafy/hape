@@ -88,7 +88,7 @@ const ProductPage: FC<Props> = ({product, related, found, isLoading = true}) => 
                   <div className="mb-3">
                   <div className={s.categoryMenu}>
                             {renderCategoryBreadcrumb(product.categoryRaw)}
-                            {name} 
+                            <span className={s.productNameBreadcrumb}>{name}</span>
                         </div>
                     </div>
             <div className={s.productBox}>    

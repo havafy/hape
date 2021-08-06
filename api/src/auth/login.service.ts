@@ -119,9 +119,9 @@ export class LoginService {
         const avatar = data.picture.data.url;
         const name = data.name;
         const email = data.email;
-
+        const facebook_id = data.id
         // Check existing email or google ID
-        let user = await this.usersService.findOne({ email });
+        let user = await this.usersService.findOne({ facebook_id });
         // if not exist let create a new user
         if (!user) {
           let r = Math.random()
@@ -133,6 +133,7 @@ export class LoginService {
             name,
             email,
             email_key: true,
+            email_verify: true,
             username,
             phone: null,
             password: r,
@@ -147,7 +148,7 @@ export class LoginService {
             avatar
           }
           if(user.facebook_id === null){
-            fields.facebook_id = data.id
+            fields.facebook_id = facebook_id
           }
           await this.usersService.saveByField(user.id, fields)
         }
@@ -200,9 +201,9 @@ export class LoginService {
         const avatar = data.picture;
         const name = data.name;
         const email = data.email;
-
+        const google_id = data.id
         // Check existing email or google ID
-        let user = await this.usersService.findOne({ email });
+        let user = await this.usersService.findOne({ google_id });
         // if not exist let create a new user
         if (!user) {
           let r = Math.random()
@@ -214,6 +215,7 @@ export class LoginService {
             name,
             email,
             email_key: true,
+            email_verify: true,
             username,
             phone: null,
             password: r,
@@ -229,7 +231,7 @@ export class LoginService {
             avatar
           }
           if(user.google_id === null){
-            fields.google_id = data.id
+            fields.google_id = google_id
           }
           await this.usersService.saveByField(user.id, fields)
         }

@@ -162,10 +162,14 @@ export class ProductsService {
             if(productDto.category){
                 categories = await this.collectGroupCategory(productDto.category)
             }
+            // apply discount price
+            const price = productDto.discount_price ? productDto.discount_price : productDto.regular_price
+            // get unique ID
             const product_id = await this.getUniqueID()
             const record: any = [
                 { index: { _index: ES_INDEX_NAME } },  {
                 ...productDto,
+                price,
                 product_id,
                 userID, categories,
                 updatedAt: createdAt,
@@ -270,7 +274,14 @@ export class ProductsService {
             if(productDto.category){
                 categories = await this.collectGroupCategory(productDto.category)
             }
-            await this.esService.update(ES_INDEX_NAME, productID ,{...productDto, categories})
+             // apply discount price
+             const price = productDto.discount_price ? productDto.discount_price : productDto.regular_price
+          
+            await this.esService.update(ES_INDEX_NAME, productID ,{
+                ...productDto, 
+                price,
+                categories
+            })
             const updatedProduct =  await this.esService.findById(ES_INDEX_NAME, productID);
             const categoryRaw = await this.categoriesService.get(productDto.category)
             return {

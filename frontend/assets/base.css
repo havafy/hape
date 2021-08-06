@@ -157,6 +157,14 @@ body.layout{
 .currency{
   font-size: 0.75rem;
 }
+.navMenu{
+  word-wrap: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
 .navMenu > li{
   margin: 0;
   padding: 0px 0px 27px 0px;
