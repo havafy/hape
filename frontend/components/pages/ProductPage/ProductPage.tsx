@@ -238,28 +238,29 @@ const SEO: FC<{product: any}> = ({product}) => {
 const  url = process.env.NEXT_PUBLIC_SITE_URL + getProductUrl(product)
   return (
       <>
-          <NextSeo
-                    title={product_name}
-                    description={description}
-                    openGraph={{
-                      type: 'website',
-                      url,
-                      title: product_name,
-                      description: description,
-                    images: [
-                      {
-                        url: product.images[0],
-                        width: 1000,
-                        height: 1000,
-                        alt: product_name,
-                      }
-                    ]
-                  }}
-                    />
- <ProductJsonLd
+    <NextSeo
+              title={product_name}
+              description={description}
+              openGraph={{
+                type: 'website',
+                url,
+                title: product_name,
+                description: description,
+              images: [
+                {
+                  url: product.images[0],
+                  width: 1000,
+                  height: 1000,
+                  alt: product_name,
+                }
+              ]
+            }}
+              />
+    <ProductJsonLd
       productName={product_name}
       images={product.images}
       description={description}
+      sku={product.sku}
       // brand="ACME"
       /* reviews={[
         {
@@ -278,7 +279,7 @@ const  url = process.env.NEXT_PUBLIC_SITE_URL + getProductUrl(product)
           },
           publisher: {
             type: 'Organization',
-            name: 'TwoVit',
+            name: 'Hape',
           },
         },
       ]} 
