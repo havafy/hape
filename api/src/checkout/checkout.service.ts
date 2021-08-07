@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import axios from 'axios'
 import { SearchService } from '../search/search.service'
 import { ProductsService } from "../products/products.service"
+import { AddressService } from "../address/address.service"
 import { CartService } from "./cart.service"
 import { CheckoutDto  } from './dto/checkout.dto'
 import { OrdersService } from '../orders/orders.service';
@@ -12,34 +13,67 @@ export class CheckoutService {
     constructor(readonly esService: SearchService,
         readonly productsService: ProductsService,
         readonly cartService: CartService,
-        readonly ordersService: OrdersService) {}
-    async shippingRates(userID: string) {
+        readonly ordersService: OrdersService,
+        readonly addressService: AddressService,
+        ) {}
+    async shippingRates(userID: string, addressID: string) {
+        const fees = []   
+        const pick_province = "Hồ chí minh"
+        const pick_district = 'Quận Tân Bình'
+        const transport ='road'
         try{
-            let params: any = {
-                pick_province: 'Hà Nội',
-                pick_district: 'Quận Hai Bà Trưng',
-                district:'Quận Tân bình',
-                address:'P.503 tòa nhà Auu Việt, số 1 Lê Đức Thọ',
-                weight:100,
-                province: "Hồ chí minh",
-                value:10000,
-                transport:'fly',
-                deliver_option:'xteam',
-                'tags%5B%5D': 1
+
+            const { carts } = await this.cartService.getByUserID(userID)
+  
+            if(carts.length){
+                const address:any = await this.addressService.get(addressID)
+
+                if(!addressID) return
+                for(let cart of carts){
+                    const district = await this.addressService.getRegionName(address.district)
+                    const weight = cart.weight > 100 ? cart.weight : 100 // gram
+                    const province =  await this.addressService.getRegionName(address.province)
+                    const value = cart.subtotal
+                    const submit = {
+                        pick_province, pick_district, district, 
+                        weight,  province, value, transport,
+                    }
+                    const { fee } = await this.getShippingFeeGHTK(submit)
+                    const days = 4
+                    if(fee){
+                        fees.push({ cart: cart.id, shipping_fee: fee.fee,  addressID, days})
+                    }
+                 
+                }
             }
-            const { data } = await axios({
-                method: 'post',
-                url: 'https://services.giaohangtietkiem.vn/services/shipment/fee',
-                headers: { 
-                  'Token': 'A5220eaffC2340Df093994eA106b7ce5F8cf40f2'
-                },
-                params
-              })
-             return data
+
         }catch(error){
             console.log('shippingRates:', error)
         }
-        return {}
+        return fees
+    }
+    async getShippingFeeGHTK({
+        pick_province, pick_district, district,
+        weight,  province, value, transport = 'road'
+    }){
+       try{
+            let params: any = {
+                pick_province, pick_district, district,
+                weight,  province, value, transport,
+                deliver_option:'none'
+            }
+        const { data } = await axios({
+            method: 'post',
+            url: 'https://services.giaohangtietkiem.vn/services/shipment/fee',
+            headers: { 
+              'Token': process.env.SHIPPING_KEY_GHTK
+            },
+            params
+          })
+         return data
+    }catch(error){
+        console.log('getShippingFeeByAddress:', error)
+    }
     }
     async checkout(userID: string, checkoutDto: CheckoutDto) {
         try{

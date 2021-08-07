@@ -26,7 +26,8 @@ export class CheckoutController {
     @Get('/api/shipping/rates')
     async rates(@Res() res): Promise<any> {
         const userID = res.req.user.id
-        return res.json(await this.checkoutService.shippingRates(userID))
+        let {addressID = '' } = res.req.query
+        return res.json(await this.checkoutService.shippingRates(userID, addressID))
     }
     @Post('/api/checkout')
     async checkout(@Res() res,  @Body() checkoutDto: CheckoutDto): Promise<any> {

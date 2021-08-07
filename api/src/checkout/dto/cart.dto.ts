@@ -35,6 +35,11 @@ export class CartDto {
   @Min(1)
   @Max(10000)
   quantityTotal: number;
+  
+  @IsNumber()
+  @Min(1)
+  @Max(10000)
+  weight: number;
 
 
   @IsOptional()
@@ -64,6 +69,11 @@ export class Items {
   @Min(1)
   @Max(10000)
   quantity: number;
+
+  @IsNumber()
+  @Min(1)
+  @Max(10000)
+  weight: number;
 
   @IsOptional()
   @MaxLength(20)

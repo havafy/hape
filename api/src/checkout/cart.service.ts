@@ -203,6 +203,7 @@ export class CartService {
             let discount = 0
             let shippingCost = 0
             let quantityTotal = 0
+            let weight = 0
             try{
                 let i = 0
                 for(const { productID, quantity } of cart.items){
@@ -212,9 +213,16 @@ export class CartService {
                     cart.items[i].thumb = product.images[0]
                     cart.items[i].sku = product.sku
                     cart.items[i].regular_price = product.regular_price
+                    
                     if(found && product.status){
-                        cart.items[i].total = product.price * quantity
-                        subtotal += product.price * quantity
+                        const item_weight = (product.weight ? product.weight : 0) * quantity
+                        weight += item_weight
+                        cart.items[i].weight = item_weight
+
+                        const item_total = product.price * quantity
+                        cart.items[i].total = item_total
+                        subtotal += item_total
+        
                         quantityTotal += quantity
                         cart.items[i].productStatus = true
                         cart.items[i].active = true
@@ -235,6 +243,7 @@ export class CartService {
                 subtotal,
                 grandTotal,
                 discount,
+                weight,
                 shippingCost,
                 quantityTotal
             }

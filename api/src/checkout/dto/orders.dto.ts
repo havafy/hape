@@ -25,6 +25,11 @@ export class OrderDto {
   @IsNumber()
   subtotal: number;
 
+  @IsNumber()
+  @Min(1)
+  @Max(10000)
+  weight: number;
+
   @IsOptional()
   @IsNumber()
   @Min(1)
@@ -91,4 +96,10 @@ export class Items {
   @MaxLength(300)
   @MinLength(5)
   sku: string;
+  
+  @IsNumber()
+  @Min(1)
+  @Max(10000)
+  weight: number;
+
 }

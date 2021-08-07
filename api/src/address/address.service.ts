@@ -9,7 +9,23 @@ const ES_INDEX_ADDRESS = 'addresses'
 @Injectable()
 export class AddressService {
     constructor(readonly esService: SearchService) {}
+    async get(id: string ) {
+
+        try {
+            const checking = await this.esService.findById(ES_INDEX_ADDRESS, id )
+            if(checking.found){
+                return {
+                    ...checking._source, 
+                }
+       
+            }
+        }catch (err) {
+          
+        }
+        return {
+        }
     
+    }
     async getSummary(id: string ) {
 
         try {
