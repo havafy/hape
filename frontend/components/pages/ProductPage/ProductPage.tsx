@@ -262,8 +262,8 @@ const  url = process.env.NEXT_PUBLIC_SITE_URL + getProductUrl(product)
       description={description}
       sku={product.sku}
       // brand="ACME"
-      /* reviews={[
-        {
+       reviews={[
+        /*{
           author: {
             type: 'Person',
             name: 'Jim',
@@ -281,13 +281,13 @@ const  url = process.env.NEXT_PUBLIC_SITE_URL + getProductUrl(product)
             type: 'Organization',
             name: 'Hape',
           },
-        },
+        },*/
       ]} 
       aggregateRating={{
-        ratingValue: '4.4',
-        reviewCount: '89',
-      }} */
-      
+        ratingValue: '0.0',
+        reviewCount: '0',
+      }} 
+    
       offers={[
         {
           price: product.price,

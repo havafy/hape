@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { url } from 'inspector'
+import axios from 'axios'
 import { SearchService } from '../search/search.service'
 import { ProductsService } from "../products/products.service"
 import { CartService } from "./cart.service"
@@ -13,7 +13,34 @@ export class CheckoutService {
         readonly productsService: ProductsService,
         readonly cartService: CartService,
         readonly ordersService: OrdersService) {}
-    
+    async shippingRates(userID: string) {
+        try{
+            let params: any = {
+                pick_province: 'Hà Nội',
+                pick_district: 'Quận Hai Bà Trưng',
+                district:'Quận Tân bình',
+                address:'P.503 tòa nhà Auu Việt, số 1 Lê Đức Thọ',
+                weight:100,
+                province: "Hồ chí minh",
+                value:10000,
+                transport:'fly',
+                deliver_option:'xteam',
+                'tags%5B%5D': 1
+            }
+            const { data } = await axios({
+                method: 'post',
+                url: 'https://services.giaohangtietkiem.vn/services/shipment/fee',
+                headers: { 
+                  'Token': 'A5220eaffC2340Df093994eA106b7ce5F8cf40f2'
+                },
+                params
+              })
+             return data
+        }catch(error){
+            console.log('shippingRates:', error)
+        }
+        return {}
+    }
     async checkout(userID: string, checkoutDto: CheckoutDto) {
         try{
             let orders = []
