@@ -45,7 +45,7 @@ export class AddressService {
         }
     
     }
-    async getByUserID(userID: string,  size: number, from: number) {
+    async getByUserID(userID: string,  size: number = 10, from: number = 0) {
         const { body: { 
             hits: { 
                 total, 
@@ -71,6 +71,19 @@ export class AddressService {
             from,
             addresses
         }
+    }
+    async getDefault(userID: string) {
+        const { count, addresses } = await this.getByUserID(userID)
+        if(count) {
+            for(let address of addresses){
+                if(address.default){
+                    return address
+                }
+            }
+            return addresses[0]
+        }
+        return null
+    
     }
     async getFullNameRegion(address: AddressDto) {
       

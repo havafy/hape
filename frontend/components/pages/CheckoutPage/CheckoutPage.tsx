@@ -29,7 +29,9 @@ const CheckoutPage: FC<Props> = ({}) => {
   const [changeAddress, setChangeAddress] = useState<boolean>(false);
   const [paymentInfo, setPaymentInfo] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string>('');
-  const [cartGroup, setCartGroup] = useState<{carts: any[], grandTotal: number, addresses: any[]}>({
+  const [cartGroup, setCartGroup] = useState<{
+    carts: any[], shippingTotal: number,
+     grandTotal: number, addresses: any[]}>({
     carts: [],
     grandTotal: 0,
     addresses: []
@@ -190,7 +192,7 @@ const CheckoutPage: FC<Props> = ({}) => {
                           </div>
                      <div className="md:col-span-1 w-40">Phí vận chuyển: </div> 
                         <div className="md:col-span-1 text-right">
-                        {currencyFormat(0)} - {currencyFormat(30000)}
+                        {currencyFormat(cartGroup.shippingTotal)}
                           </div>
                           <div className="md:col-span-1 w-40">Tổng thanh toán:
                       </div> 
@@ -386,9 +388,9 @@ const CartShopBox: FC<{cart: any;}> = ({cart}) => {
       </div>
       <div className={s.cartShippingColumn}>
       Phí giao hàng:  
-      <span className="ml-2">
-        {currencyFormat(0)} - {currencyFormat(30000)}</span> 
-        (Giao bởi chủ shop)
+      {cart.shipping && <span className="ml-2">
+        {currencyFormat(cart.shipping.fee)}</span> } 
+        <span className="text-gray-400 ml-3">(Giao bởi chủ shop)</span>
       </div>
       <div className={s.cartPaymentColumn}>
       Phương thức thanh toán: <span className="text-green-600">Thanh toán khi nhận hàng</span>

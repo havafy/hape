@@ -7,7 +7,7 @@ import { FilesService } from "../files/files.service";
 import { ProductsService } from "../products/products.service";
 import { AddressService } from '../address/address.service';
 import { AddressModule } from '../address/address.module';
-
+import { ShippingService } from './shipping.service';
 import { ShopModule } from '../shop/shop.module';
 import { ShopService } from "../shop/shop.service";
 import { OrdersModule } from "../orders/orders.module";
@@ -21,13 +21,16 @@ import { CategoriesService } from '../products/categories.service';
     ],
     providers: [
         CartService, 
+        ShippingService,
         CheckoutService, 
+
         FilesService, 
         ProductsService,
         AddressService,
         ShopService,
         OrdersService,
         CategoriesService,
+
        // UsersService
     ],
     controllers: [CheckoutController],
