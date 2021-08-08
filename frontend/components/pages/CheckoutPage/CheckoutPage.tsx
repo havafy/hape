@@ -34,7 +34,8 @@ const CheckoutPage: FC<Props> = ({}) => {
      grandTotal: number, addresses: any[]}>({
     carts: [],
     grandTotal: 0,
-    addresses: []
+    addresses: [],
+    shippingTotal: 0
   })
   const headerApi = { 
     headers: { 'Authorization': `Bearer ${accessToken}` } 
