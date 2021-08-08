@@ -291,7 +291,7 @@ export class CartService {
         let carts = []
 
         if(count){
-            let addressSelected: any
+            let addressSelected: any = null
             if(address !== ''){
                 addressSelected = await this.addressService.get(address)
             }else{
@@ -309,7 +309,7 @@ export class CartService {
                   
                  }
                 // get shipping fee by cart
-                if(collect === 'address,payments,shippings' && address){
+                if(collect === 'address,payments,shippings' && addressSelected){
                     const feeRes = await this.getShippingFee({cart: cartData, address: addressSelected })
                     if(feeRes){
                         shippingTotal += feeRes.fee
