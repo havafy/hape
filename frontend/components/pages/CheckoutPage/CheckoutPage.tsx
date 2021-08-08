@@ -12,7 +12,7 @@ import {FaLocationArrow, FaRegEdit} from 'react-icons/fa'
 import { RiAddFill } from 'react-icons/ri'
 import {MdArrowBack} from 'react-icons/md'
 import { AddressForm } from '@components/common'
-import { Radio, Modal } from 'antd';
+import { Radio, Modal, Skeleton } from 'antd';
 import { useAuth } from '@context/AuthContext'
 import { getProductUrl, currencyFormat } from '@lib/product'
 import { Hape } from '@components/icons'
@@ -24,6 +24,7 @@ const CheckoutPage: FC<Props> = ({}) => {
   const router = useRouter()
   const {accessToken, updateAction} = useAuth();
   const [ visible, setVisible] = useState(false)
+  const [ready, setReady] = useState(false)
   const [loading, setLoading] = useState<boolean>(false);
   const [createdOrders, setCreatedOrders] = useState<any[]>([]);
   const [changeAddress, setChangeAddress] = useState<boolean>(false);
@@ -43,12 +44,13 @@ const CheckoutPage: FC<Props> = ({}) => {
   useEffect(() => {
     initialLoad()
   }, [])
-  const pullCart = async (addressAction: string = '') =>{
+  const pullCart = async (address = '') =>{
     try{
       let {data} = await axios.get('/cart', { 
         ...headerApi,
-        params: { collect: 'address,payments,shippings' }
+        params: { collect: 'address,payments,shippings', address}
       })
+      setReady(true) // show loading box
       setCartGroup(data)
       if(data.addresses.length ===0){
         setVisible(true)
@@ -58,6 +60,7 @@ const CheckoutPage: FC<Props> = ({}) => {
         setSelectedAddress(data.addresses[0].id)
         setChangeAddress(false)
       }
+      
       updateAction({event: 'CART_SUMMARY_UPDATE', payload: data })
       return data
     }catch(err){
@@ -82,11 +85,13 @@ const CheckoutPage: FC<Props> = ({}) => {
       setSelectedAddress(data.addresses[0].id)
     }
   }
-  const pickupAddress = useCallback((id:string) => {
+  const pickupAddress = useCallback(async (id:string) => {
       if(id !== '' && id !== 'goBack'){
           setSelectedAddress(id)
+          if(id !== '')  await pullCart(id)
         }
         setChangeAddress(false)
+        
       }, []) 
 
   const submitPlaceOrder = async () => {
@@ -127,8 +132,8 @@ const CheckoutPage: FC<Props> = ({}) => {
   return (
     <>
     <LeanHeader />
-
     <main className="mt-18">
+    {!ready ? <LoadingBox /> : 
       <div className={s.root}>
             <div>
               { cartGroup.grandTotal > 0 && <div>
@@ -224,8 +229,8 @@ const CheckoutPage: FC<Props> = ({}) => {
           
           </div>
  
-      </div>
-    </main>
+      </div>}
+    </main> 
 
     </>
   )
@@ -258,6 +263,15 @@ console.log('paymentInfo:', paymentInfo)
     </div> 
   </div>)
 }
+const LoadingBox = ()=>{
+
+  return <div className={s.root}>
+    <div className="bg-white px-10 pt-5 pb-20 shadow">
+    <Skeleton />
+    </div>
+
+  </div>
+  }
 const CartIsEmpty = () =>{
 
   return (<div className={s.addressBox}>
@@ -346,7 +360,6 @@ const SelectAddressForm: FC<{
 
 
 const CartShopBox: FC<{cart: any;}> = ({cart}) => {
-
 
   return (  <div className={s.cartByShop}>
     <div className={s.shopTitle}>

@@ -26,9 +26,6 @@ export class CartDto {
   @IsNumber()
   discount: number;
 
-  @IsOptional()
-  @IsNumber()
-  shippingCost: number;
   
   @IsOptional()
   @IsNumber()

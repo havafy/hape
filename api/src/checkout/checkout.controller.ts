@@ -22,8 +22,8 @@ export class CheckoutController {
     @Get('/api/cart')
     async get(@Res() res): Promise<any> {
         const userID = res.req.user.id
-        let {collect = '' } = res.req.query
-        return res.json(await this.cartService.getByUserID(userID, collect))
+        let {collect = '', address = '' } = res.req.query
+        return res.json(await this.cartService.getByUserID(userID, collect, address))
     }
     @Get('/api/shipping/rates')
     async rates(@Res() res): Promise<any> {

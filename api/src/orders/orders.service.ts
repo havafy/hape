@@ -140,13 +140,18 @@ export class OrdersService {
                 cartData.items[i].thumb = await this.filesService.copyOrderItemThumb(item.thumb, orderNumber)
                 i++
             }
-
+            // collect the shipping cost/fee by address
+            const feeRes = await this.cartService.getShippingFee({cart, address })
+            const shippingFee = feeRes ? feeRes.fee : 0 
+            const grandTotal = cartData.cartData + shippingFee
             // sync cart to order
             delete cartData.id //clean up
             let order = {
                 ...cartData,
+                grandTotal,
                 orderNumber,
                 address,
+                shippingFee,
                 shipping: cart.shipping,
                 payment: cart.payment,
                 paymentStatus: 'WAITING',

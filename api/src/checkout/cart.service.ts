@@ -206,7 +206,6 @@ export class CartService {
             let subtotal = 0
             let grandTotal = 0
             let discount = 0
-            let shippingCost = 0
             let quantityTotal = 0
             let weight = 0
             try{
@@ -249,7 +248,6 @@ export class CartService {
                 grandTotal,
                 discount,
                 weight,
-                shippingCost,
                 quantityTotal
             }
 
@@ -275,7 +273,7 @@ export class CartService {
                 quantityTotal
             }
          }
-    async getByUserID(userID: string, collect: string = '', size: number = 100, from: number = 0) {
+    async getByUserID(userID: string, collect: string = '', address = '', size: number = 100, from: number = 0) {
         const payments = ['COD']
         const shippings = [{code: 'FREE_SHIPPING', cost: 0}]
         const { body: { 
@@ -293,9 +291,13 @@ export class CartService {
         let carts = []
 
         if(count){
-            const pick_province = "Hồ chí minh"
-            const pick_district = 'Quận Tân Bình'
-            const address:any = await this.addressService.getDefault(userID)
+            let addressSelected: any
+            if(address !== ''){
+                addressSelected = await this.addressService.get(address)
+            }else{
+                addressSelected = await this.addressService.getDefault(userID)
+            }
+        
             for(let cart of hits){
                 const shop = await this.shopService.getShopSummary(cart._source.shopID)
                 const cartData = {
@@ -308,10 +310,11 @@ export class CartService {
                  }
                 // get shipping fee by cart
                 if(collect === 'address,payments,shippings' && address){
-                    cartData['shipping'] = await this.getShippingFee({
-                        cart, address, pick_province, pick_district
-                    })
-                    shippingTotal += cartData.shipping.fee
+                    const feeRes = await this.getShippingFee({cart: cartData, address: addressSelected })
+                    if(feeRes){
+                        shippingTotal += feeRes.fee
+                        cartData['shipping'] = feeRes
+                    }
                 }
                 carts.push(cartData)
                 quantityTotal += cart._source.quantityTotal
@@ -347,8 +350,6 @@ export class CartService {
 
     async getRates(userID: string, addressID: string) {
         const fees = []   
-        const pick_province = "Hồ chí minh"
-        const pick_district = 'Quận Tân Bình'
         try{
 
             const { carts } = await this.getByUserID(userID)
@@ -358,9 +359,7 @@ export class CartService {
 
                 if(!addressID) return
                 for(let cart of carts){
-                    const { fee, days } = await this.getShippingFee({
-                        cart, address, pick_province, pick_district
-                    })
+                    const { fee, days } = await this.getShippingFee({ cart, address  })
                     if(fee){
                         fees.push({ cart: cart.id, shipping_fee: fee,  addressID, days})
                     }
@@ -383,6 +382,7 @@ export class CartService {
                     weight,  province, value, transport,
                     deliver_option:'none'
                 }
+            
             const { data } = await axios({
                 method: 'post',
                 url: 'https://services.giaohangtietkiem.vn/services/shipment/fee',
@@ -391,12 +391,15 @@ export class CartService {
                 },
                 params
             })
+            console.log(params)
             return data
         }catch(error){
             console.log('getShippingFeeByAddress:', error)
         }
     }
-    async getShippingFee({cart, address, pick_province, pick_district}){
+    async getShippingFee({cart, address}){
+        const pick_province = "Hồ chí minh"
+        const pick_district = 'Quận Tân Bình'
         const district = await this.addressService.getRegionName(address.district)
         const weight = cart.weight > 100 ? cart.weight : 100 // gram
         const province =  await this.addressService.getRegionName(address.province)

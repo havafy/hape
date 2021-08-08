@@ -139,7 +139,7 @@ return (
                               </div>
                         <div className="md:col-span-1 w-40">Phí vận chuyển: </div> 
                             <div className="md:col-span-1 text-right">
-                            {currencyFormat(0)} - {currencyFormat(30000)}
+                            {currencyFormat(order.shippingFee)}
                               </div>
         
                         </div>
