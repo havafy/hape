@@ -297,7 +297,7 @@ export class CartService {
             }else{
                 addressSelected = await this.addressService.getDefault(userID)
             }
-        
+      
             for(let cart of hits){
                 const shop = await this.shopService.getShopSummary(cart._source.shopID)
                 const cartData = {
@@ -311,6 +311,7 @@ export class CartService {
                 // get shipping fee by cart
                 if(collect === 'address,payments,shippings' && addressSelected){
                     const feeRes = await this.getShippingFee({cart: cartData, address: addressSelected })
+                    console.log('feeRes:', feeRes)
                     if(feeRes){
                         shippingTotal += feeRes.fee
                         cartData['shipping'] = feeRes
