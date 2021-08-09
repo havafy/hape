@@ -287,6 +287,7 @@ export class CartService {
         const count = total.value
         let quantityTotal = 0
         let grandTotal = 0
+        let subtotal = 0
         let shippingTotal = 0
         let carts = []
 
@@ -299,6 +300,7 @@ export class CartService {
             }
       
             for(let cart of hits){
+                let shippingFee = 0
                 const shop = await this.shopService.getShopSummary(cart._source.shopID)
                 const cartData = {
                     id: cart._id,
@@ -308,22 +310,26 @@ export class CartService {
                     shippings
                   
                  }
+                
                 // get shipping fee by cart
                 if(collect === 'address,payments,shippings' && addressSelected){
                     const feeRes = await this.getShippingFee({cart: cartData, address: addressSelected })
                     console.log('feeRes:', feeRes)
                     if(feeRes){
-                        shippingTotal += feeRes.fee
+                        shippingFee = feeRes.fee
+                        shippingTotal += shippingFee
                         cartData['shipping'] = feeRes
                     }
                 }
                 carts.push(cartData)
+                subtotal += cart._source.subtotal
                 quantityTotal += cart._source.quantityTotal
-                grandTotal += cart._source.grandTotal
+                grandTotal += cart._source.grandTotal + shippingFee
             }
         }
         let response: any = {
             count,
+            subtotal,
             grandTotal,
             quantityTotal,
             shippingTotal,

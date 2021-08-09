@@ -194,7 +194,7 @@ const CheckoutPage: FC<Props> = ({}) => {
                       <div className="md:col-span-1 w-40">Tổng tiền hàng: 
                       </div> 
                         <div className="md:col-span-1 text-right">
-                          {currencyFormat(cartGroup.grandTotal)}
+                          {currencyFormat(cartGroup.subtotal)}
                           </div>
                      <div className="md:col-span-1 w-40">Phí vận chuyển: </div> 
                         <div className="md:col-span-1 text-right">
