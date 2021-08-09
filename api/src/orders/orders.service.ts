@@ -142,8 +142,9 @@ export class OrdersService {
             }
             // collect the shipping cost/fee by address
             const feeRes = await this.cartService.getShippingFee({cart, address })
-            const shippingFee = feeRes.fee ? feeRes.fee.fee : 0 
-            const grandTotal = cartData.cartData + shippingFee
+  
+            const shippingFee = feeRes.fee ? feeRes.fee : 0 
+            const grandTotal = cartData.grandTotal + shippingFee
             // sync cart to order
             delete cartData.id //clean up
             let order = {
@@ -159,7 +160,7 @@ export class OrdersService {
                 createdAt,
                 updatedAt
             }
-
+            console.log(feeRes, order)
             // push order to ES
             const record: any = [{index: { _index: ES_INDEX_ORDER }}, order]
             const {  body: {items} } = await this.esService.createByBulk(ES_INDEX_ORDER, record);
