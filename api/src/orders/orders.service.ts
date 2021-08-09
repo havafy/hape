@@ -202,25 +202,25 @@ export class OrdersService {
         const shopper = await this.getShop(order.shopID);
         const shopUser = await this.getUser(order.shopID);
         if(!shopUser || !shopper || !user) return 
-         try {
-            const source = fs.readFileSync(__dirname + '/../../templates/emails/new-order-customer.hbs', 'utf8')
-             var template = Handlebars.compile(source);
-             var result = template({
-                    sendTo: shopper.email,
-                    user,
-                    orderNumber: order.orderNumber,
-                    shopName: shopper.shopName,
-                    createdAt: moment(order.createdAt).format('H:M D-M-Y'),
-                    orderID, order,
-                    LinkURL: process.env.FRONTEND_URL + "user/order-detail?id=" + orderID ,
-                    LinkText: "Xem đơn hàng"
-                });
-             return result
+        //  try {
+        //     const source = fs.readFileSync(__dirname + '/../../templates/emails/new-order-customer.hbs', 'utf8')
+        //      var template = Handlebars.compile(source);
+        //      var result = template({
+        //             sendTo: shopper.email,
+        //             user,
+        //             orderNumber: order.orderNumber,
+        //             shopName: shopper.shopName,
+        //             createdAt: moment(order.createdAt).format('H:M D-M-Y'),
+        //             orderID, order,
+        //             LinkURL: process.env.FRONTEND_URL + "user/order-detail?id=" + orderID ,
+        //             LinkText: "Xem đơn hàng"
+        //         });
+        //      return result
         
-            } catch (err) {
-            console.error('test:', err)
-          }
-          return '22'
+        //     } catch (err) {
+        //     console.error('test:', err)
+        //   }
+        //   return '22'
         
         const subject = 'Đơn hàng đã xác nhận thành công #' + order.orderNumber 
         this.mailerService.sendMail({
