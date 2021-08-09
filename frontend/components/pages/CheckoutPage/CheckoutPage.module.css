@@ -55,6 +55,13 @@
 }
 .itemTotal{
     color: var(--main-color);
+
+}
+.itemTotal > span{
+    @apply block
+}
+.itemTotal span{
+    @apply text-right
 }
 .removeButton{
     @apply cursor-pointer inline-block
@@ -204,7 +211,7 @@
     @apply md:col-span-4 self-center pb-3 md:pb-0
 }
 .cartShippingColumn{
-    @apply md:col-span-4 self-center
+    @apply md:col-span-4 self-center text-right text-gray-700 
 }
 .cartPaymentColumn{
     @apply md:col-span-4 self-center text-left md:text-right

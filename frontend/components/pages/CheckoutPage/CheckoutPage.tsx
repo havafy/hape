@@ -401,15 +401,16 @@ const CartShopBox: FC<{cart: any;}> = ({cart}) => {
       <label>Lời nhắn:</label>
       <input className={s.textInput} type="text" placeholder="Lời nhắn cho chủ shop" />
       </div>
-      <div className={s.cartShippingColumn}>
-      Phí giao hàng:  
-      {cart.shipping && <span className="ml-2">
-        {currencyFormat(cart.shipping.fee)}</span> } 
-        <span className="text-gray-400 ml-3">(Giao bởi chủ shop)</span>
-      </div>
       <div className={s.cartPaymentColumn}>
       Phương thức thanh toán: <span className="text-green-600">Thanh toán khi nhận hàng</span>
       </div>
+      <div className={s.cartShippingColumn}>
+      Phí giao hàng<span className="text-gray-400 ml-2">(Giao bởi chủ shop)</span>:  
+      {cart.shipping && <span className="ml-2">
+        {currencyFormat(cart.shipping.fee)}</span> } 
+        
+      </div>
+
     <div className="md:col-span-12 md:text-right mt-3 self-center">
        <span>
         Tổng số tiền ({cart.quantityTotal} sản phẩm):
