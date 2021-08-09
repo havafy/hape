@@ -31,11 +31,12 @@ const CheckoutPage: FC<Props> = ({}) => {
   const [paymentInfo, setPaymentInfo] = useState<any[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string>('');
   const [cartGroup, setCartGroup] = useState<{
-    carts: any[], shippingTotal: number,
+    carts: any[], shippingTotal: number, subtotal: number,
      grandTotal: number, addresses: any[]}>({
     carts: [],
     grandTotal: 0,
     addresses: [],
+    subtotal: 0,
     shippingTotal: 0
   })
   const headerApi = { 
