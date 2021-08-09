@@ -246,7 +246,7 @@
 	  }
 		.item-cell{
 				border-bottom: 1px solid #f6f6f6;
-				padding: 10px 0;
+				padding: 6px 0;
 		}
 	  /* -------------------------------------
 		  RESPONSIVE AND MOBILE FRIENDLY STYLES
@@ -413,25 +413,36 @@
 					Số lượng: {{this.quantity}}</div>
 				</div>
 			</td> <td align="left" class="item-cell">
-				<div style="margin: 10px 0 0 0">{{this.total}}</div>
+				<div style="margin: 10px 0 0 0">₫{{this.total}}</div>
 				</td></tr>
   		{{/each}}
 
 	</tbody>
 	</table>
 	<div class="orderPriceBox">
-		<div class="row">
-			<span class="label">Tổng tiền hàng<span> 
-			<span class="price">{{order.subtotal}}</span>
-		</div>
-		<div class="row"> <span class="label">Phí giao hàng<span> 
-				<span class="price"></span>{{order.shippingFee}}
-				</div>
-
-		<div  class="row" style="font-weight:bold; font-size: 1rem">
-			<span class="label">Tổng số tiền<span>
-			<span class="price">{{order.grandTotal}}</span>
-		</div>
+		<table role="presentation" style="text-align: right" border="0" cellpadding="0" cellspacing="0"><tbody>
+		<tr>
+			<td class="item-cell" >
+		Tổng tiền hàng
+			</td>
+			<td class="item-cell" style="width: 100px">
+				<span class="price">₫{{order.subtotal}}</span>
+				</td>
+			</tr>
+		<tr>
+			<td class="item-cell">Phí giao hàng</td>
+			<td>
+				<span class="price">₫{{order.shippingFee}}</span>
+				</td>
+			</tr>
+			<tr>
+			<td class="item-cell">Tổng số tiền</td>
+			<td>
+				<span class="price">₫{{order.grandTotal}}</span>
+				</td>
+			</tr>
+	</tbody>
+	</table>
 	</div>
 	<div class="btn btn-primary" style="margin: 20px auto 50px auto; text-align: center">
 		 <a href="{{ LinkURL }}" target="_blank" >{{ LinkText }}</a> 

@@ -142,7 +142,7 @@ export class OrdersService {
             }
             // collect the shipping cost/fee by address
             const feeRes = await this.cartService.getShippingFee({cart, address })
-            const shippingFee = feeRes ? feeRes.fee : 0 
+            const shippingFee = feeRes.fee ? feeRes.fee.fee : 0 
             const grandTotal = cartData.cartData + shippingFee
             // sync cart to order
             delete cartData.id //clean up
@@ -186,8 +186,8 @@ export class OrdersService {
 
     async test (){
 
-        const userID = 31
-        const orderID = "8bBFEHsB4WwrigC8c-6c"
+        const userID = 21504
+        const orderID = "GLDTKnsB4WwrigC88-_3"
         //get order information
         const { _source } =  await this.esService.findById(ES_INDEX_ORDER, orderID);
         return this.sendEvent({order: _source, userID, orderID})
@@ -202,25 +202,25 @@ export class OrdersService {
         const shopper = await this.getShop(order.shopID);
         const shopUser = await this.getUser(order.shopID);
         if(!shopUser || !shopper || !user) return 
-        //  try {
-        //     const source = fs.readFileSync(__dirname + '/../../templates/emails/new-order-customer.hbs', 'utf8')
-        //      var template = Handlebars.compile(source);
-        //      var result = template({
-        //             sendTo: shopper.email,
-        //             user,
-        //             orderNumber: order.orderNumber,
-        //             shopName: shopper.shopName,
-        //             createdAt: moment(order.createdAt).format('H:M D-M-Y'),
-        //             orderID, order,
-        //             LinkURL: process.env.FRONTEND_URL + "user/order-detail?id=" + orderID ,
-        //             LinkText: "Xem đơn hàng"
-        //         });
-        //      return result
+         try {
+            const source = fs.readFileSync(__dirname + '/../../templates/emails/new-order-customer.hbs', 'utf8')
+             var template = Handlebars.compile(source);
+             var result = template({
+                    sendTo: shopper.email,
+                    user,
+                    orderNumber: order.orderNumber,
+                    shopName: shopper.shopName,
+                    createdAt: moment(order.createdAt).format('H:M D-M-Y'),
+                    orderID, order,
+                    LinkURL: process.env.FRONTEND_URL + "user/order-detail?id=" + orderID ,
+                    LinkText: "Xem đơn hàng"
+                });
+             return result
         
-        //     } catch (err) {
-        //     console.error('test:', err)
-        //   }
-        //   return '22'
+            } catch (err) {
+            console.error('test:', err)
+          }
+          return '22'
         
         const subject = 'Đơn hàng đã xác nhận thành công #' + order.orderNumber 
         this.mailerService.sendMail({

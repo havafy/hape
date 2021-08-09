@@ -71,7 +71,7 @@ const CheckoutPage: FC<Props> = ({}) => {
   }
   const initialLoad = async () =>{
     const data = await pullCart()
-    if(!data.addresses.length){
+    if(!data.addresses){
       return
     }
     let found = false
