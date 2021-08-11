@@ -20,7 +20,7 @@ export class HomePageService {
             data:{
                 bannerBig:{
                     link: '/',
-                    src: bannerUrl+'h1.gif',
+                    src: bannerUrl+'h1.png',
                 },
                 banner1:{
                     link: '/',
@@ -32,11 +32,11 @@ export class HomePageService {
                 }, 
                 banner3:{
                     link: '/',
-                    src: bannerUrl+'b3.png',
+                    src: bannerUrl+'b03.png',
                 }, 
                 banner4:{
                     link: '/',
-                    src: bannerUrl+'b4.png',
+                    src: bannerUrl+'b04.png',
                 }, 
             }
         })
