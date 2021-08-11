@@ -1,18 +1,28 @@
 
-.root{
-    @apply inline-block relative cursor-pointer
+.cart{
+    @apply ml-8 inline-block relative cursor-pointer 
 }
 
-.root svg{
+.cart svg{
     width: 25px;
     height: 25px;
-    margin: 8px 0 0 0;
     transition: fill 275ms ease;
     fill: var(--main-color);
-    @apply inline-block mr-8
+    @apply inline-block ml-4 mt-2
 }
+.shop{
+    @apply ml-8 mt-2 hidden md:inline-block
 
-.root label{
+}
+.shop svg{
+    width: 27px;
+    height: 27px;
+
+    transition: fill 275ms ease;
+    fill: #555;
+    @apply inline-block cursor-pointer
+}
+.cart label{
     background: var(--main-color);
     text-align: center;
     display: inline-block;
@@ -21,13 +31,13 @@
     padding: 1px 0 0 0;
     font-size: 12px;
     border-radius: 50%;
-    left: 18px;
-    @apply shadow absolute font-bold text-white cursor-pointer
+    left: 33px;
+    @apply shadow absolute  font-bold text-white cursor-pointer
 }
-.root button:hover svg{
+.cart button:hover svg{
     fill: #000;
 }
-.root input{
+.cart input{
     text-align: center;
     font-size: 15px;
     padding: 2px;

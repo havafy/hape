@@ -139,8 +139,9 @@ span.highlight {
 /* ---------- User Nav ------------ */
 
 .circle-avatar {
-    width: 32px;
-    height: 32px;
+    width: 29px;
+    height: 29px;
+    margin: 5px 0 0 0;
     display: inline-block;
     border-radius: 50%;
     border: 1px solid #eee;
@@ -152,8 +153,8 @@ span.highlight {
 }
 
 .user-logged-box{
-    margin: 4px 18px 0 0;
-    @apply text-sm cursor-pointer
+
+    @apply text-sm cursor-pointer relative
  }
   
 .user-logged-box:hover .user-menu-dropdown{
@@ -167,8 +168,8 @@ span.highlight {
     display: none;
     backdrop-filter: blur(10px);
     background-color: rgba(255, 255, 255, 0.96);
-    right: 0;
-    min-width: 240px;
+    left: -30px;
+    min-width: 200px;
     text-align: left;
     -webkit-box-shadow: -1px 1px 20px 0px rgba(0,0,0,0.39); 
     box-shadow: -1px 1px 20px 0px rgba(0,0,0,0.39);

@@ -286,6 +286,8 @@ const  url = process.env.NEXT_PUBLIC_SITE_URL + getProductUrl(product)
       aggregateRating={{
         ratingValue: '0.0',
         reviewCount: '0',
+        bestRating: "0",
+        ratingCount: "0"
       }} 
     
       offers={[

@@ -1,9 +1,16 @@
 import { FC, useState, useEffect ,} from 'react'
-import { RiShoppingCartLine } from 'react-icons/ri'
+import { RiShoppingCartLine, RiDatabase2Line, RiPlayListAddFill, RiFileList2Line} from 'react-icons/ri' 
+import { AiOutlineShop } from 'react-icons/ai' 
+import Link from 'next/link'
+
+import { 
+    FcAcceptDatabase
+} from 'react-icons/fc'
 
 import Router from 'next/router'
 import { useAuth } from '@context/AuthContext'
 import axios from 'axios'
+import cn from 'classnames'
 import s from './CartBox.module.css'
 
 const CartBox: FC<{}> = () => {
@@ -16,10 +23,35 @@ const CartBox: FC<{}> = () => {
 
         }
     }
-    return (    
-        <span onClick={onClick} className={s.root}><RiShoppingCartLine fill="none" />
+    const onClickPost = () =>{
+        if(accessToken === undefined || accessToken === ''){
+            updateAction({event: 'LOGIN_OPEN', payload: {} })   
+        }else{
+            Router.push('/user/shop-product-form')
+
+        }
+    }
+    return ( <>
+        <span onClick={onClickPost} className={cn(s.shop, 'user-logged-box')}><AiOutlineShop />
+        <div className={cn('user-menu-dropdown','mt-1')}>
+        <i className="header-popover-arrow" style={{'transform': `translate(0px, 0px)`, 'left': `35px`}}></i>
+        <ul>
+            <li className="menu-item">
+                <Link href='/user/shop-product-form'><a><RiPlayListAddFill />Tạo sản phẩm</a></Link>
+            </li>
+            <li className="menu-item">
+            <Link href='/user/shop-products'><a><RiFileList2Line />Sản phẩm</a></Link>
+           </li>
+            <li className="menu-item">
+                <Link href='/user/shop-orders'><a><FcAcceptDatabase />Quản lý đơn hàng</a></Link>
+            </li>
+        </ul>
+        </div>
+        </span>
+        <span onClick={onClick} className={s.cart}><RiShoppingCartLine fill="none" />
             {event ==='CART_SUMMARY_UPDATE'  && payload.quantityTotal > 0 ? <label>{payload.quantityTotal}</label> : <></> }
         </span>
+        </>
     )
 }
 export default CartBox

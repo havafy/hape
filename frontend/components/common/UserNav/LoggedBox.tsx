@@ -19,21 +19,20 @@ const LoggedBox = () => {
 
     <div className='user-logged-box'>
     <div>
-        <span className="circle-avatar" style={{'backgroundImage': `url(${user.avatar})`}}></span> 
+        <span className="circle-avatar" style={{'backgroundImage': `url(${user.avatar})`, }}></span> 
     <div className="user-menu-dropdown">
-        <i className="header-popover-arrow" style={{'transform': `translate(0px, 0px)`, 'right': `75px`}}></i>
+        <i className="header-popover-arrow" style={{'transform': `translate(0px, 0px)`, 'left': `35px`}}></i>
         <ul>
 
+
+        <li className="menu-item">
+            <Link href='/user/orders'><a><RiShoppingBag2Line />Đơn hàng</a></Link>
+        </li>
+        <li className="menu-item">
+            <Link href='/user/address-book'><a><RiSettings5Line />Địa chỉ</a></Link>
+        </li>
         <li className="menu-item">
             <Link href='/user/profile'><a><FaRegUserCircle />Tài khoản</a></Link>
-        </li>
-        <li className="menu-item">
-            <Link href='/user/orders'><a><RiShoppingBag2Line />Đơn mua hàng</a></Link>
-        </li>
-
-
-        <li className="menu-item">
-            <Link href='/user/shop-products'><a><RiDatabase2Line />Sản phẩm</a></Link>
         </li>
 
         <li className="menu-item cursor-pointer" onClick={logoutSubmit}>
