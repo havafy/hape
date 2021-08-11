@@ -35,15 +35,21 @@ const CartBox: FC<{}> = () => {
         <span onClick={onClickPost} className={cn(s.shop, 'user-logged-box')}><AiOutlineShop />
         <div className={cn('user-menu-dropdown','mt-1')}>
         <i className="header-popover-arrow" style={{'transform': `translate(0px, 0px)`, 'left': `35px`}}></i>
-        <ul>
+        <ul >
             <li className="menu-item">
-                <Link href='/user/shop-product-form'><a><RiPlayListAddFill />Tạo sản phẩm</a></Link>
+            {accessToken ?  <Link href='/user/shop-product-form'>
+            <a><RiPlayListAddFill />Tạo sản phẩm</a>
+                    </Link> :  <a><RiPlayListAddFill />Tạo sản phẩm</a> }
             </li>
             <li className="menu-item">
-            <Link href='/user/shop-products'><a><RiFileList2Line />Sản phẩm</a></Link>
+            
+            {accessToken ? <Link href='/user/shop-products'><a><RiFileList2Line />Sản phẩm</a></Link>
+             :  <a><RiFileList2Line />Sản phẩm</a> }
            </li>
             <li className="menu-item">
-                <Link href='/user/shop-orders'><a><FcAcceptDatabase />Quản lý đơn hàng</a></Link>
+            {accessToken ? <Link href='/user/shop-orders'><a><FcAcceptDatabase />Quản lý đơn hàng</a></Link>
+             :  <a><FcAcceptDatabase />Quản lý đơn hàng</a> }
+
             </li>
         </ul>
         </div>

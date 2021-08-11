@@ -5,7 +5,7 @@
 
 .mainContainer{
   padding: 4px 0;
-  @apply flex;
+  @apply flex justify-end;
 }
 .list {
   @apply flex flex-row items-center justify-items-end h-full;

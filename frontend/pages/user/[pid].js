@@ -9,11 +9,22 @@ import { useAuth } from '@context/AuthContext'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 
+import { useEffect } from 'react'
+
 export default function Page() {
     const router = useRouter()
-    const { accessToken } = useAuth();
+    const { accessToken, updateAction} = useAuth()
     const { pid } = router.query
-
+    useEffect(()=>{
+      openLogin()
+    
+    },[pid])
+    const openLogin = () =>{
+      if(accessToken === undefined || accessToken === ''){
+  
+          updateAction({event: 'LOGIN_OPEN', payload: {} })   
+      }
+    }
   return (
      <Layout pid={pid}>
          { accessToken !== '' &&
@@ -47,7 +58,16 @@ export default function Page() {
           </div>
       </div>
          }
-         { accessToken === '' && <Error /> }
+         { accessToken === '' && <main className="mt-18 mb-60 sm:mt-60">
+      <div className="mx-auto max-w-7xl text-center">
+          <img src="/assets/empty-box.png" width="90px" className="my-10 mx-auto" />
+        <h1 className="text-xl text-gray-700">Vui lòng đăng nhập hoặc đăng ký thành viên để try cập trang này.</h1>
+          <div>
+           <a className="button arrow mt-10 font-semibold" onClick={openLogin}>Đăng nhập</a>
+
+          </div>
+      </div>
+    </main>}
     </Layout>
  
   )

@@ -5,7 +5,7 @@
   background: #f2f2f2;
   border-radius: 3px;
   height: 31px;
-  @apply relative w-4/5
+  @apply relative 
 }
 .searchInput{
   padding: 5px 10px;

@@ -67,12 +67,12 @@ const Navbar: FC<Props> = ({darkMode, hideHeader}) => (
             </ul>
           </div>
         
-          <div className="col-span-6 md:col-span-3 searchBar">
+          <div className="col-span-6 md:col-span-2 searchBar">
            <SearchInput />
           </div>
 
    
-          <div className="col-span-3 md:col-span-2 justify-end">
+          <div className="col-span-3 md:col-span-3 justify-end">
             <div className="justify-end flex-1 space-x-8 ">
               <UserNav />
             </div>
