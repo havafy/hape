@@ -35,7 +35,7 @@ const Banners: FC<{data: any}> = ({data: {data}}) => {
       </div>
     </div>
     <div className="md:col-span-1">
-    <div className="md:grid md:grid-cols-2 md:gap-3">
+    <div className="md:grid md:grid-cols-2 md:gap-3 hidden">
         <div className="md:col-span-1">
         <Link href={data.banner1.link}>
           <a><img className="w-full" src={data.banner1.src} /></a>

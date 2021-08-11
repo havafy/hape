@@ -1,7 +1,7 @@
 
 .cart{
     
-    @apply ml-3 md:ml-8 inline-block relative cursor-pointer mr-5
+    @apply ml-0 md:ml-8 inline-block relative cursor-pointer mr-5
 }
 
 .cart svg{
