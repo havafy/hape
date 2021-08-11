@@ -7,7 +7,7 @@ const About: FC = () => {
   return (
     <main className="">
       <Head>
-        <title>About Hape - As a full service eCommerce agency.</title>
+        <title>Hape.vn tự hào là kênh thương mại điện tử chuyên về thực phẩm hữu cơ, thực phẩm chay</title>
       </Head>
       <div className={s.headBox}>
 
@@ -17,7 +17,9 @@ const About: FC = () => {
          Giới Thiệu Hape
         </div>
         <p className={s.introText}>
-       Hape tự hào là cung cấp giải pháp thương mại điện tử cho doanh nghiệp trên nền tảng web và ứng dụng di động.
+       Hape.vn tự hào là kênh thương mại điện tử chuyên về thực phẩm hữu cơ, thực phẩm chay, sản phẩm thủ công mỹ nghệ, đồ dùng nhà cửa, mỹ phẩm sử dụng nguyên vật liệu thân thiện với môi trường. 
+       Sứ mệnh chúng tôi mang đến sản phẩm an toàn, thân thiện môi trường, giúp kết nối và xây dựng thương hiệu Nông Trại và Nghệ Nhân đến người tiêu dùng. 
+
         <br /> Chúng tôi luôn tập trung áp dụng những công nghệ tiên tiến nhất, kiểm định chất lượng cao, tập trung phát triển các dịch vụ bảo mật, nhằm cung ứng cho doanh nghiệp các giải pháp toàn diện, chất lượng ưu việt, đem đến trải nghiệm tốt cho người dùng với chi phí hợp lí nhất.
 
            </p>
