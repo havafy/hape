@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useAuth } from '../../context/AuthContext'
 import { Layout, Menu, Breadcrumb } from 'antd';
 import {
   SettingOutlined,
@@ -11,29 +12,27 @@ import {
 
 } from '@ant-design/icons';
 import { Hape } from '../icons'
+import { LoginForm } from '../index'
 const {  Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
+export default function MainLayout() {
+  const [collapsed, setCollapsed] = useState(false)
+  const [theme] = useState('light')
+  const { accessToken} = useAuth()
 
-class MainLayout extends React.Component {
-  state = {
-    collapsed: false,
-    theme: 'light'
+  const onCollapse = (collapsed) => {
+    setCollapsed( collapsed )
   };
 
-  onCollapse = collapsed => {
-    console.log(collapsed);
-    this.setState({ collapsed });
-  };
 
-  render() {
-    const { collapsed, theme } = this.state;
     return (<div>
       <div className="header-bar"><div className="logo" ><Hape fill="#DB4140" width="70px" /></div></div>
       <div className="app-container">
+{!accessToken ? <LoginForm /> :
+      <>
       <div className="sidebar-container">
-        <Sider className="mt-5" theme={theme}  width={200} collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
-
+        <Sider className="mt-5" theme={theme}  width={200} collapsible collapsed={collapsed} onCollapse={onCollapse}>
           <Menu theme={theme} defaultSelectedKeys={['1']} mode="inline">
 
             <SubMenu key="products" icon={<BarcodeOutlined />} title="Products">
@@ -78,10 +77,9 @@ class MainLayout extends React.Component {
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>Hape Administrator ©2018 Created by Havafy</Footer>
-
+</> }
       </div>
       </div>
-    );
-  }
+    )
+  
 }
-export default MainLayout
