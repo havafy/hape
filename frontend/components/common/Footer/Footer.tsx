@@ -13,8 +13,8 @@ const Footer: FC = () => (
 
   <footer className={s.footer}>
     <Container>
-      <div className="px-5 grid grid-cols-1 lg:grid-cols-12 gap-8 pt-20 pb-20 transition-colors duration-150">
-      <div className="col-span-3 ">
+      <div className="px-5 grid grid-cols-2 md:grid-cols-12 gap-8 pt-20 md:pb-20 transition-colors duration-150">
+      <div className="col-span-1 md:col-span-3 ">
       <h3 className={s.title}>Chăm sóc khách hàng</h3>
       <ul className="flex flex-initial flex-col md:flex-1">
         <li className={s.menu}> <Link href="/page/thanh-toan"><a>Thanh Toán</a></Link></li>
@@ -23,7 +23,7 @@ const Footer: FC = () => (
         <li className={s.menu}> <Link href="/page/chinh-sach-bao-hanh"><a>Chính Sách Bảo Hành</a></Link></li>
           </ul>
         </div>
-        <div className="col-span-3 ">
+        <div className="col-span-1 md:col-span-3 ">
       <h3 className={s.title}>Về Hape</h3>
       <ul className="flex flex-initial flex-col md:flex-1">
         <li className={s.menu}> <Link href="/page/about-us"><a>Giới thiệu Hape</a></Link></li>
@@ -31,7 +31,7 @@ const Footer: FC = () => (
         <li className={s.menu}> <Link href="/page/dieu-khoan-su-dung"><a>Điều khoản sử dụng</a></Link></li>
           </ul>
         </div>
-        <div className="col-span-4">
+        <div className="col-span-3">
         <h3 className={s.title}>Thanh toán</h3>
         <div className={s.partnerIcons}>
           <img src="/assets/payments/visa.png" width="50px" />
@@ -49,11 +49,12 @@ const Footer: FC = () => (
     
           <img src="/assets/shippings/jt.svg"  width="60px" />
           <img src="/assets/shippings/grab.png"  />
-          <img src="/assets/shippings/ninjavan.svg" />
+          {/* <img src="/assets/shippings/ninjavan.svg" /> */}
           <img src="/assets/shippings/viettel_post.png" />
           </div>
           </div>
-        <div className="col-span-2">
+        <div className="col-span-3 mr-5">
+        <div>
         <h3 className={s.title}>Luôn giữ kết nối.</h3>
           <div className="mt-10 flex items-start ">
             <div className={s.iconSocial}>
@@ -84,7 +85,10 @@ const Footer: FC = () => (
 
             </div>
           </div>
-
+          </div> 
+        <div className="my-5">
+          <b><a href="https://www.havafy.vn" title="Thiết kế web bán hàng" className="text-xs text-gray-700">
+            Thiết kế web và xây dựng bởi Havafy</a></b></div>
         </div>
 
       </div>

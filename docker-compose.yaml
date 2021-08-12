@@ -8,6 +8,15 @@ services:
       - ./frontend:/src
     ports:
       - "3100:3000"
+    
+  admin:
+    container_name: hape-admin
+    # restart: always
+    build: ./admin/
+    volumes:
+      - ./admin:/src
+    ports:
+      - "3800:3800"
 
   api: # Node.js App
     container_name: hape-api
