@@ -1,9 +1,6 @@
 import './App.css';
-import MainLayout from './components/MainLayout'
-import { Button, DatePicker, version } from "antd";
-import "antd/dist/antd.css";
-import "./styles/vars.css";
-import "./styles/global.css";
+import MainLayout from './components/Layout/MainLayout'
+
 
 function App() {
   return (
