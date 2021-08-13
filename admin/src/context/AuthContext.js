@@ -66,6 +66,7 @@ export function AuthProvider({ children }) {
         window.location.reload()
     }
     const login = (accessToken, user) => {
+        console.log('login:', accessToken, user)
         localStorage.setItem('accessToken', accessToken)
         setAccessToken(accessToken)
         setUser(user)

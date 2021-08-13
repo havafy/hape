@@ -1,0 +1,12 @@
+.ant-form-item-explain, .ant-form-item-extra{
+    
+    @apply text-left
+}
+
+.ant-form label {
+    font-size: 14px;
+    width: 100px;
+}
+.ant-form-item{
+   min-height: 33px;
+}

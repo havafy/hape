@@ -38,8 +38,11 @@ export class LoginService {
       };
     }
   }
+  isAdmin(userID: number) {
+    return process.env.ADMIN_ID.split(',').includes(String(userID))
+}
   public async login(
-    loginDto: LoginDto,
+    loginDto: LoginDto, role = ''
   ): Promise<any | { status: number; message: string }> {
     return this.validate(loginDto).then(userData => {
       if (!userData) {
@@ -55,26 +58,42 @@ export class LoginService {
         return {
           message: 'Authentication failed. Wrong password',
           status: 400,
-        };
+        }
       }
-
       const payload: JwtPayload = {
         id: userData.id,
       };
-
+     
+      if (role === 'admin'){
+        if(this.isAdmin(userData.id)) {
+          payload['role'] = 'admin'
+        }else{
+          return {
+            message: 'Authentication failed. Wrong password',
+            status: 400,
+          }
+        }
+      } 
       const accessToken = this.getAccessToken(payload);
-      delete userData.password
       return {
         expiresIn: process.env.EXPIRES_IN_JWT,
         accessToken: accessToken,
-        user: userData,
+        user: {
+          id: userData.id,
+          username: userData.username,
+          email: userData.email,
+          phone: userData.phone,
+          avatar: userData.avatar,
+          name: userData.name,
+        },
         status: 200,
       };
     });
   }
   public getAccessToken(payload: JwtPayload) {
     return this.jwtService.sign({
-      id: payload.id
+      id: payload.id,
+      role: payload.role ? payload.role : 'user' 
     });
   }
   public async validateUserByJwt(payload: JwtPayload) {

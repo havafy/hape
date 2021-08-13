@@ -16,7 +16,7 @@ export class StaticPageService {
         if(check === null) return { status: 500, message: 'Page is not exist.' }
         return { page: check, status: 200}
     }
-    async isAdmin(userID: string) {
+    isAdmin(userID: string) {
         return process.env.ADMIN_ID.split(',').includes(String(userID))
     }
     async create(userID: string, staticPageDto: StaticPageDto) {

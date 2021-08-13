@@ -1,35 +1,48 @@
 import React, { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
-import { Form, Input, Button, Checkbox } from 'antd'
-
+import { Form, Input, Button, message } from 'antd'
+import axios from "axios"
 
 export default function LoginForm() {
-    const onFinish = (values) => {
-        console.log('Success:', values);
-      };
+  const { accessToken, login} = useAuth()
+    const onFinish = async (values) => {
+        try {
+            //send register data to API
+            const { data } = await axios.post('auth/login?role=admin', values)
+
+            if(data?.accessToken){
+              login(data.accessToken, data.user)
+              message.success('Login is successful')
+            }else{
+              message.error('Email or password is wrong.')
+            }
+        } catch (error){
+            console.log('Login', error)
+            message.error(error.message)
+        }
+      }
     
       const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
       };
     
     return (
-    <div className="my-32 mx-auto shadow bg-white px-5 py-12" style={{width: '420px'}}>
+    <div className="mt-32 mx-auto shadow bg-white px-12 pt-12 pb-8" style={{maxWidth: '420px'}}>
     
     <h1 className="text-2xl">Login to Hape Administrator</h1>
-    <div>
+    <div className="mt-10">
 
     <Form
         name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
+
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
         <Form.Item
-          label="Username"
-          name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          label="Email"
+          name="email"
+          rules={[{ required: true, message: 'Please input your email!' }]}
         >
           <Input />
         </Form.Item>
@@ -41,16 +54,12 @@ export default function LoginForm() {
         >
           <Input.Password />
         </Form.Item>
-  
-        <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-  
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <div className="mt-5">
+        <Form.Item >
           <Button type="primary" htmlType="submit">
             Submit
           </Button>
-        </Form.Item>
+        </Form.Item></div>
       </Form>
     </div>
     
