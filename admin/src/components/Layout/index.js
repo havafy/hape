@@ -11,7 +11,9 @@ import {
 
 } from '@ant-design/icons';
 import { useAuthDispatch, logout, useAuthState } from '../../context';
-
+import {
+  Link, Router
+} from "react-router-dom";
 import { Hape } from '../icons'
 
 const { SubMenu } = Menu;
@@ -34,9 +36,9 @@ const Layout = ({ history, children }) => {
             <div class="flex-grow">
 
             </div>
-            <div class="flex-none ">
-                <p>Welcome {userDetails.user.email}</p>
-                <button  onClick={handleLogout}>Logout</button>
+            <div className="flex-none w-48 justify-end text-right">
+                <span>Hi {userDetails.user.name.split(' ')[0]}!</span>
+                <button className="mx-5" onClick={handleLogout}>Logout</button>
             </div>
          </div>
       </div>
@@ -71,12 +73,13 @@ const SideBar = () => {
   const [theme] = useState('light')
   console.log('sidebar render...')
   return (
-
+ 
         <Sider className="mt-2 bg-white" theme={theme}  width={200} collapsible collapsed={collapsed} onCollapse={onCollapse}>
+   
           <Menu theme={theme} defaultSelectedKeys={['1']} mode="inline">
        
             <SubMenu key="products" icon={<BarcodeOutlined />} title="Products">
-              <Menu.Item key="3">Product List</Menu.Item>
+              <Menu.Item key="3"><Link to="/products">Product List </Link></Menu.Item>
               <Menu.Item key="4">Add Product</Menu.Item>
               <Menu.Item key="5">Categories</Menu.Item>
             </SubMenu>
@@ -105,7 +108,7 @@ const SideBar = () => {
             </SubMenu>
           </Menu>
         </Sider>
-
+   
   )
 }
 
