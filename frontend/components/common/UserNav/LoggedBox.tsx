@@ -10,6 +10,7 @@ import {
     RiLogoutCircleLine 
 } from 'react-icons/ri'
 const LoggedBox = () => {
+    console.log('LoggedBox render...')
   const { user, logout, updateAction } = useAuth();
   const logoutSubmit = () => {
     updateAction({event: 'CART_SUMMARY_UPDATE', payload: {} })

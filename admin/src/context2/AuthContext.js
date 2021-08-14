@@ -11,6 +11,7 @@ const authContextDefaultValues = {
     updateAction: (action) => {},
     login: () => {},
     logout: () => {},
+    logged: () => {}
 };
 
 const AuthContext = createContext(authContextDefaultValues);
@@ -65,6 +66,10 @@ export function AuthProvider({ children }) {
         localStorage.setItem('accessToken', '')
         window.location.reload()
     }
+    const logged = () => {
+        console.log('logged:', (accessToken === '' || accessToken === undefined )  ?  false : true)
+        return (accessToken === '' || accessToken === undefined )  ?  false : true
+    }
     const login = (accessToken, user) => {
         console.log('login:', accessToken, user)
         localStorage.setItem('accessToken', accessToken)
@@ -87,6 +92,7 @@ export function AuthProvider({ children }) {
         login,
         logout,
         action,
+        logged,
         updateAction
     };
 

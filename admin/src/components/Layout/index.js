@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { useAuth } from '../../context/AuthContext'
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Menu, Layout as antLayout } from 'antd';
 import {
   SettingOutlined,
   WechatOutlined,
@@ -11,30 +10,71 @@ import {
   TeamOutlined,
 
 } from '@ant-design/icons';
-import { Hape } from '../icons'
-import { LoginForm } from '../index'
-const {  Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
+import { useAuthDispatch, logout, useAuthState } from '../../context';
 
-export default function MainLayout() {
+import { Hape } from '../icons'
+
+const { SubMenu } = Menu;
+const { Sider } = antLayout
+
+const Layout = ({ history, children }) => {
+	const dispatch = useAuthDispatch();
+	const userDetails = useAuthState();
+
+	const handleLogout = () => {
+		logout(dispatch);
+		history.push('/login');
+	}
+    return (<div>
+      <div className="header-bar">
+        <div class="flex">
+            <div class="flex-none ">
+            <div className="logo" ><Hape fill="#DB4140" width="70px" /></div>
+            </div>
+            <div class="flex-grow">
+
+            </div>
+            <div class="flex-none ">
+                <p>Welcome {userDetails.user.email}</p>
+                <button  onClick={handleLogout}>Logout</button>
+            </div>
+         </div>
+      </div>
+      <div className="app-container">
+        <div class="flex">
+            <div class="flex-none ">
+              <SideBar />
+            </div>
+            <div class="flex-grow">
+                <div className="px-5">
+                
+                {children}
+
+                  </div>
+            </div>
+
+          </div>
+      </div>
+      <div className="mt-20 mb-5 text-center text-xs text-gray-600">Hape Administrator ©2018 Created by Havafy</div>
+      </div>
+    )
+  
+}
+
+const SideBar = () => {
   const [collapsed, setCollapsed] = useState(false)
-  const [theme] = useState('light')
-  const { accessToken} = useAuth()
 
   const onCollapse = (collapsed) => {
     setCollapsed( collapsed )
   };
 
+  const [theme] = useState('light')
+  console.log('sidebar render...')
+  return (
 
-    return (<div>
-      <div className="header-bar"><div className="logo" ><Hape fill="#DB4140" width="70px" /></div></div>
-      <div className="app-container">
-{!accessToken ? <LoginForm /> :
-      <>
-      <div className="sidebar-container">
-        <Sider className="mt-5" theme={theme}  width={200} collapsible collapsed={collapsed} onCollapse={onCollapse}>
+        <Sider className="mt-2 bg-white" theme={theme}  width={200} collapsible collapsed={collapsed} onCollapse={onCollapse}>
           <Menu theme={theme} defaultSelectedKeys={['1']} mode="inline">
-
+       
             <SubMenu key="products" icon={<BarcodeOutlined />} title="Products">
               <Menu.Item key="3">Product List</Menu.Item>
               <Menu.Item key="4">Add Product</Menu.Item>
@@ -65,21 +105,8 @@ export default function MainLayout() {
             </SubMenu>
           </Menu>
         </Sider>
-        </div>
-    
-          <Content className="px-5 py-3">
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-              Bill is a cat.
-            </div>
-          </Content>
-          <Footer style={{ textAlign: 'center' }}>Hape Administrator ©2018 Created by Havafy</Footer>
-</> }
-      </div>
-      </div>
-    )
-  
+
+  )
 }
+
+export default Layout

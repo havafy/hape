@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, {  } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { Form, Input, Button, message } from 'antd'
 import axios from "axios"
 
 export default function LoginForm() {
-  const { accessToken, login} = useAuth()
+  console.log('LoginForm render...')
+  const { login} = useAuth()
     const onFinish = async (values) => {
         try {
             //send register data to API
