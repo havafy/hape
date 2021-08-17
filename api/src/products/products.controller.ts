@@ -75,5 +75,16 @@ export class ProductsController {
         return res.json(await this.categoriesService.reIndex(id))
     }
 
-
+    @Get('/api/products')
+    async getCategories(@Res() res): Promise<any> {
+        const userID = res.req.user.id
+        let {pageSize = 30, current = 1 } = res.req.query
+        if(pageSize > 100){
+            pageSize = 30
+        } 
+        const from = pageSize * (current -1 )
+     
+        const response = await this.categoriesService.list(userID, pageSize, from )
+        return res.json(response)
+    }
 }

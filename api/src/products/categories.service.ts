@@ -68,6 +68,30 @@ export class CategoriesService {
              }
          
         }
+        
+    async list(userID: number,  size: number, from: number) {
+        const { body: { 
+            hits: { 
+                total, 
+                hits 
+            } } } = await this.esService.findBySingleField(ES_INDEX_CATEGORY, {}, size, from, [{"id": "desc"}])
+        const count = total.value
+        let categories = []
+        if(count){
+            categories = hits.map((item: any) => {
+                return{
+                    id: item._id,
+                    ...item._source,
+                 }
+            })
+        }
+        return {
+            count,
+            size,
+            from,
+            categories
+        }
+    }
         async collectCategories (){
             const tree = getCategories()
            

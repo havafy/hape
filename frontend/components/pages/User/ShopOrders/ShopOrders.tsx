@@ -51,7 +51,6 @@ const handleTableChange = (pagination: any, filters: any, sorter: any) => {
 };
 
 const onSelectChange = (selectedRowKeys: any) => {
-
   setSelectedRowKeys(selectedRowKeys)
 };
 const rowSelection = {
