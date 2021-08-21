@@ -57,7 +57,14 @@ services:
     container_name: hape-elasticsearch
     restart: always
     environment:
+      - node.name=elasticsearch
+      - cluster.name=elasticsearch-cluster
       - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - "path.repo=/usr/share/elasticsearch/backup"    
+    volumes:
+      - ./elasticsearch/backup:/usr/share/elasticsearch/backup
     ulimits:
       memlock:
         soft: -1
