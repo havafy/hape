@@ -1,8 +1,10 @@
-
-
-mkdir ./backup_files
-rm -rf ./es_backup
 # npm install elasticdump -g
+
+
+rm -rf ./es_backup
+
+mkdir ./backup_files 
+mkdir ./es_backup 
 
 multielasticdump \
   --direction=dump \
