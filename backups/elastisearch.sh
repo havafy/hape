@@ -16,3 +16,5 @@ multielasticdump \
 tar -zcvf "es_$(date +"%Y_%m_%d_%I_%M_%p").tar.gz" ./es_backup
 
 mv es_*.tar.gz backup_files/
+
+rm -rf ./es_backup

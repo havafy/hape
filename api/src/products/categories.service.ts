@@ -70,11 +70,13 @@ export class CategoriesService {
         }
         
     async list(userID: number,  size: number, from: number) {
+        const body = { size,  from, sort: [{"id": "desc"}]}
+        
         const { body: { 
             hits: { 
                 total, 
                 hits 
-            } } } = await this.esService.findBySingleField(ES_INDEX_CATEGORY, {}, size, from, [{"id": "desc"}])
+            } } } = await this.esService.search(ES_INDEX_CATEGORY, body)
         const count = total.value
         let categories = []
         if(count){

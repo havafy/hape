@@ -8,11 +8,15 @@
 /*/.env
 /example/
 
+/elasticsearch/
+
 /api/ormconfig.json
 # testing
 /*/coverage
 
 /.vscode
+
+/*/ormconfig.json
 
 # next.js
 /*/.next/
