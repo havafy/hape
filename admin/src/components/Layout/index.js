@@ -2,12 +2,16 @@ import React from 'react'
 import { useAuthDispatch, logout, useAuthState } from '../../context';
 import SideBar from '../Sidebar';
 import { Hape } from '../icons'
+import {
 
+  useHistory
+} from "react-router-dom";
 
-const Layout = ({ history, children }) => {
+const Layout = ({ children }) => {
 	const dispatch = useAuthDispatch();
 	const userDetails = useAuthState();
-
+  let history = useHistory();
+  
 	const handleLogout = () => {
 		logout(dispatch);
 		history.push('/login');
@@ -22,7 +26,7 @@ const Layout = ({ history, children }) => {
 
             </div>
             <div className="flex-none w-48 justify-end text-right">
-                <span>Hi {userDetails.user.name.split(' ')[0]}!</span>
+                <span>Hi {userDetails.user ? userDetails.user.name.split(' ')[0] : ''}!</span>
                 <button className="mx-5" onClick={handleLogout}>Logout</button>
             </div>
          </div>

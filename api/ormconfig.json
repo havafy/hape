@@ -4,7 +4,7 @@
   "port": 3320,
   "username": "root",
   "password": "cY5KWGN3ek2Ky9YzyjNupmv7C",
-  "database": "hape_dev",
+  "database": "development",
   "autoLoadEntities": true,
   "synchronize": true,
   "logging": false,

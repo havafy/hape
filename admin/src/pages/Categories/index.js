@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import s from './categories.module.css';
 import axios from 'axios'
 import Layout from '../../components/Layout'
+import { useAuthState } from '../../context';
+
 import { Table  } from 'antd'
+
 const { Column } = Table
 
 const PAGE_SIZE = 30
@@ -12,8 +15,9 @@ function Categories(props) {
 	const [ selectedRowKeys, setSelectedRowKeys] = useState([])
 	const [categories, setCategories] = useState([])
 	const [ loading, setLoading] = useState(false)
+	const userDetails = useAuthState();
 	const headerApi = { 
-	  headers: { 'Authorization': `Bearer ${accessToken}` } 
+	  headers: { 'Authorization': `Bearer ${userDetails.token}` } 
 	}
 	useEffect(() => {
 		pullCategories()
