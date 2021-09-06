@@ -37,7 +37,9 @@ class MyDocument extends Document {
             window.fbAsyncInit = function() {
               FB.init({
                 xfbml            : true,
-                version          : 'v11.0'
+                version          : 'v11.0',
+                appId : '105109347625874',
+                autoLogAppEvents : true
               });
             };
             (function(d, s, id) {
