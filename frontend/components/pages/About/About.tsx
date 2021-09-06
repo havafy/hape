@@ -3,7 +3,7 @@ import Link from 'next/link'
 import s from './About.module.css'
 import Head from 'next/head'
 
-const About: FC = () => {
+const About: FC<any> = () => {
   return (
     <main className="">
       <Head>
@@ -57,38 +57,27 @@ Quý khách có thể tìm hiểu thêm thông tin về quy trình mua hàng, c�
         </div>
       </div>
 
-      <div className="bg-gray-100 lg:mt-20 py-24 hidden">
-        <div className="mx-auto max-w-7xl">
-          <div className="text-3xl font-bold m-auto max-w-2xl text-center text-gray-800">
-            Each of our values is aligned with what will guide us to achieve our mission
-          </div>
-          <div className="my-12 md:grid md:grid-cols-3 md:gap-8">
-            <div className="md:col-span-1 px-12 py-10 bg-white shadow-md">
-              <h3 className="font-semibold text-xl mb-3">Mission</h3>
-              <p className="text-base text-gray-600">We are purpose-driven people,
-              dedicated to serving something beyond ourselves.
-              Having mission as a value also allows us
-              to continually ground ourselves in why we’re building Hape.
-            </p>
-            </div>
-            <div className="md:col-span-1 px-12 py-10 bg-white shadow-md">
-              <h3 className="font-semibold text-xl mb-3">Do great things, fast</h3>
-              <p className="text-base text-gray-600">We commit to being great at the things we do and doing them fast, without sacrificing one for the other.
-            </p>
-            </div>
-            <div className="md:col-span-1 px-12 py-10 bg-white shadow-md">
-              <h3 className="font-semibold text-xl mb-3">Mindfulness</h3>
-              <p className="text-base text-gray-600">We focus on the present and aim to give ourselves time to reflect and space to integrate what we learn. These practices allow us to collectively learn from and improve in all that we do, and to continually evolve our culture.
-            </p>
-            </div>
-          </div>
-          <div className="text-center">
-            <Link href="/contact"><a className="button arrow text-xl mt-12 mb-10">Get in touch</a></Link>
-          </div>
-        </div>
 
-      </div>
-    </main>
+<div className="mt-20 mx-auto max-w-7xl my-10 text-base">
+  <div className="mx-28">
+<p>Quý khách có nhu cầu liên lạc, trao đổi hoặc đóng góp ý kiến, vui lòng tham khảo các thông tin sau:
+</p>
+Liên lạc qua điện thoại: 028 6650 0660<br />
+Liên lạc qua email: contact@hape.vn <br />
+Fanpage của Havamall: https://facebook.com/hapevn <br />
+Đối tác có nhu cầu hợp tác quảng cáo hoặc kinh doanh: contact@hape.vn<br />
+Văn phòng: 65/2H Giải Phóng, phường 4, quận Tân Bình, TPHCM <br />
+
+<p className="mt-10">
+  <h3 className="text-xl"> Thông tin về công ty</h3>
+
+Công ty TNHH IMEX GLOBAL ENTERPRISES <br />
+Địa chỉ đăng ký kinh doanh: 254 Nguyễn Hoàng, Phường An Phú, quận 2, thành phố Hồ Chí Minh <br />
+Giấy chứng nhận Đăng ký Kinh doanh số 0315138097 do Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh cấp ngày 29/06/2018
+</p>
+</div>
+</div>
+      </main>
   )
 }
 
