@@ -38,7 +38,7 @@ class MyDocument extends Document {
               FB.init({
                 xfbml            : true,
                 version          : 'v11.0',
-                appId : '105109347625874',
+                appId : '786878948688637',
                 status : false, 
                 autoLogAppEvents : true
               });
