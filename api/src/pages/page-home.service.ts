@@ -53,7 +53,7 @@ export class HomePageService {
             'banh-keo-chocolate': '200785',*/
         blocks.push(await this.getBlockByCategory('200796', "Mì & Thực phẩm khô"))
 
-        blocks.push(await this.getBlockByCategory('200801', "Đồ đống hộp & Đậu"))
+        blocks.push(await this.getBlockByCategory('200801', "Đồ đóng hộp & Đậu"))
 
         blocks.push(await this.getBlockByCategory('200802', "Thực phẩm đông lạnh"))
 
