@@ -66,13 +66,13 @@ Liên lạc qua điện thoại: 028 6650 0660<br />
 Liên lạc qua email: contact@hape.vn <br />
 Fanpage của Havamall: https://facebook.com/hapevn <br />
 Đối tác có nhu cầu hợp tác quảng cáo hoặc kinh doanh: contact@hape.vn<br />
-Văn phòng: 65/2H Giải Phóng, phường 4, quận Tân Bình, TPHCM <br />
+Văn phòng: 65/2H Giải Phóng, phường 4, quận Tân Bình, Thành phố Hồ Chí Minh. <br />
 
 <p className="mt-10">
   <h3 className="text-xl"> Thông tin về công ty</h3>
 
 Công ty TNHH IMEX GLOBAL ENTERPRISES <br />
-Địa chỉ đăng ký kinh doanh: 254 Nguyễn Hoàng, Phường An Phú, quận 2, thành phố Hồ Chí Minh <br />
+Địa chỉ đăng ký kinh doanh: 254 Nguyễn Hoàng, Phường An Phú, Thành phố Thủ Đức, Thành phố Hồ Chí Minh. <br />
 Giấy chứng nhận Đăng ký Kinh doanh số 0315138097 do Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh cấp ngày 29/06/2018
 </p>
 </div>

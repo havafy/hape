@@ -291,7 +291,8 @@ const RegisterForm = () => {
                 <div className="col-span-1">
                 <FacebookLogin
                     appId={`${process.env.NEXT_PUBLIC_FACEBOOK_KEY}`}
-                    autoLoad={false}
+                    autoLoad={true}
+                    reAuthenticate={true}
                     fields="name,email,picture"
                     icon="fa-facebook"
                     cssClass="facebook-login-btn"
