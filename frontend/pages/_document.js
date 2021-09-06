@@ -39,6 +39,7 @@ class MyDocument extends Document {
                 xfbml            : true,
                 version          : 'v11.0',
                 appId : '105109347625874',
+                status : false, 
                 autoLogAppEvents : true
               });
             };
