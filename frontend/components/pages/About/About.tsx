@@ -64,7 +64,7 @@ Quý khách có thể tìm hiểu thêm thông tin về quy trình mua hàng, c�
 </p>
 Liên lạc qua điện thoại: 028 6650 0660<br />
 Liên lạc qua email: contact@hape.vn <br />
-Fanpage của Havamall: https://facebook.com/hapevn <br />
+Fanpage: https://facebook.com/hapevn <br />
 Đối tác có nhu cầu hợp tác quảng cáo hoặc kinh doanh: contact@hape.vn<br />
 Văn phòng: 65/2H Giải Phóng, phường 4, quận Tân Bình, Thành phố Hồ Chí Minh. <br />
 
