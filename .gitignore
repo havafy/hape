@@ -44,3 +44,8 @@ yarn-error.log*
 # vercel
 /*/.vercel
 api/ormconfig.json
+
+# go lang
+/*/go.sum
+/*/tmp/
+/*/bin/
