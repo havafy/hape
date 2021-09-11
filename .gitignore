@@ -49,3 +49,6 @@ api/ormconfig.json
 /*/go.sum
 /*/tmp/
 /*/bin/
+
+/data/
+/test/

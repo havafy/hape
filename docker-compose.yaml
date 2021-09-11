@@ -43,6 +43,30 @@ services:
       - "3320:3306"
     networks:
       - hape
+  postgres:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5438:5432"
+    networks:
+      - hape
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: postgres
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5433:80"
+    networks:
+      - hape
+
   redis: # sudo sysctl vm.overcommit_memory=1
     container_name: hape-redis
     restart: always
